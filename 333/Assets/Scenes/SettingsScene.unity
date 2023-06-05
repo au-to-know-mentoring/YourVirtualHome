@@ -867,6 +867,8 @@ MonoBehaviour:
   activationDistance: 500
   Slider0Point: {fileID: 1435567866}
   slider: {fileID: 2060135845}
+  spawnerIndicatorPrefab: {fileID: 5853488389498237362, guid: 8c59b85e878561b4e8301d928526aed1,
+    type: 3}
 --- !u!1 &465896466
 GameObject:
   m_ObjectHideFlags: 0
@@ -3596,37 +3598,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 835e735ca71bf78459fb2cababd74112, type: 3}
---- !u!1 &1435567865
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1435567866}
-  m_Layer: 0
-  m_Name: Slider0Point
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1435567866
+--- !u!4 &1435567866 stripped
 Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 1435567866, guid: f8b83153d9a2f0c40a3a1e629b957879,
+    type: 3}
+  m_PrefabInstance: {fileID: 2060135844}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1435567865}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 63, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2060135846}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1443548666
 GameObject:
   m_ObjectHideFlags: 0
@@ -3892,6 +3869,11 @@ PrefabInstance:
       propertyPath: scaleSlider
       value: 
       objectReference: {fileID: 2060135845}
+    - target: {fileID: 7800947997379912067, guid: df8456583e3d4ef41833d45291579534,
+        type: 3}
+      propertyPath: playerScript
+      value: 
+      objectReference: {fileID: 438170772}
     - target: {fileID: 7800947997379912067, guid: df8456583e3d4ef41833d45291579534,
         type: 3}
       propertyPath: dollhouseParent
@@ -5656,6 +5638,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8214228683128590408, guid: 800f4402bbb8f874ba97164ee6de2566,
+        type: 3}
+      propertyPath: housePrefab
+      value: 
+      objectReference: {fileID: 684430527279466060, guid: c5567c1449b43454baf1bb09c4a541c2,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 800f4402bbb8f874ba97164ee6de2566, type: 3}
 --- !u!1001 &2060135844
@@ -5670,26 +5658,26 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1784159516}
-    - target: {fileID: 6179752557709116959, guid: f8b83153d9a2f0c40a3a1e629b957879,
+    - target: {fileID: 6179752557766272496, guid: f8b83153d9a2f0c40a3a1e629b957879,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6179752557766272496, guid: f8b83153d9a2f0c40a3a1e629b957879,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1784159516}
+    - target: {fileID: 6179752557766272496, guid: f8b83153d9a2f0c40a3a1e629b957879,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: rotateDollhouse
+      value: EnablePlaceSpawnerButton
       objectReference: {fileID: 0}
     - target: {fileID: 6179752557935535012, guid: f8b83153d9a2f0c40a3a1e629b957879,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1784159516}
-    - target: {fileID: 6179752557935535012, guid: f8b83153d9a2f0c40a3a1e629b957879,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: rotateDollhouse
-      objectReference: {fileID: 0}
-    - target: {fileID: 6179752558088814014, guid: f8b83153d9a2f0c40a3a1e629b957879,
-        type: 3}
-      propertyPath: m_Size.x
-      value: 128
-      objectReference: {fileID: 0}
     - target: {fileID: 6179752558404520014, guid: f8b83153d9a2f0c40a3a1e629b957879,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -5710,20 +5698,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1784159516}
-    - target: {fileID: 6179752558517261128, guid: f8b83153d9a2f0c40a3a1e629b957879,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: rotateDollhouse
-      objectReference: {fileID: 0}
     - target: {fileID: 6179752558557168183, guid: f8b83153d9a2f0c40a3a1e629b957879,
         type: 3}
       propertyPath: m_Name
       value: ModelSettings_Canvas
-      objectReference: {fileID: 0}
-    - target: {fileID: 6179752558557168183, guid: f8b83153d9a2f0c40a3a1e629b957879,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6179752558557168187, guid: f8b83153d9a2f0c40a3a1e629b957879,
         type: 3}
@@ -5844,12 +5822,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a4db7a114972834c8e4117be1d82ba3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!224 &2060135846 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 6179752558914253343, guid: f8b83153d9a2f0c40a3a1e629b957879,
-    type: 3}
-  m_PrefabInstance: {fileID: 2060135844}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2068618680 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 113768, guid: 126d619cf4daa52469682f85c1378b4a,

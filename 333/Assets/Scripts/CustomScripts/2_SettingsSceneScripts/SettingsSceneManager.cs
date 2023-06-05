@@ -8,6 +8,7 @@ public class SettingsSceneManager : MonoBehaviour
 
     [SerializeField] GameObject dollhouseParent;
     [SerializeField] GameObject player;
+    [SerializeField] SettingsScenePlayer playerScript;
     public float perspectiveCompensation = 0.95f;
     Vector3 dummyPosition = new Vector3(0,0,0);
 
@@ -28,16 +29,13 @@ public class SettingsSceneManager : MonoBehaviour
     }
 
     #region use_settings
-
     public void scaleDollhouse() {
         if (dollhouseParent == null)
             return;
         float sliderVal = mapToNewRange(0, 1, 0.05f, 1.5f, scaleSlider.value);
         Vector3 newScale = new Vector3(sliderVal, sliderVal, sliderVal);
         dollhouseParent.transform.localScale = newScale;
-
     }
-
 
     public float mapToNewRange(float OldMin, float OldMax, float NewMin, float NewMax, float OldValue)
     {
@@ -61,16 +59,12 @@ public class SettingsSceneManager : MonoBehaviour
             dollhouseParent.transform.rotation *= Quaternion.Euler(0, 0, 90 * Mathf.Sign(xyz));
         }
         // record new rotation
-        dd.houseRotation = dollhouseParent.transform.rotation;
+        //dd.houseRotation = dollhouseParent.transform.rotation;
     }
 
-    public void startRotation() {
-        
+    public void EnablePlaceSpawnerButton() {
+        playerScript.EnableSpawnerPlacement();
     }
-    public void dragRotation() {
-    
-    }
-
     #endregion
 
 
@@ -88,7 +82,7 @@ public class SettingsSceneManager : MonoBehaviour
         // position dollhouse in front of camera
         dollhouseParent.transform.position = dummyPosition;
 
-        Vector3 playerpos = new Vector3(0, 0, FindEdgeOfHouse(dh, 0) - 10);
+        Vector3 playerpos = new Vector3(0, 5, FindEdgeOfHouse(dh, 0) - 10);
         player.transform.position = playerpos;
     }
 

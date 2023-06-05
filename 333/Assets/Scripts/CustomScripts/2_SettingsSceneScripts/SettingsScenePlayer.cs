@@ -18,25 +18,36 @@ public class SettingsScenePlayer : MonoBehaviour
     [Header("Dollhouse")]
     public GameObject dollhouse;
 
-    [Header("Activation Settings")]
+    [Header("Canvas Settings")]
     public float activationDistance;
     private bool sliderDragging = false;
     [SerializeField] Transform Slider0Point;
     [SerializeField] Scrollbar slider;
+    // spawner related variables
+    private bool placingSpawner = false;
+    [SerializeField] GameObject spawnerIndicatorPrefab;
+    GameObject spawnerIndicator;
+    float maxNormalAngle = 45f;
+    bool canPlaceSpawner = false;
 
     private void Start()
     {
         rightX.action.Enable();
         rightX.action.performed += GrabButton;
         rightX.action.canceled += GrabRelease;
+        rightTrigger.action.Enable();
+        rightTrigger.action.performed += ResetButton;
 
         lr.positionCount = 2;
         aimDirection = Vector3.forward;
         lr.SetPosition(1, aimDirection * 20);
-        //rightTrigger.action.performed += ResetButton;
+
+        spawnerIndicator = Instantiate(spawnerIndicatorPrefab, Vector3.zero, Quaternion.identity);
+        spawnerIndicator.SetActive(false);
     }
 
     private void GrabButton(InputAction.CallbackContext context) {
+        placeSpawner();
         PressButton();
 
         lr.positionCount = 2;
@@ -44,14 +55,17 @@ public class SettingsScenePlayer : MonoBehaviour
     }
     private void GrabRelease(InputAction.CallbackContext context) {
         sliderDragging = false;
+        DataManager.Instance.SetHouse(dollhouse);
     }
     private void ResetButton(InputAction.CallbackContext context) {
-        dollhouse.transform.eulerAngles = Vector3.zero;
+        //dollhouse.transform.eulerAngles = Vector3.zero;
+        ResetSpawnIndicator();
     }
 
     void Update()
     {
         DragSlider();
+        PositionSpawner();
     }
 
     void DragSlider() {
@@ -83,6 +97,8 @@ public class SettingsScenePlayer : MonoBehaviour
         RaycastHit[] hits;
         Vector3 direction = controller.transform.TransformDirection(aimDirection);
         hits = Physics.RaycastAll(controller.transform.position, direction, Mathf.Infinity);
+        if (hits.Length < 1) { return; }
+
         for (int i = 0; i < hits.Length; i++) {
             if (hits[i].transform.gameObject.name == "Handle")
             {
@@ -94,6 +110,55 @@ public class SettingsScenePlayer : MonoBehaviour
                 break;
             }
         }
+    }
+
+    public void EnableSpawnerPlacement() {
+        placingSpawner = true;
+    }
+
+    private void PositionSpawner() {
+        if (!placingSpawner)
+            return;
+        // use tags or layermask to check if house?
+        spawnerIndicator.SetActive(false);
+        ChangeLineRendererColor(Color.red);
+        canPlaceSpawner = false;
+
+        RaycastHit[] hits;
+        hits = Physics.RaycastAll(controller.transform.position, controller.transform.TransformDirection(aimDirection), Mathf.Infinity);
+        if (hits.Length > 0) {
+            // organise hits from closest to farthest
+            System.Array.Sort(hits, (x, y) => x.distance.CompareTo(y.distance));
+            for (int i = 0; i < hits.Length; i++) {
+                if (hits[i].transform.gameObject.tag == "SettingsCanvas") {
+                    continue;
+                }
+                Debug.Log(Vector3.Angle(Vector3.up, hits[i].normal));
+                if (Vector3.Angle(Vector3.up, hits[i].normal) < maxNormalAngle)
+                {
+                    ChangeLineRendererColor(Color.green);
+                    spawnerIndicator.SetActive(true);
+                    spawnerIndicator.gameObject.transform.position = hits[i].point;
+                    canPlaceSpawner = true;
+                    break;
+                }
+            }
+        }
+    }
+    private void placeSpawner() {
+        if (!canPlaceSpawner)
+            return;
+
+        placingSpawner = false;
+        ChangeLineRendererColor(Color.red);
+        DataManager.Instance.SetSpawnPosition(spawnerIndicator.transform.position);
+    }
+    private void ResetSpawnIndicator()
+    {
+        placingSpawner = false;
+        ChangeLineRendererColor(Color.red);
+        spawnerIndicator.transform.position = DataManager.Instance.GetSpawnPosition();
+        spawnerIndicator.SetActive(true);
     }
 
     // utility functions-------------------
@@ -110,5 +175,11 @@ public class SettingsScenePlayer : MonoBehaviour
         var to = toAbs + toMin;
 
         return to;
+    }
+
+    private void ChangeLineRendererColor(Color color)
+    {
+        lr.startColor = color;
+        lr.endColor = color;
     }
 }

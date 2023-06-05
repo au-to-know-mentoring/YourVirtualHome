@@ -16,11 +16,12 @@ public class DataManager : MonoBehaviour
         else
         {
             Instance = this;
-            DontDestroyOnLoad(this);
+            DontDestroyOnLoad(this.gameObject);
         }
     }
 
-    [SerializeField] GameObject house; // stored base version of downloaded house
+    [SerializeField] GameObject housePrefab; // stored base version of downloaded house
+    Vector3 spawnPosition = Vector3.zero;
 
 
     void Start()
@@ -36,9 +37,15 @@ public class DataManager : MonoBehaviour
 
     public void SetHouse(GameObject h)
     {
-        house = h;
+        housePrefab = h;
+    }
+    public void SetSpawnPosition(Vector3 sp) {
+        spawnPosition = sp;
+    }
+    public Vector3 GetSpawnPosition() {
+        return spawnPosition;
     }
     public GameObject GetHouse() {
-        return house;
+        return housePrefab;
     }
 }
