@@ -82,6 +82,7 @@ public class CustomTeleporter : MonoBehaviour
     private void HandleTeleporter()
     {
         // reset faded objects to normal materials
+        /*-----------------------------------------------------------
         foreach (GameObject g in FadedObjects)
         {
             g.GetComponent<HouseObject>().ResetMyMaterials();
@@ -89,7 +90,7 @@ public class CustomTeleporter : MonoBehaviour
 
         }
         FadedObjects.Clear();
-
+        */
         Teleport();
 
         return;
@@ -115,6 +116,7 @@ public class CustomTeleporter : MonoBehaviour
             System.Array.Sort(hits, (x, y) => x.distance.CompareTo(y.distance));
             for (int i = 0; i < hits.Length; i++)
             {
+                Debug.Log(hits[i].transform.gameObject.name);
                 if (hits[i].transform.gameObject.tag == "SceneReset") {
                     readyToReset = true;
                     break;
