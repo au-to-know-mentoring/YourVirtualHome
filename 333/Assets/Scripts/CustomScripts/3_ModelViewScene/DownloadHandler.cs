@@ -23,7 +23,6 @@ public class DownloadHandler : MonoBehaviour
 
     void DownloadFile()
     {
-        Debug.Log("a download file triggered");
         WebClient client = new WebClient();
 
         path = Application.persistentDataPath + "/" + "ArchicadObjSize.zip";
@@ -38,13 +37,11 @@ public class DownloadHandler : MonoBehaviour
     {
         // extract to assets folder
         ZipFile.ExtractToDirectory(path, Application.persistentDataPath);
-        Debug.Log("b callback triggered");
         var loadedObject = new OBJLoader().Load(Application.persistentDataPath + "/TEST 8/" + "Vacation Home.obj", Application.persistentDataPath + "/TEST 8/" + "Vacation Home.mtl");
         // load object into world 
         loadedObject.gameObject.transform.Rotate(-90f, 0f, 0f, Space.World);
         // apply collision 
         WorldManager.ApplyCollidersToHouse(loadedObject);
-        Debug.Log("c callback ended");
 
         // code for modelview scene
         // give reference of house to wand

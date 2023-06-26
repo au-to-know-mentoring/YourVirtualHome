@@ -11,16 +11,17 @@ public class CustomTeleporter : MonoBehaviour
     [SerializeField] InputActionReference rightSecondary;
     private bool leftSecondaryPressed = false;
     private bool rightSecondaryPressed = false;
-    [SerializeField] GameObject canvas;     // canvas reference for scene reset
+
+    [SerializeField] GameObject SceneResetCanvas;     // canvas reference for scene reset
     private bool readyToReset = false; // bool to determine if the user is hovering the reset canvas
 
     [SerializeField] DownloadHandler dh;
 
     [SerializeField] InputActionReference teleportButton; // 
-    [SerializeField] GameObject leftController;    // reference to left controller gameObject
+    [SerializeField] GameObject rightController;    // reference to left controller gameObject
     [SerializeField] LineRenderer lr;		// reference to lineRenderer (line that comes out of the end of the controller)
     GameObject ti;				// reference to the flat cylinder that indicates where the user will teleport
-    GameObject tiPrefab; 			// prefab for the flat cylinder
+    [SerializeField] GameObject tiPrefab; 			// prefab for the flat cylinder
     List<GameObject> FadedObjects;		// list of objects made transparent
  
 
@@ -28,6 +29,7 @@ public class CustomTeleporter : MonoBehaviour
 
     private float maxTeleportDistance = 20f;		// definition for the maximum distance that can be teleported
     private float maxNormalAngle = 45f;		// the maximum angle before a surface is considered a wall and not teleportable
+    Vector3 aimDirection = Vector3.forward;
 
     private void Awake()
     {
@@ -66,10 +68,8 @@ public class CustomTeleporter : MonoBehaviour
 
     void Start()
     {
-        // define variables on start
-        tiPrefab = Resources.Load<GameObject>("Prefabs/TeleportIndicator");
         ti = Instantiate(tiPrefab, Vector3.zero, Quaternion.identity);
-        wand = FindObjectOfType<Wand>();
+        //wand = FindObjectOfType<Wand>();-----------------------------------------------
         FadedObjects = new List<GameObject>();
     }
 
@@ -92,10 +92,11 @@ public class CustomTeleporter : MonoBehaviour
 
         Teleport();
 
+        return;
         // fade hovered objects that have been wanded to a transparent green
         foreach (GameObject g in FadedObjects)
         {
-            wand.SetFaded(g);
+            //wand.SetFaded(g);------------------------------------
             g.GetComponent<MeshCollider>().enabled = false;
         }
     }
@@ -105,10 +106,9 @@ public class CustomTeleporter : MonoBehaviour
         // disable teleport indicator by default
         ti.SetActive(false);
 
-
         RaycastHit[] hits;
         // collect list of objects that the teleporter is pointing at as hits
-        hits = Physics.RaycastAll(leftController.transform.position, leftController.transform.TransformDirection(Vector3.down), maxTeleportDistance);
+        hits = Physics.RaycastAll(rightController.transform.position, aimDirection, maxTeleportDistance);
         if (hits.Length > 0) // layerMask
         {
             // sort the list from closest to farthest
@@ -164,7 +164,7 @@ public class CustomTeleporter : MonoBehaviour
     private void ChangeLineRendererColor(Color color)
     {
         lr.positionCount = 2;
-        lr.SetPosition(1, new Vector3(0, -maxTeleportDistance, 0));
+        lr.SetPosition(1, aimDirection * maxTeleportDistance);
         lr.startColor = color;
         lr.endColor = color;
     }
@@ -178,12 +178,12 @@ public class CustomTeleporter : MonoBehaviour
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
             // otherwise hide canvas
-            canvas.SetActive(false);
+            SceneResetCanvas.SetActive(false);
             return;
         }
 
         // if both secondaries are pressed, enable canvas
-        canvas.SetActive(true);
+        SceneResetCanvas.SetActive(true);
     }
 
 }

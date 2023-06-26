@@ -8,6 +8,7 @@ public class Debugger : MonoBehaviour
 {
     // Adjust via the Inspector
     public int maxLines = 8;
+    private int errorCount = 0;
     private Queue<string> queue = new Queue<string>();
     private string currentText = "";
 
@@ -23,10 +24,11 @@ public class Debugger : MonoBehaviour
 
     void HandleLog(string logString, string stackTrace, LogType type)
     {
+        errorCount++;
         // Delete oldest message
         if (queue.Count >= maxLines) queue.Dequeue();
 
-        queue.Enqueue(logString);
+        queue.Enqueue("Error #" + errorCount + ": " + logString);
 
         var builder = new StringBuilder();
         foreach (string st in queue)
