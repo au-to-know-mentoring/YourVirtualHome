@@ -45,7 +45,7 @@ public class DownloadHandler : MonoBehaviour
 
         // code for modelview scene
         // give reference of house to wand
-        //FindObjectOfType<Wand>().setHouse(loadedObject);
+        FindObjectOfType<Wand>().setHouse(loadedObject);
         // spawns player near house
         //positionPlayer(loadedObject);
         

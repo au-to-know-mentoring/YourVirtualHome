@@ -5,24 +5,24 @@ using UnityEngine.InputSystem;
 
 public class Wand : MonoBehaviour
 {
-    List<Vector3> Rotations;   // list of rotations for the house
-    int currentRotation = 0;   // current rotation index in list
+    //List<Vector3> Rotations;   // list of rotations for the house
+    //int currentRotation = 0;   // current rotation index in list
     GameObject house = null;   // reference to house game object
 
     [SerializeField] LineRenderer lr;   // reference to lineRenderer that projects line out of wand
 
-    [SerializeField] GameObject rightController; // reference to right controller
+    [SerializeField] GameObject leftController; // reference to right controller
     [SerializeField] InputActionReference wandButton;
     [SerializeField] InputActionReference wandActivateButton;
 
     bool wandActive = false;
+    Vector3 aimDirection = Vector3.forward;
     private float maxWandDistance = 2.5f;   // Maximum interaction distance for wand
     private bool haveTarget = false; //boolean to confirm if wand should be useable and is on-target
     private RaycastHit target; // storing target for wand use
 
     void Start()
     {
-        createRotationList();
         wandButton.action.Enable();
         wandActivateButton.action.Enable();
         wandButton.action.performed += UseWand;
@@ -53,7 +53,7 @@ public class Wand : MonoBehaviour
         lr.enabled = true;
         RaycastHit hit;
         // fire raycast out of wand
-        if (Physics.Raycast(rightController.transform.position, rightController.transform.TransformDirection(Vector3.down), out hit, maxWandDistance))
+        if (Physics.Raycast(leftController.transform.position, leftController.transform.TransformDirection(aimDirection), out hit, maxWandDistance))
         {
             // define colours of line renderer gradient 
             ChangeLineRendererColor(Color.green);
@@ -74,6 +74,7 @@ public class Wand : MonoBehaviour
             if (hit.transform.gameObject.GetComponent<MeshCollider>() != null)
             {
                 hit.transform.gameObject.tag = "Wanded";
+            Debug.Log("Wanded");
                 // MakeObjectTransparent(hit.transform.gameObject);
                 // SetFaded(hit.transform.gameObject);
                 // Destroy(hit.transform.gameObject.GetComponent<MeshCollider>());
@@ -111,7 +112,7 @@ public class Wand : MonoBehaviour
     private void ChangeLineRendererColor(Color color)
     {
         lr.positionCount = 2;
-        lr.SetPosition(1, new Vector3(0, -maxWandDistance, 0));
+        lr.SetPosition(1, aimDirection * maxWandDistance);
         lr.startColor = Color.blue;
         lr.endColor = color;
     }
@@ -153,7 +154,7 @@ public class Wand : MonoBehaviour
     {
         house = h;
     }
-
+    /*
     // rotate the house gameObject through the list of rotations
     private void rotateHouse()
     {
@@ -185,6 +186,7 @@ public class Wand : MonoBehaviour
         Rotations.Add(new Vector3(0, 0, 270));
         Rotations.Add(new Vector3(0, 0, 0));
     }
+    */
 }
 
 

@@ -69,8 +69,9 @@ public class CustomTeleporter : MonoBehaviour
     void Start()
     {
         ti = Instantiate(tiPrefab, Vector3.zero, Quaternion.identity);
-        //wand = FindObjectOfType<Wand>();-----------------------------------------------
+        wand = FindObjectOfType<Wand>();
         FadedObjects = new List<GameObject>();
+        ChangeLineRendererColor(Color.red);
     }
 
     void Update()
@@ -82,7 +83,6 @@ public class CustomTeleporter : MonoBehaviour
     private void HandleTeleporter()
     {
         // reset faded objects to normal materials
-        /*-----------------------------------------------------------
         foreach (GameObject g in FadedObjects)
         {
             g.GetComponent<HouseObject>().ResetMyMaterials();
@@ -90,14 +90,14 @@ public class CustomTeleporter : MonoBehaviour
 
         }
         FadedObjects.Clear();
-        */
+
         Teleport();
 
         return;
         // fade hovered objects that have been wanded to a transparent green
         foreach (GameObject g in FadedObjects)
         {
-            //wand.SetFaded(g);------------------------------------
+            wand.SetFaded(g);
             g.GetComponent<MeshCollider>().enabled = false;
         }
     }
@@ -109,14 +109,14 @@ public class CustomTeleporter : MonoBehaviour
 
         RaycastHit[] hits;
         // collect list of objects that the teleporter is pointing at as hits
-        hits = Physics.RaycastAll(rightController.transform.position, aimDirection, maxTeleportDistance);
+        hits = Physics.RaycastAll(rightController.transform.position, rightController.transform.TransformDirection(aimDirection), maxTeleportDistance);
         if (hits.Length > 0) // layerMask
         {
             // sort the list from closest to farthest
             System.Array.Sort(hits, (x, y) => x.distance.CompareTo(y.distance));
             for (int i = 0; i < hits.Length; i++)
             {
-                Debug.Log(hits[i].transform.gameObject.name);
+                //Debug.Log(hits[i].transform.gameObject.name);
                 if (hits[i].transform.gameObject.tag == "SceneReset") {
                     readyToReset = true;
                     break;
@@ -127,6 +127,7 @@ public class CustomTeleporter : MonoBehaviour
                 }
                 if (hits[i].transform.gameObject.tag == "Wanded")
                 {
+                    Debug.Log("Something is Wanded!");
                     // if an object has been wanded, it can be passed through
                     FadedObjects.Add(hits[i].transform.gameObject);
                     continue;
