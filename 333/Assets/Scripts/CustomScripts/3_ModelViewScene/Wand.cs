@@ -75,13 +75,12 @@ public class Wand : MonoBehaviour
             {
                 hit.transform.gameObject.tag = "Wanded";
             Debug.Log("Wanded");
-                // MakeObjectTransparent(hit.transform.gameObject);
-                // SetFaded(hit.transform.gameObject);
-                // Destroy(hit.transform.gameObject.GetComponent<MeshCollider>());
-                // Debug.Log("Collider Destroyed");
+                MakeObjectTransparent(hit.transform.gameObject);
+                SetFaded(hit.transform.gameObject);
+                Destroy(hit.transform.gameObject.GetComponent<MeshCollider>());
+                Debug.Log("Collider Destroyed");
             }
     }
-    /*
     private void MakeObjectTransparent(GameObject houseObject)
     {
         // get all materials applied to the mesh of a gameobject, and set them to transparency
@@ -108,7 +107,6 @@ public class Wand : MonoBehaviour
 
     }
 
-    */
     private void ChangeLineRendererColor(Color color)
     {
         lr.positionCount = 2;
