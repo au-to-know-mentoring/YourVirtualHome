@@ -14,12 +14,14 @@ public class Wand : MonoBehaviour
     [SerializeField] GameObject leftController; // reference to right controller
     [SerializeField] InputActionReference wandButton;
     [SerializeField] InputActionReference wandActivateButton;
+    [SerializeField] InputActionReference undoButton;
 
     bool wandActive = false;
     Vector3 aimDirection = Vector3.forward;
     private float maxWandDistance = 2.5f;   // Maximum interaction distance for wand
     private bool haveTarget = false; //boolean to confirm if wand should be useable and is on-target
     private RaycastHit target; // storing target for wand use
+    private List<UndoInfo> undoList = new List<UndoInfo>(); // store changes made by the wand to undo later
 
     void Start()
     {
@@ -28,7 +30,18 @@ public class Wand : MonoBehaviour
         wandButton.action.performed += UseWand;
         wandActivateButton.action.performed += ActivateWand;
         wandActivateButton.action.canceled += ActivateWand;
+        undoButton.action.Enable();
+        undoButton.action.performed += context => UndoLastAction();
+    
     }
+
+    private void OnDisable()
+    {
+
+        undoButton.action.Disable();
+    }
+
+
 
     void UseWand(InputAction.CallbackContext context)
     {
@@ -71,16 +84,24 @@ public class Wand : MonoBehaviour
 
     private void DestroyCollider(RaycastHit hit)
     {
-            if (hit.transform.gameObject.GetComponent<MeshCollider>() != null)
-            {
-                hit.transform.gameObject.tag = "Wanded";
+        if (hit.transform.gameObject.GetComponent<MeshCollider>() != null)
+        {
+            UndoInfo undoInfo = new UndoInfo();
+            undoInfo.Object = hit.transform.gameObject;
+            undoInfo.OriginalMaterials = hit.transform.gameObject.GetComponent<MeshRenderer>().materials;
+            undoInfo.ColliderDestroyed = true;
+
+            undoList.Add(undoInfo);
+
+            hit.transform.gameObject.tag = "Wanded";
             Debug.Log("Wanded");
-                MakeObjectTransparent(hit.transform.gameObject);
-                SetFaded(hit.transform.gameObject);
-                Destroy(hit.transform.gameObject.GetComponent<MeshCollider>());
-                Debug.Log("Collider Destroyed");
-            }
+            MakeObjectTransparent(hit.transform.gameObject);
+            SetFaded(hit.transform.gameObject);
+            Destroy(hit.transform.gameObject.GetComponent<MeshCollider>());
+            Debug.Log("Collider Destroyed");
+        }
     }
+
     private void MakeObjectTransparent(GameObject houseObject)
     {
         // get all materials applied to the mesh of a gameobject, and set them to transparency
@@ -123,7 +144,7 @@ public class Wand : MonoBehaviour
 
     public void SetFaded(GameObject houseObject)
     {
-        // access the houseObject’s mesh renderer
+        // access the houseObjectï¿½s mesh renderer
         MeshRenderer mr = houseObject.GetComponent<MeshRenderer>();
         Material[] newMaterials = new Material[mr.materials.Length];
 
@@ -147,7 +168,7 @@ public class Wand : MonoBehaviour
 
     #endregion
 
-    // define reference to house’s gameObject
+    // define reference to houseï¿½s gameObject
     public void setHouse(GameObject h)
     {
         house = h;
@@ -185,7 +206,57 @@ public class Wand : MonoBehaviour
         Rotations.Add(new Vector3(0, 0, 0));
     }
     */
+    private void UndoLastAction()
+    {
+        if (undoList.Count > 0)
+        {
+            UndoInfo undoInfo = undoList[undoList.Count - 1];
+
+            if (undoInfo.ColliderDestroyed)
+            {
+                UndoCollider(undoInfo);
+            }
+
+            undoList.RemoveAt(undoList.Count - 1);
+        }
+    }
+
+    private void UndoCollider(UndoInfo undoInfo)
+    {
+        GameObject obj = undoInfo.Object;
+
+        MeshRenderer mr = obj.GetComponent<MeshRenderer>();
+        mr.materials = undoInfo.OriginalMaterials;
+
+        if (obj.GetComponent<HouseObject>() != null)
+        {
+            obj.GetComponent<HouseObject>().ResetMyMaterials();
+            Destroy(obj.GetComponent<HouseObject>());
+        }
+
+        obj.AddComponent<MeshCollider>();
+    }
+    private void ClearUndoList()
+    {
+        foreach (UndoInfo undoInfo in undoList)
+        {
+            if (undoInfo.ColliderDestroyed)
+            {
+                UndoCollider(undoInfo);
+            }
+        }
+
+        undoList.Clear();
+    }
+
 }
+public class UndoInfo
+{
+    public GameObject Object;
+    public Material[] OriginalMaterials;
+    public bool ColliderDestroyed;
+}
+
 
 
 
