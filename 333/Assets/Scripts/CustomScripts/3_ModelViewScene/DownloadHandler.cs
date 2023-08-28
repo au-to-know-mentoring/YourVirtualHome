@@ -25,10 +25,10 @@ public class DownloadHandler : MonoBehaviour
     {
         WebClient client = new WebClient();
 
-        path = Application.persistentDataPath + "/" + "OcalObj.zip";
+        path = Application.persistentDataPath + "/" + "OlafObj.zip";
         // links function  to event
         client.DownloadFileCompleted += new AsyncCompletedEventHandler(DownloadFileCallback);
-        Uri uri = new Uri("https://github.com/ATK-mentoring/fbx-examples/raw/main/OcalObj.zip");
+        Uri uri = new Uri("https://github.com/ATK-mentoring/fbx-examples/raw/main/OlafObj.zip");
         // call download function 
         client.DownloadFileAsync(uri, path);
     }
@@ -37,7 +37,7 @@ public class DownloadHandler : MonoBehaviour
     {
         // extract to assets folder
         ZipFile.ExtractToDirectory(path, Application.persistentDataPath);
-        var loadedObject = new OBJLoader().Load(Application.persistentDataPath + "/TEST 8/" + "PANAMUNA_VR FILE.obj", Application.persistentDataPath + "/TEST 8/" + "PANAMUNA_VR FILE.mtl");
+        var loadedObject = new OBJLoader().Load(Application.persistentDataPath + "/TEST 8/" + "20230822 OBJ/PANAMUNA_VR FILE.obj", Application.persistentDataPath + "/TEST 8/" + "20230822 OBJ/PANAMUNA_VR FILE.mtl");
         // load object into world 
         loadedObject.gameObject.transform.Rotate(-90f, 0f, 0f, Space.World);
         // apply collision 
@@ -74,7 +74,7 @@ public class DownloadHandler : MonoBehaviour
     {
         ClearFiles("PANAMUNA_VR FILE.obj");
         ClearFiles("TEST 8");
-        ClearFiles("OcalObj.zip");
+        ClearFiles("OlafObj.zip");
     }
     public void ClearFiles(string path)
     {

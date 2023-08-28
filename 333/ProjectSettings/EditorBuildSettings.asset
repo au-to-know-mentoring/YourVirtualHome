@@ -5,7 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/ModelViewScene.unity
     guid: 061fcac6e856ded40b627ad158862d94
   - enabled: 0
@@ -14,7 +14,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Oculus/VR/Scenes/TrackedKeyboard.unity
     guid: eb540761693b1de438733a3581e21f58
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/z_OlafScene.unity
     guid: f4ab205a235775d409435e6038875c66
   m_configObjects:
