@@ -8,7 +8,9 @@ using System.Net;
 using System;
 using System.IO.Compression;
 using System.ComponentModel;
-
+ using UnityEngine.UI;
+ using TMPro;
+// localhost:3000/virtualhome-remote/getModel/
 public class DownloadHandler : MonoBehaviour
 {
     // event for completion of download
@@ -16,19 +18,22 @@ public class DownloadHandler : MonoBehaviour
     // path to zip
     string path = "";
 
-    void Start()
-    {
-        DownloadFile();
+    public InputField iField;
+    string myInput;
+    public void DownloadFromMyLink() {
+        if (myInput != null) {
+            DownloadFile();
+        }
     }
 
     void DownloadFile()
     {
         WebClient client = new WebClient();
 
-        path = Application.persistentDataPath + "/" + "OlafObj.zip";
+        path = Application.persistentDataPath + "/" + "ArchicadObjSize.zip";
         // links function  to event
         client.DownloadFileCompleted += new AsyncCompletedEventHandler(DownloadFileCallback);
-        Uri uri = new Uri("https://github.com/ATK-mentoring/fbx-examples/raw/main/OlafObj.zip");
+        Uri uri = new Uri("localhost:3000/virtualhome-remote/getModel/" + myInput);
         // call download function 
         client.DownloadFileAsync(uri, path);
     }
@@ -37,7 +42,7 @@ public class DownloadHandler : MonoBehaviour
     {
         // extract to assets folder
         ZipFile.ExtractToDirectory(path, Application.persistentDataPath);
-        var loadedObject = new OBJLoader().Load(Application.persistentDataPath + "/TEST 8/" + "20230822 OBJ/PANAMUNA_VR FILE.obj", Application.persistentDataPath + "/TEST 8/" + "20230822 OBJ/PANAMUNA_VR FILE.mtl");
+        var loadedObject = new OBJLoader().Load(Application.persistentDataPath + "/TEST 8/" + "Vacation Home.obj", Application.persistentDataPath + "/TEST 8/" + "Vacation Home.mtl");
         // load object into world 
         loadedObject.gameObject.transform.Rotate(-90f, 0f, 0f, Space.World);
         // apply collision 
@@ -48,7 +53,7 @@ public class DownloadHandler : MonoBehaviour
         FindObjectOfType<Wand>().setHouse(loadedObject);
         // spawns player near house
         //positionPlayer(loadedObject);
-
+        
     }
 
     void positionPlayer(GameObject house)
@@ -65,16 +70,15 @@ public class DownloadHandler : MonoBehaviour
     }
 
 
-    private void OnApplicationQuit()
-    {
-        DeleteAllFiles();
-    }
+    // private void OnApplicationQuit()
+    // {
+    //     DeleteAllFiles();
+    // }
 
-    public void DeleteAllFiles()
-    {
-        ClearFiles("PANAMUNA_VR FILE.obj");
+    public void DeleteAllFiles() {
+        ClearFiles("Vacation Home.obj");
         ClearFiles("TEST 8");
-        ClearFiles("OlafObj.zip");
+        ClearFiles("ArchicadObjSize.zip");
     }
     public void ClearFiles(string path)
     {
