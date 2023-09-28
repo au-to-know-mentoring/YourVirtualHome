@@ -1,0 +1,120 @@
+{
+    "name": "ModelViewSceneControls",
+    "maps": [
+        {
+            "name": "ModelViewScene",
+            "id": "070b24c0-65ba-4c0b-8fdd-f2c0e7b00644",
+            "actions": [
+                {
+                    "name": "LeftPrimary",
+                    "type": "Value",
+                    "id": "3f2a019e-6995-468c-b995-617356679a85",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "LeftSecondary",
+                    "type": "Value",
+                    "id": "9b6404a2-4b92-4ad5-968b-fb0e8e2af282",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "LeftTrigger",
+                    "type": "Value",
+                    "id": "cc068109-a7c9-483d-a0f0-bde5ec019ddd",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "RightSecondary",
+                    "type": "Value",
+                    "id": "5834665d-4247-4c6c-b595-92b730b29e67",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "RightPrimary",
+                    "type": "Value",
+                    "id": "dd1f75a1-f1d3-4351-9e89-6fb9478d5e9b",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "0663710d-9905-4366-b62d-ac20c7a0857b",
+                    "path": "<XRController>{RightHand}/secondaryButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "ModelViewSceneControls",
+                    "action": "RightSecondary",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cc6d48a7-ad10-430c-99bb-17ff041407ba",
+                    "path": "<XRController>{RightHand}/primaryButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "ModelViewSceneControls",
+                    "action": "RightPrimary",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "095273bf-dfb7-4732-b2a0-80077a3a5384",
+                    "path": "<XRController>{LeftHand}/primaryButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "ModelViewSceneControls",
+                    "action": "LeftPrimary",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6d26d7e7-688a-41f1-b505-68d9d4b6bb78",
+                    "path": "<XRController>{LeftHand}/secondaryButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "ModelViewSceneControls",
+                    "action": "LeftSecondary",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "169c9766-a19f-44a9-a2fd-f8acaa16e242",
+                    "path": "<XRController>{LeftHand}/triggerPressed",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "ModelViewSceneControls",
+                    "action": "LeftTrigger",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": [
+        {
+            "name": "ModelViewSceneControls",
+            "bindingGroup": "ModelViewSceneControls",
+            "devices": []
+        }
+    ]
+}
