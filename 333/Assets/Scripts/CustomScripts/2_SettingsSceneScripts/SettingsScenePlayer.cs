@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class SettingsScenePlayer : MonoBehaviour
 {
@@ -153,6 +154,13 @@ public class SettingsScenePlayer : MonoBehaviour
             {
                 //Debug.Log("VSlider clicked");
                 VSliderDragging = true;
+                break;
+            }
+            if (hits[i].transform.gameObject.name == "ArchitectInputField")
+            {
+                Debug.Log("inputfield clidked");
+                hits[i].transform.gameObject.GetComponent<InputField>().ActivateInputField();
+                hits[i].transform.gameObject.GetComponent<InputField>().Select();
                 break;
             }
             if (hits[i].transform.gameObject.GetComponent<Button>() != null) {
