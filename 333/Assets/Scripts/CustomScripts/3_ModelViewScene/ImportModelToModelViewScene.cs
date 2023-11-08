@@ -10,8 +10,8 @@ public class ImportModelToModelViewScene : MonoBehaviour
 
 	void Start()
 	{
-		DownloadHandlerScript = gameObject.GetComponent<DownloadHandler>();
-		DownloadHandlerScript.LoadModelToScene();
+		//DownloadHandlerScript = gameObject.GetComponent<DownloadHandler>();
+		//DownloadHandlerScript.LoadModelToScene();
 		//SceneManager.LoadScene("ModelScene", LoadSceneMode.Single);
 
 	}

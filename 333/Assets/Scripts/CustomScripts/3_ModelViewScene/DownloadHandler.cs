@@ -11,6 +11,8 @@ using System.ComponentModel;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
+//using static System.Net.Mime.MediaTypeNames;
 
 
 // localhost:3000/virtualhome-remote/getModel/ 
@@ -24,10 +26,53 @@ public class DownloadHandler : MonoBehaviour
     string zipFile = "";
     public InputField iField; // forr Code input
     string myInput = ""; // for Code input 
-    
+   
+    public List<string> ListOfModelFolders = new List<string>();
+
+    private string SaveDownloadModelString = "ModelsDownloaded";
+
+    public int ModelCountSave;
+    public string unZipFolderLocation;
+   
+    private string[] dirs;
+    string[] OBJfiles;
+    string[] ArrayMTLfiles;
+
+    public int TEST;
+    public int choiceTest;
+
+    public bool PRESSME;
 
 
-    public void DownloadFromMyLink() {
+
+    // change the choiceTest INT to change the folder you are using in ListOfModelFolders
+
+
+
+    public TMP_Dropdown modelSelectDropDown;
+
+    public void Update()
+	{
+
+        if (PRESSME == true)
+        {
+            LoadModelToScene();
+            PRESSME = false;
+        }
+    }
+	public void Start()
+	{
+        
+        
+        ListModelFolders();
+        
+
+        unZipFolderLocation = Application.persistentDataPath + "Model";
+     
+        
+    }
+   
+	public void DownloadFromMyLink() {
        
          DownloadFile(); // only called from UI button press and not on application start
         
@@ -47,7 +92,7 @@ public class DownloadHandler : MonoBehaviour
         // get ProgressPercent for DownloadBarProgress.cs
         client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(DownloadProgressCallback4); // + myInput
 
-        Uri uri = new Uri("https://aumentoring.com.au/virtualhome-remote/getModel/935211"); //https://github.com/ATK-mentoring/fbx-examples/blob/main/ArchicadObjSize.zip localhost:3000/virtualhome-remote/getModel/380150 // needs to be fixed to use our code input needs to be online tho
+        Uri uri = new Uri("https://aumentoring.com.au/virtualhome-remote/getModel/592381"); //https://github.com/ATK-mentoring/fbx-examples/blob/main/ArchicadObjSize.zip localhost:3000/virtualhome-remote/getModel/380150 // needs to be fixed to use our code input needs to be online tho
         // call download function 
         Debug.Log(myInput);
         Debug.Log(uri);
@@ -55,8 +100,9 @@ public class DownloadHandler : MonoBehaviour
         
         
     }
-    
-    public DownloadProgressChangedEventArgs ProgressVar; // for DownloadBarProgress.cs to use Percentage value
+	
+
+	public DownloadProgressChangedEventArgs ProgressVar; // for DownloadBarProgress.cs to use Percentage value
     public void DownloadProgressCallback4(object sender, DownloadProgressChangedEventArgs e)
     {
         ProgressVar = e;
@@ -67,15 +113,44 @@ public class DownloadHandler : MonoBehaviour
             e.TotalBytesToReceive,
             e.ProgressPercentage);// for DownloadBarProgress.cs to get percentage
     }
+    public void ListModelFolders() 
+	{
+        var headFolderPath = Path.GetDirectoryName(Application.persistentDataPath); // get's parent Folder
+        
+        dirs = new string[250];
+        dirs = Directory.GetDirectories(headFolderPath, Application.productName + "Model*", SearchOption.TopDirectoryOnly);  
+
+        ListOfModelFolders.Clear();
+
+        foreach (string dir in dirs)
+        {          
+            ListOfModelFolders.Add(dir);
+  
+            Debug.Log(dir);
+        }
+
+        Debug.Log(ListOfModelFolders.Count);
+        TEST = ListOfModelFolders.Count;
+    }
 
 	public void DownloadFileCallback(object sender, AsyncCompletedEventArgs e)
 	{
 
-		// extract to assets folder
-		ZipFile.ExtractToDirectory(path, Application.persistentDataPath);
+             ModelCountSave = ModelCountSave + 1;
+             unZipFolderLocation = Application.persistentDataPath + "Model" + ModelCountSave;
+            
+            ZipFile.ExtractToDirectory(path, unZipFolderLocation);
+            ListModelFolders(); // upadtes the Model Folders List with new folder
 
-	} // download files don't import, different add the .obj .mtl (the model) stores a folder, what ever model in view port has a id to the files, click run , import the model to the modelviewScene
-    public void SwitchToModelScene() // load modelview scene in background then import model to model view scene, then Switch from "Default Scene" to Model View Scene
+
+        // extract to download location
+
+
+    } 
+  
+
+    // download files don't import, different add the .obj .mtl (the model) stores a folder, what ever model in view port has a id to the files, click run , import the model to the modelviewScene
+    public void SwitchToModelScene() // load model view scene in background then import model to model view scene, then Switch from "Default Scene" to Model View Scene
     {
         Scene scene = SceneManager.GetActiveScene();
         StartCoroutine(LoadYourAsyncScene());  
@@ -93,16 +168,30 @@ public class DownloadHandler : MonoBehaviour
       
        
     }
+  
     public void LoadModelToScene() // used by ImportModelToModelViewScene.cs
 	{
-
-
+       // string unknownPath = Directory.GetDirectories(Application.persistentDataPath + "Model" + ModelCountSave)[0];
+        string unkownPathTwo = Application.persistentDataPath + "Model" + choiceTest;
+        Debug.Log(unkownPathTwo);
        
-        Debug.Log(Application.persistentDataPath);
-        var loadedObject = new OBJLoader().Load(Application.persistentDataPath +  "/TEST 8/" + "Vacation Home.obj", Application.persistentDataPath + "/TEST 8/" + "Vacation Home.mtl");
+        string[] OBJfiles = Directory.GetFiles(unkownPathTwo,"*.obj", SearchOption.AllDirectories);
         
-            // load object into world 
-            loadedObject.gameObject.transform.Rotate(-90f, 0f, 0f, Space.World);
+        
+        var objFilePath = OBJfiles[0];// get full path to the OBJ file
+
+        string[] ArrayMTLfiles = Directory.GetFiles(unkownPathTwo, "*.mtl", SearchOption.AllDirectories);
+       
+        var mtlFilePath = ArrayMTLfiles[0]; // get full path to the MTL file
+
+        Debug.Log(mtlFilePath);
+
+        
+        var loadedObject = new OBJLoader().Load(objFilePath, mtlFilePath); // imports the obj
+        
+        // load object into world 
+        loadedObject.gameObject.transform.Rotate(-90f, 0f, 0f, Space.World);
+
         Debug.Log("transform");
         // apply collision 
         WorldManager.ApplyCollidersToHouse(loadedObject);
@@ -118,11 +207,6 @@ public class DownloadHandler : MonoBehaviour
     }
 
   
-       
-
- 
-   
-
     void positionPlayer(GameObject house)
     {
         GameObject player = FindObjectOfType<Wand>().gameObject;
@@ -137,8 +221,9 @@ public class DownloadHandler : MonoBehaviour
     }
 
 
-    private void OnApplicationQuit()
+    public void OnApplicationQuit()
     {
+      
         DeleteAllFiles();
         Debug.Log(zipFile);
         Debug.Log(path);
@@ -150,7 +235,7 @@ public class DownloadHandler : MonoBehaviour
 
 
     public void DeleteAllFiles() {
-        ClearFiles("/" + "TEST 8"); // will move Delete Model function to the model previews panel
+       // ClearFiles("/" + "TEST 8"); // will move Delete Model function to the model previews panel
         ClearFiles(".zip"); // deletes the zip 
     }
    
