@@ -9,8 +9,9 @@ public class GetModelFromDownloadHandler : MonoBehaviour
     private DownloadHandler DownloadhandlerScript;
     public GameObject DownloadHandlerOBJ;
     private TMP_Dropdown modelSelectDropDown;
-    private int myList;
     private int myChoice;
+
+    private int numOfFolderInt;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,14 +27,14 @@ public class GetModelFromDownloadHandler : MonoBehaviour
 
         //get all options available within this dropdown menu
         List<TMP_Dropdown.OptionData> menuOptions = modelSelectDropDown.GetComponent<TMP_Dropdown>().options;
-
+        foreach (string numOfFolder in  DownloadhandlerScript.ListOfModelFolders)
+		{
+            
+		}
         //get the string value of the selected index
         string value = menuOptions[menuIndex].text;
         
-        if (menuIndex == 1)
-		{
-            myChoice = 69;
-		}
+      
 
         Debug.Log(menuIndex);
         
@@ -42,7 +43,20 @@ public class GetModelFromDownloadHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        var myList = DownloadhandlerScript.TEST;
+        if (modelSelectDropDown.value >= 0)
+		{
+            DownloadhandlerScript.choiceTest = modelSelectDropDown.value;
+            
+        }
+
+        if (numOfFolderInt < DownloadhandlerScript.ListOfModelFolders.Count)
+	    {
+            numOfFolderInt++;
+            string DropMenuName = "Option" + numOfFolderInt;
+            modelSelectDropDown.options.Add(new TMP_Dropdown.OptionData() { text = DropMenuName });
+        }  
+     
+        Debug.Log(DownloadhandlerScript.ListOfModelFolders.Count);
         TestChangeModel();
         
     }

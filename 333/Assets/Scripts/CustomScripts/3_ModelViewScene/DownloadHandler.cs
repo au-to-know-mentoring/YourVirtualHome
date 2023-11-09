@@ -12,6 +12,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
+
 //using static System.Net.Mime.MediaTypeNames;
 
 
@@ -38,38 +39,54 @@ public class DownloadHandler : MonoBehaviour
     string[] OBJfiles;
     string[] ArrayMTLfiles;
 
-    public int TEST;
+
+    public string unkownPathTwo;
+
     public int choiceTest;
 
     public bool PRESSME;
 
+    public int showSelectInt;
+    public int modelSelectInt { get; set; }
+    string modelSelectKey = "ModelNum";
+
+    private bool modelHasLoaded;
+	// change the choiceTest INT to change the folder you are using in ListOfModelFolders
 
 
-    // change the choiceTest INT to change the folder you are using in ListOfModelFolders
-
-
-
-    public TMP_Dropdown modelSelectDropDown;
-
+	public void Awake()
+	{
+        modelSelectInt = PlayerPrefs.GetInt(modelSelectKey);
+        Debug.Log(modelSelectInt + gameObject.name);
+	}
+    public void setModelSelect()
+	{
+        PlayerPrefs.SetInt(modelSelectKey, choiceTest);
+	}
+	public TMP_Dropdown modelSelectDropDown;
+    
     public void Update()
 	{
-
-        if (PRESSME == true)
-        {
-            LoadModelToScene();
-            PRESSME = false;
-        }
+        showSelectInt = modelSelectInt;
+        setModelSelect();
+        Scene scene = SceneManager.GetActiveScene();
+        if (scene.name == "ModelScene")
+		{
+            if (modelHasLoaded == false)
+			{
+                modelHasLoaded = true;
+                LoadModelToScene();
+            }
+		}
     }
+
 	public void Start()
 	{
-        
-        
+  
         ListModelFolders();
-        
 
         unZipFolderLocation = Application.persistentDataPath + "Model";
-     
-        
+ 
     }
    
 	public void DownloadFromMyLink() {
@@ -92,7 +109,7 @@ public class DownloadHandler : MonoBehaviour
         // get ProgressPercent for DownloadBarProgress.cs
         client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(DownloadProgressCallback4); // + myInput
 
-        Uri uri = new Uri("https://aumentoring.com.au/virtualhome-remote/getModel/592381"); //https://github.com/ATK-mentoring/fbx-examples/blob/main/ArchicadObjSize.zip localhost:3000/virtualhome-remote/getModel/380150 // needs to be fixed to use our code input needs to be online tho
+        Uri uri = new Uri("https://aumentoring.com.au/virtualhome-remote/getModel/" + myInput); //https://github.com/ATK-mentoring/fbx-examples/blob/main/ArchicadObjSize.zip localhost:3000/virtualhome-remote/getModel/380150 // needs to be fixed to use our code input needs to be online tho
         // call download function 
         Debug.Log(myInput);
         Debug.Log(uri);
@@ -123,24 +140,25 @@ public class DownloadHandler : MonoBehaviour
         ListOfModelFolders.Clear();
 
         foreach (string dir in dirs)
-        {          
+        {
+            
+            Debug.Log(dir); 
             ListOfModelFolders.Add(dir);
-  
+            
             Debug.Log(dir);
         }
+        
 
-        Debug.Log(ListOfModelFolders.Count);
-        TEST = ListOfModelFolders.Count;
     }
 
 	public void DownloadFileCallback(object sender, AsyncCompletedEventArgs e)
 	{
-
-             ModelCountSave = ModelCountSave + 1;
-             unZipFolderLocation = Application.persistentDataPath + "Model" + ModelCountSave;
             
-            ZipFile.ExtractToDirectory(path, unZipFolderLocation);
-            ListModelFolders(); // upadtes the Model Folders List with new folder
+             
+             unZipFolderLocation = Application.persistentDataPath + "Model" + ListOfModelFolders.Count;
+             
+             ZipFile.ExtractToDirectory(path, unZipFolderLocation);
+             ListModelFolders(); // upadtes the Model Folders List with new folder
 
 
         // extract to download location
@@ -153,26 +171,33 @@ public class DownloadHandler : MonoBehaviour
     public void SwitchToModelScene() // load model view scene in background then import model to model view scene, then Switch from "Default Scene" to Model View Scene
     {
         Scene scene = SceneManager.GetActiveScene();
-        StartCoroutine(LoadYourAsyncScene());  
+        StartCoroutine(LoadYourAsyncScene());
+        
     }
     IEnumerator LoadYourAsyncScene() // load ModelViewScene in back ground
 	{
-        UnityEngine.AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("ModelScene");
+        UnityEngine.AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("ModelScene", LoadSceneMode.Single);
 
         // Wait until the asynchronous scene fully loads
         while (!asyncLoad.isDone)
         {
             //LoadModelToScene();
             yield return null;
+            
         } 
+        
       
        
     }
   
     public void LoadModelToScene() // used by ImportModelToModelViewScene.cs
 	{
-       // string unknownPath = Directory.GetDirectories(Application.persistentDataPath + "Model" + ModelCountSave)[0];
-        string unkownPathTwo = Application.persistentDataPath + "Model" + choiceTest;
+      
+       foreach (string dir in ListOfModelFolders)
+		{
+           unkownPathTwo = dir;
+        }
+        
         Debug.Log(unkownPathTwo);
        
         string[] OBJfiles = Directory.GetFiles(unkownPathTwo,"*.obj", SearchOption.AllDirectories);
