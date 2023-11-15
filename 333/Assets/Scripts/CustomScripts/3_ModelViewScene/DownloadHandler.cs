@@ -26,7 +26,7 @@ public class DownloadHandler : MonoBehaviour
     // zipFile name to delete on application quit
     string zipFile = "";
     public InputField iField; // forr Code input
-    string myInput = ""; // for Code input 
+    public string myInput = ""; // for Code input 
    
     public List<string> ListOfModelFolders = new List<string>();
 
@@ -51,6 +51,10 @@ public class DownloadHandler : MonoBehaviour
     string modelSelectKey = "ModelNum";
 
     private bool modelHasLoaded;
+
+    public GetModelName getModelNameScript;
+
+    
 	// change the choiceTest INT to change the folder you are using in ListOfModelFolders
 
 
@@ -97,8 +101,8 @@ public class DownloadHandler : MonoBehaviour
     
     void DownloadFile()
     {
-        string myInput = iField.text; // for Code Input
-        
+        myInput = iField.text; // for Code Input
+        getModelNameScript.getModelInfo();
         //string myInput = iField.text;
         WebClient client = new WebClient();
 

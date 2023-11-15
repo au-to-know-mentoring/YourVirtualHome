@@ -43,7 +43,6 @@ public class DownloadBarProgress : MonoBehaviour
                 DownloadPercentText.text = PercentString + "%"; // writes percent
                 ProgressSlider.value = downloadBar; // filles download bar 
             } 
-        }
-       
+        } 
     }
 }
