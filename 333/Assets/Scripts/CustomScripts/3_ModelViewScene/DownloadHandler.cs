@@ -52,9 +52,9 @@ public class DownloadHandler : MonoBehaviour
 
     private bool modelHasLoaded;
 
-    public GetModelName getModelNameScript;
+    public GetModelInfo getModelInfoScript;
 
-    
+    public Keyboard myKeyboardScript;
 	// change the choiceTest INT to change the folder you are using in ListOfModelFolders
 
 
@@ -71,6 +71,9 @@ public class DownloadHandler : MonoBehaviour
     
     public void Update()
 	{
+        Debug.Log(Application.persistentDataPath + "/ " + Application.productName + "Model" + ListOfModelFolders.Count);
+        myInput = myKeyboardScript.iField.text;
+        Debug.Log(myInput);
         showSelectInt = modelSelectInt;
         setModelSelect();
         Scene scene = SceneManager.GetActiveScene();
@@ -96,31 +99,30 @@ public class DownloadHandler : MonoBehaviour
 	public void DownloadFromMyLink() {
        
          DownloadFile(); // only called from UI button press and not on application start
-        
     }
     
-    void DownloadFile()
+    public void DownloadFile()
     {
-        myInput = iField.text; // for Code Input
-        getModelNameScript.getModelInfo();
+       // myInput = iField.text; // for Code Input
+        
         //string myInput = iField.text;
         WebClient client = new WebClient();
 
         zipFile = Application.productName + ".zip";
-        path = Application.persistentDataPath  + ".zip";
+        path = Application.persistentDataPath  + "/"+ Application.productName+".zip";
         // links function  to event
         client.DownloadFileCompleted += new AsyncCompletedEventHandler(DownloadFileCallback);
         // get ProgressPercent for DownloadBarProgress.cs
         client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(DownloadProgressCallback4); // + myInput
 
-        Uri uri = new Uri("https://aumentoring.com.au/virtualhome-remote/getModel/" + myInput); //https://github.com/ATK-mentoring/fbx-examples/blob/main/ArchicadObjSize.zip localhost:3000/virtualhome-remote/getModel/380150 // needs to be fixed to use our code input needs to be online tho
+        Uri uri = new Uri("http://aumentoring.com.au/virtualhome-remote/getModel/460893"); //https://github.com/ATK-mentoring/fbx-examples/blob/main/ArchicadObjSize.zip localhost:3000/virtualhome-remote/getModel/380150 // needs to be fixed to use our code input needs to be online tho
         // call download function 
         Debug.Log(myInput);
         Debug.Log(uri);
         client.DownloadFileAsync(uri, path);
-        
-        
-    }
+
+		//getModelInfoScript.getModelInfo();
+	}
 	
 
 	public DownloadProgressChangedEventArgs ProgressVar; // for DownloadBarProgress.cs to use Percentage value
@@ -159,7 +161,7 @@ public class DownloadHandler : MonoBehaviour
 	{
             
              
-             unZipFolderLocation = Application.persistentDataPath + "Model" + ListOfModelFolders.Count;
+             unZipFolderLocation = Application.persistentDataPath + "/ " +Application.productName +"Model" + ListOfModelFolders.Count; // the extracted folder name
              
              ZipFile.ExtractToDirectory(path, unZipFolderLocation);
              ListModelFolders(); // upadtes the Model Folders List with new folder
