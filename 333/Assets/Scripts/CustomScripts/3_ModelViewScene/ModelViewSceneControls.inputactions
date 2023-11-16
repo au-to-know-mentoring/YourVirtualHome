@@ -49,6 +49,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "WandButton",
+                    "type": "Button",
+                    "id": "6a348406-fb58-49ef-9f5d-5f39d5fa9cb7",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "WandActivateButton",
+                    "type": "Button",
+                    "id": "78f460dd-8f90-49ec-adf2-5a40a7b02209",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -104,6 +122,28 @@
                     "processors": "",
                     "groups": "ModelViewSceneControls",
                     "action": "LeftTrigger",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9899ebe9-7d65-407a-9e4f-7cbcaa274afa",
+                    "path": "<OculusTouchController>{LeftHand}/secondaryButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "WandButton",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0879ad29-1731-454f-b417-d95033d30098",
+                    "path": "<OculusTouchController>{LeftHand}/primaryButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "WandActivateButton",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

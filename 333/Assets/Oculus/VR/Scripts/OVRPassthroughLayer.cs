@@ -241,7 +241,11 @@ public class OVRPassthroughLayer : MonoBehaviour
     /// </param>
     public void SetColorLut(OVRPassthroughColorLut lut, float weight = 1)
     {
+<<<<<<< HEAD
         if (lut != null && lut.IsValid)
+=======
+        if (lut != null && lut.IsInitialized)
+>>>>>>> Code-import-working
         {
             weight = ClampWeight(weight);
             colorMapType = ColorMapType.ColorLut;
@@ -251,7 +255,11 @@ public class OVRPassthroughLayer : MonoBehaviour
         }
         else
         {
+<<<<<<< HEAD
             Debug.LogError("Trying to set an invalid Color LUT for Passthrough");
+=======
+            Debug.LogError("Trying to set an uninitialized Color LUT for Passthrough");
+>>>>>>> Code-import-working
         }
     }
 
@@ -266,8 +274,13 @@ public class OVRPassthroughLayer : MonoBehaviour
     /// </param>
     public void SetColorLut(OVRPassthroughColorLut lutSource, OVRPassthroughColorLut lutTarget, float weight)
     {
+<<<<<<< HEAD
         if (lutSource != null && lutSource.IsValid
                               && lutTarget != null && lutTarget.IsValid)
+=======
+        if (lutSource != null && lutSource.IsInitialized
+                              && lutTarget != null && lutTarget.IsInitialized)
+>>>>>>> Code-import-working
         {
             weight = ClampWeight(weight);
             colorMapType = ColorMapType.InterpolatedColorLut;
@@ -277,7 +290,11 @@ public class OVRPassthroughLayer : MonoBehaviour
         }
         else
         {
+<<<<<<< HEAD
             Debug.LogError("Trying to set an invalid Color LUT for Passthrough");
+=======
+            Debug.LogError("Trying to set an uninitialized Color LUT for Passthrough");
+>>>>>>> Code-import-working
         }
     }
 
@@ -795,6 +812,7 @@ public class OVRPassthroughLayer : MonoBehaviour
         passthroughOverlay.enabled = OVRManager.instance != null &&
                                      OVRManager.instance.isInsightPassthroughEnabled &&
                                      OVRManager.IsInsightPassthroughInitialized();
+<<<<<<< HEAD
 
         if (wasPassthroughOverlayEnabled != passthroughOverlay.enabled)
         {
@@ -814,6 +832,8 @@ public class OVRPassthroughLayer : MonoBehaviour
         return projectionSurfaceType == ProjectionSurfaceType.UserDefined
             && deferredSurfaceGameObjects.Count == 0
             && surfaceGameObjects.Count == 0;
+=======
+>>>>>>> Code-import-working
     }
 
     private static float ClampWeight(float weight)
@@ -1012,11 +1032,15 @@ public class OVRPassthroughLayer : MonoBehaviour
         // Surface geometries have been moved to the deferred additions queue in OnDisable() and will be re-added
         // in LateUpdate().
 
+<<<<<<< HEAD
         if (colorMapEditorType != ColorMapEditorType.Custom)
         {
             _stylesHandler.SetStyleHandler(_editorToColorMapType[colorMapEditorType]);
         }
 
+=======
+        _stylesHandler.SetStyleHandler(_editorToColorMapType[colorMapEditorType]);
+>>>>>>> Code-import-working
         if (HasControlsBasedColorMap())
         {
             // Compute initial color map from controls

@@ -54,6 +54,7 @@ public class OVROverlayEditor : Editor
     private bool sourceRectsVisible = false;
     private bool destRectsVisible = false;
 
+<<<<<<< HEAD
     private bool _DidLookupSrcRectShader;
     private bool _DidLookupDestRectShader;
     private Shader _SrcRectShader;
@@ -92,6 +93,89 @@ public class OVROverlayEditor : Editor
     private SerializedProperty _propNoDepthBufferTesting;
     private SerializedProperty _propCurrentOverlayShape;
 
+=======
+    private Material _SrcRectMaterial;
+
+    protected Material SrcRectMaterial
+    {
+        get
+        {
+            if (_SrcRectMaterial == null)
+            {
+                string[] shaders = AssetDatabase.FindAssets("OVROverlaySrcRectEditor");
+
+                if (shaders.Length > 0)
+                {
+                    Shader shader = (Shader)AssetDatabase.LoadAssetAtPath(
+                        AssetDatabase.GUIDToAssetPath(shaders[0]), typeof(Shader));
+
+                    if (shader != null)
+                    {
+                        _SrcRectMaterial = new Material(shader);
+                    }
+                }
+            }
+
+            return _SrcRectMaterial;
+        }
+    }
+
+    private Material _DestRectMaterial;
+
+    protected Material DestRectMaterial
+    {
+        get
+        {
+            if (_DestRectMaterial == null)
+            {
+                string[] shaders = AssetDatabase.FindAssets("OVROverlayDestRectEditor");
+
+                if (shaders.Length > 0)
+                {
+                    Shader shader =
+                        (Shader)AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(shaders[0]),
+                            typeof(Shader));
+
+                    if (shader != null)
+                    {
+                        _DestRectMaterial = new Material(shader);
+                    }
+                }
+            }
+
+            return _DestRectMaterial;
+        }
+    }
+
+    private TextureRect _DraggingRect;
+    private Side _DraggingSide;
+
+    enum TextureRect
+    {
+        None,
+        SrcLeft,
+        SrcRight,
+        DestLeft,
+        DestRight
+    }
+
+    enum Side
+    {
+        Left,
+        Right,
+        Top,
+        Bottom
+    }
+
+    private GUIContent[] selectableShapeNames;
+    private OVROverlay.OverlayShape[] selectableShapeValues;
+
+    private SerializedProperty _propCurrentOverlayType;
+    private SerializedProperty _propCompositionDepth;
+    private SerializedProperty _propNoDepthBufferTesting;
+    private SerializedProperty _propCurrentOverlayShape;
+
+>>>>>>> Code-import-working
     private SerializedProperty _propUseLegacyCubemapRotation;
     private SerializedProperty _propUseBicubicFiltering;
     private SerializedProperty _propIsExternalSurface;
@@ -208,8 +292,11 @@ public class OVROverlayEditor : Editor
                 new GUIContent("Overlay Shape", "The shape of this overlay"), ref currentShapeIndex,
                 selectableShapeNames, ref modified);
             overlay.currentOverlayShape = selectableShapeValues[currentShapeIndex];
+<<<<<<< HEAD
             if (modified && overlay.previewInEditor)
                 overlay.ResetEditorPreview();
+=======
+>>>>>>> Code-import-working
         }
 
         if (overlay.currentOverlayShape == OVROverlay.OverlayShape.Cubemap)
@@ -346,12 +433,16 @@ public class OVROverlayEditor : Editor
 
             if (overlay.overrideTextureRectMatrix)
             {
+<<<<<<< HEAD
                 const float displaySize = 128;
                 const float padding = 4;
+=======
+>>>>>>> Code-import-working
                 sourceRectsVisible = EditorGUILayout.Foldout(sourceRectsVisible,
                     new GUIContent("Source Rects",
                         "What portion of the source texture will ultimately be shown in each eye."));
 
+<<<<<<< HEAD
                 Color backgroundColor = new Color32(56, 56, 56, 255);
                 Color dragLeftColor = Color.red;
                 Color dragRightColor = Color.green;
@@ -783,6 +874,398 @@ public class OVROverlayEditor : Editor
         }
     }
 
+=======
+                if (sourceRectsVisible)
+                {
+                    var mat = SrcRectMaterial;
+
+                    if (mat != null)
+                    {
+                        Rect drawRect = EditorGUILayout.GetControlRect(GUILayout.Height(128 + 8));
+                        Vector4 srcLeft = new Vector4(Mathf.Max(0.0f, overlay.srcRectLeft.x),
+                            Mathf.Max(0.0f, overlay.srcRectLeft.y),
+                            Mathf.Min(1.0f - overlay.srcRectLeft.x, overlay.srcRectLeft.width),
+                            Mathf.Min(1.0f - overlay.srcRectLeft.y, overlay.srcRectLeft.height));
+                        Vector4 srcRight = new Vector4(Mathf.Max(0.0f, overlay.srcRectRight.x),
+                            Mathf.Max(0.0f, overlay.srcRectRight.y),
+                            Mathf.Min(1.0f - overlay.srcRectRight.x, overlay.srcRectRight.width),
+                            Mathf.Min(1.0f - overlay.srcRectRight.y, overlay.srcRectRight.height));
+
+                        if (overlay.invertTextureRects)
+                        {
+                            srcLeft.y = 1 - srcLeft.y - srcLeft.w;
+                            srcRight.y = 1 - srcRight.y - srcRight.w;
+                        }
+
+                        mat.SetVector("_SrcRectLeft", srcLeft);
+                        mat.SetVector("_SrcRectRight", srcRight);
+                        // center our draw rect
+                        var drawRectCentered = new Rect(drawRect.x + drawRect.width / 2 - 128 - 4, drawRect.y, 256 + 8,
+                            drawRect.height);
+                        EditorGUI.DrawPreviewTexture(drawRectCentered, overlay.textures[0] ?? Texture2D.blackTexture,
+                            mat);
+
+                        var drawRectInset = new Rect(drawRectCentered.x + 4, drawRectCentered.y + 4,
+                            drawRectCentered.width - 8, drawRectCentered.height - 8);
+                        UpdateRectDragging(drawRectInset, drawRectInset, TextureRect.SrcLeft, TextureRect.SrcRight,
+                            overlay.invertTextureRects, ref overlay.srcRectLeft, ref overlay.srcRectRight);
+                        CreateCursorRects(drawRectInset, overlay.srcRectLeft, overlay.invertTextureRects);
+                        CreateCursorRects(drawRectInset, overlay.srcRectRight, overlay.invertTextureRects);
+                    }
+
+                    var labelControlRect = EditorGUILayout.GetControlRect();
+                    EditorGUI.LabelField(
+                        new Rect(labelControlRect.x, labelControlRect.y, labelControlRect.width / 2,
+                            labelControlRect.height),
+                        new GUIContent("Left Source Rect",
+                            "The rect in the source image that will be displayed on the left eye layer"));
+                    EditorGUI.LabelField(
+                        new Rect(labelControlRect.x + labelControlRect.width / 2, labelControlRect.y,
+                            labelControlRect.width / 2, labelControlRect.height),
+                        new GUIContent("Right Source Rect",
+                            "The rect in the source image that will be displayed on the right eye layer"));
+
+                    var rectControlRect = EditorGUILayout.GetControlRect(GUILayout.Height(34));
+
+                    EditorGUI.BeginChangeCheck();
+                    var srcRectLeft = Clamp01(EditorGUI.RectField(
+                        new Rect(rectControlRect.x, rectControlRect.y, rectControlRect.width / 2 - 20,
+                            rectControlRect.height), overlay.srcRectLeft));
+                    var srcRectRight = Clamp01(EditorGUI.RectField(
+                        new Rect(rectControlRect.x + rectControlRect.width / 2, rectControlRect.y,
+                            rectControlRect.width / 2 - 20, rectControlRect.height), overlay.srcRectRight));
+
+                    if (EditorGUI.EndChangeCheck())
+                    {
+                        Undo.RecordObject(target, "Changed Source Rect");
+                        overlay.srcRectLeft = srcRectLeft;
+                        overlay.srcRectRight = srcRectRight;
+                    }
+
+                    EditorGUILayout.BeginHorizontal();
+                    if (overlay.textures[1] != null)
+                    {
+                        if (GUILayout.Button(new GUIContent("Reset To Default", "Reset Source Rects to default")))
+                        {
+                            SetRectsByVideoType(overlay, StereoType.Stereo, DisplayType.Custom);
+                        }
+                    }
+                    else
+                    {
+                        if (GUILayout.Button(new GUIContent("Monoscopic", "Display the full Texture in both eyes")))
+                        {
+                            SetRectsByVideoType(overlay, StereoType.Mono, DisplayType.Custom);
+                        }
+
+                        if (GUILayout.Button(new GUIContent("Stereo Left/Right",
+                                "The left half of the texture is displayed in the left eye, and the right half in the right eye")))
+                        {
+                            SetRectsByVideoType(overlay, StereoType.StereoLeftRight, DisplayType.Custom);
+                        }
+
+                        if (GUILayout.Button(new GUIContent("Stereo Top/Bottom",
+                                "The top half of the texture is displayed in the left eye, and the bottom half in the right eye")))
+                        {
+                            SetRectsByVideoType(overlay, StereoType.StereoTopBottom, DisplayType.Custom);
+                        }
+                    }
+
+                    EditorGUILayout.EndHorizontal();
+                }
+
+                destRectsVisible = EditorGUILayout.Foldout(destRectsVisible,
+                    new GUIContent("Destination Rects",
+                        "What portion of the destination texture that the source will be rendered into."));
+                if (destRectsVisible)
+                {
+                    var mat = DestRectMaterial;
+
+                    if (mat != null)
+                    {
+                        Rect drawRect = EditorGUILayout.GetControlRect(GUILayout.Height(128 + 8));
+
+                        Vector4 srcLeft = new Vector4(Mathf.Max(0.0f, overlay.srcRectLeft.x),
+                            Mathf.Max(0.0f, overlay.srcRectLeft.y),
+                            Mathf.Min(1.0f - overlay.srcRectLeft.x, overlay.srcRectLeft.width),
+                            Mathf.Min(1.0f - overlay.srcRectLeft.y, overlay.srcRectLeft.height));
+                        Vector4 srcRight = new Vector4(Mathf.Max(0.0f, overlay.srcRectRight.x),
+                            Mathf.Max(0.0f, overlay.srcRectRight.y),
+                            Mathf.Min(1.0f - overlay.srcRectRight.x, overlay.srcRectRight.width),
+                            Mathf.Min(1.0f - overlay.srcRectRight.y, overlay.srcRectRight.height));
+                        Vector4 destLeft = new Vector4(Mathf.Max(0.0f, overlay.destRectLeft.x),
+                            Mathf.Max(0.0f, overlay.destRectLeft.y),
+                            Mathf.Min(1.0f - overlay.destRectLeft.x, overlay.destRectLeft.width),
+                            Mathf.Min(1.0f - overlay.destRectLeft.y, overlay.destRectLeft.height));
+                        Vector4 destRight = new Vector4(Mathf.Max(0.0f, overlay.destRectRight.x),
+                            Mathf.Max(0.0f, overlay.destRectRight.y),
+                            Mathf.Min(1.0f - overlay.destRectRight.x, overlay.destRectRight.width),
+                            Mathf.Min(1.0f - overlay.destRectRight.y, overlay.destRectRight.height));
+
+                        if (overlay.invertTextureRects)
+                        {
+                            srcLeft.y = 1 - srcLeft.y - srcLeft.w;
+                            srcRight.y = 1 - srcRight.y - srcRight.w;
+                            destLeft.y = 1 - destLeft.y - destLeft.w;
+                            destRight.y = 1 - destRight.y - destRight.w;
+                        }
+
+                        mat.SetVector("_SrcRectLeft", srcLeft);
+                        mat.SetVector("_SrcRectRight", srcRight);
+                        mat.SetVector("_DestRectLeft", destLeft);
+                        mat.SetVector("_DestRectRight", destRight);
+                        mat.SetColor("_BackgroundColor",
+                            EditorGUIUtility.isProSkin
+                                ? (Color)new Color32(56, 56, 56, 255)
+                                : (Color)new Color32(194, 194, 194, 255));
+
+                        var drawRectCentered = new Rect(drawRect.x + drawRect.width / 2 - 128 - 16 - 4, drawRect.y,
+                            256 + 32 + 8, drawRect.height);
+                        // center our draw rect
+                        EditorGUI.DrawPreviewTexture(drawRectCentered, overlay.textures[0] ?? Texture2D.blackTexture,
+                            mat);
+
+                        var drawRectInsetLeft = new Rect(drawRectCentered.x + 4, drawRectCentered.y + 4,
+                            drawRectCentered.width / 2 - 20, drawRectCentered.height - 8);
+                        var drawRectInsetRight = new Rect(drawRectCentered.x + drawRectCentered.width / 2 + 16,
+                            drawRectCentered.y + 4, drawRectCentered.width / 2 - 20, drawRectCentered.height - 8);
+                        UpdateRectDragging(drawRectInsetLeft, drawRectInsetRight, TextureRect.DestLeft,
+                            TextureRect.DestRight, overlay.invertTextureRects, ref overlay.destRectLeft,
+                            ref overlay.destRectRight);
+
+                        CreateCursorRects(drawRectInsetLeft, overlay.destRectLeft, overlay.invertTextureRects);
+                        CreateCursorRects(drawRectInsetRight, overlay.destRectRight, overlay.invertTextureRects);
+                    }
+
+                    var labelControlRect = EditorGUILayout.GetControlRect();
+                    EditorGUI.LabelField(
+                        new Rect(labelControlRect.x, labelControlRect.y, labelControlRect.width / 2,
+                            labelControlRect.height),
+                        new GUIContent("Left Destination Rect",
+                            "The rect in the destination layer the left eye will display to"));
+                    EditorGUI.LabelField(
+                        new Rect(labelControlRect.x + labelControlRect.width / 2, labelControlRect.y,
+                            labelControlRect.width / 2, labelControlRect.height),
+                        new GUIContent("Right Destination Rect",
+                            "The rect in the destination layer the right eye will display to"));
+
+                    var rectControlRect = EditorGUILayout.GetControlRect(GUILayout.Height(34));
+
+                    EditorGUI.BeginChangeCheck();
+                    var destRectLeft = Clamp01(EditorGUI.RectField(
+                        new Rect(rectControlRect.x, rectControlRect.y, rectControlRect.width / 2 - 20,
+                            rectControlRect.height), overlay.destRectLeft));
+                    var destRectRight = Clamp01(EditorGUI.RectField(
+                        new Rect(rectControlRect.x + rectControlRect.width / 2, rectControlRect.y,
+                            rectControlRect.width / 2 - 20, rectControlRect.height), overlay.destRectRight));
+
+                    if (EditorGUI.EndChangeCheck())
+                    {
+                        Undo.RecordObject(target, "Changed Destination Rect");
+                        overlay.destRectLeft = destRectLeft;
+                        overlay.destRectRight = destRectRight;
+                    }
+
+                    if (overlay.currentOverlayShape == OVROverlay.OverlayShape.Equirect)
+                    {
+                        EditorGUILayout.BeginHorizontal();
+                        if (GUILayout.Button(new GUIContent("360 Video", "Display the full 360 layer")))
+                        {
+                            SetRectsByVideoType(overlay, StereoType.Custom, DisplayType.Full);
+                        }
+
+                        if (GUILayout.Button(new GUIContent("180 Video", "Display the front 180 layer")))
+                        {
+                            SetRectsByVideoType(overlay, StereoType.Custom, DisplayType.Half);
+                        }
+
+                        EditorGUILayout.EndHorizontal();
+                    }
+                    else
+                    {
+                        if (GUILayout.Button(new GUIContent("Reset To Default", "Reset Source Rects to default")))
+                        {
+                            SetRectsByVideoType(overlay, StereoType.Custom, DisplayType.Full);
+                        }
+                    }
+                }
+
+                EditorGUILayout.PropertyField(_propInvertTextureRects,
+                    new GUIContent("Invert Rect Coordinates",
+                        "Check this box to use the top left corner of the texture as the origin"));
+            }
+        }
+
+        EditorGUILayout.Space();
+        EditorGUILayout.LabelField("Color Scale", EditorStyles.boldLabel);
+        EditorGUILayout.PropertyField(_propOverridePerLayerColorScaleAndOffset,
+            new GUIContent("Override Color Scale",
+                "Manually set color scale and offset of this layer, regardless of what the global values are from OVRManager.SetColorScaleAndOffset()."));
+        if (overlay.overridePerLayerColorScaleAndOffset)
+        {
+            EditorGUILayout.PropertyField(_propColorScale,
+                new GUIContent("Color Scale", "Scale that the color values for this overlay will be multiplied by."));
+            EditorGUILayout.PropertyField(_propColorOffset,
+                new GUIContent("Color Offset", "Offset that the color values for this overlay will be added to."));
+            serializedObject.ApplyModifiedProperties();
+            overlay.SetPerLayerColorScaleAndOffset(_propColorScale.vector4Value, _propColorOffset.vector4Value);
+        }
+
+        EditorGUILayout.Space();
+        EditorGUILayout.LabelField("Preview", EditorStyles.boldLabel);
+        EditorGUILayout.PropertyField(_propPreviewInEditor,
+            new GUIContent("Preview in Editor (Experimental)",
+                "Preview the overlay in the editor using a mesh renderer."));
+
+        _propNoDepthBufferTesting.boolValue = !tmpEnableDepthBufferTest;
+        serializedObject.ApplyModifiedProperties();
+    }
+
+    private Rect Clamp01(Rect rect)
+    {
+        rect.x = Mathf.Clamp01(rect.x);
+        rect.y = Mathf.Clamp01(rect.y);
+        rect.width = Mathf.Clamp01(rect.width);
+        rect.height = Mathf.Clamp01(rect.height);
+        return rect;
+    }
+
+    private bool IsUnitRect(Rect rect)
+    {
+        return IsRect(rect, 0, 0, 1, 1);
+    }
+
+    private bool IsRect(Rect rect, float x, float y, float w, float h)
+    {
+        return rect.x == x && rect.y == y && rect.width == w && rect.height == h;
+    }
+
+    private StereoType GetStereoType(OVROverlay overlay)
+    {
+        if (overlay.textures[0] != null && overlay.textures[1] != null)
+        {
+            if (IsUnitRect(overlay.srcRectLeft) && IsUnitRect(overlay.srcRectRight))
+            {
+                return StereoType.Stereo;
+            }
+            else
+            {
+                return StereoType.Custom;
+            }
+        }
+        else if (overlay.textures[0] != null)
+        {
+            if (IsUnitRect(overlay.srcRectLeft) && IsUnitRect(overlay.srcRectRight))
+            {
+                return StereoType.Mono;
+            }
+            else if (IsRect(overlay.srcRectLeft, 0, 0, 0.5f, 1f) && IsRect(overlay.srcRectRight, 0.5f, 0, 0.5f, 1f))
+            {
+                return StereoType.StereoLeftRight;
+            }
+            else if (overlay.invertTextureRects && IsRect(overlay.srcRectLeft, 0, 0.0f, 1f, 0.5f) &&
+                     IsRect(overlay.srcRectRight, 0f, 0.5f, 1f, 0.5f))
+            {
+                return StereoType.StereoTopBottom;
+            }
+            else if (!overlay.invertTextureRects && IsRect(overlay.srcRectLeft, 0, 0.5f, 1f, 0.5f) &&
+                     IsRect(overlay.srcRectRight, 0f, 0f, 1f, 0.5f))
+            {
+                return StereoType.StereoTopBottom;
+            }
+            else
+            {
+                return StereoType.Custom;
+            }
+        }
+        else
+        {
+            return StereoType.Mono;
+        }
+    }
+
+    private void SetRectsByVideoType(OVROverlay overlay, StereoType stereoType, DisplayType displayType)
+    {
+        Rect srcRectLeft, srcRectRight, destRectLeft, destRectRight;
+
+        switch (displayType)
+        {
+            case DisplayType.Full:
+                destRectLeft = destRectRight = new Rect(0, 0, 1, 1);
+                break;
+
+            case DisplayType.Half:
+                destRectLeft = destRectRight = new Rect(0.25f, 0, 0.5f, 1);
+                break;
+
+            default:
+                destRectLeft = overlay.destRectLeft;
+                destRectRight = overlay.destRectRight;
+                break;
+        }
+
+        switch (stereoType)
+        {
+            case StereoType.Mono:
+            case StereoType.Stereo:
+                srcRectLeft = srcRectRight = new Rect(0, 0, 1, 1);
+                break;
+
+            case StereoType.StereoTopBottom:
+                if (overlay.invertTextureRects)
+                {
+                    srcRectLeft = new Rect(0, 0.0f, 1, 0.5f);
+                    srcRectRight = new Rect(0, 0.5f, 1, 0.5f);
+                }
+                else
+                {
+                    srcRectLeft = new Rect(0, 0.5f, 1, 0.5f);
+                    srcRectRight = new Rect(0, 0.0f, 1, 0.5f);
+                }
+
+                break;
+
+            case StereoType.StereoLeftRight:
+                srcRectLeft = new Rect(0, 0, 0.5f, 1);
+                srcRectRight = new Rect(0.5f, 0, 0.5f, 1);
+                break;
+
+            default:
+                srcRectLeft = overlay.srcRectLeft;
+                srcRectRight = overlay.srcRectRight;
+                break;
+        }
+
+        Undo.RecordObject(overlay, "Changed rect");
+        overlay.SetSrcDestRects(srcRectLeft, srcRectRight, destRectLeft, destRectRight);
+    }
+
+    private void GetCursorPoints(Rect drawRect, Rect selectRect, bool invertY, out Vector2 leftPos,
+        out Vector2 rightPos, out Vector2 topPos, out Vector2 bottomPos)
+    {
+        if (invertY)
+        {
+            selectRect.y = 1 - selectRect.y - selectRect.height;
+        }
+
+        leftPos = new Vector2(drawRect.x + selectRect.x * drawRect.width,
+            drawRect.y + (1 - selectRect.y - selectRect.height / 2) * drawRect.height);
+        rightPos = new Vector2(drawRect.x + (selectRect.x + selectRect.width) * drawRect.width,
+            drawRect.y + (1 - selectRect.y - selectRect.height / 2) * drawRect.height);
+        topPos = new Vector2(drawRect.x + (selectRect.x + selectRect.width / 2) * drawRect.width,
+            drawRect.y + (1 - selectRect.y - selectRect.height) * drawRect.height);
+        bottomPos = new Vector2(drawRect.x + (selectRect.x + selectRect.width / 2) * drawRect.width,
+            drawRect.y + (1 - selectRect.y) * drawRect.height);
+
+        if (invertY)
+        {
+            // swap top and bottom
+            var tmp = topPos;
+            topPos = bottomPos;
+            bottomPos = tmp;
+        }
+    }
+
+>>>>>>> Code-import-working
     private void CreateCursorRects(Rect drawRect, Rect selectRect, bool invertY)
     {
         Vector2 leftPos, rightPos, topPos, bottomPos;
@@ -902,6 +1385,7 @@ public class OVROverlayEditor : Editor
                 break;
         }
     }
+<<<<<<< HEAD
 
 
 
@@ -997,4 +1481,6 @@ public class OVROverlayEditor : Editor
         destRectMaterialRight = _DestRectMaterialRight = new Material(shader);
         return true;
     }
+=======
+>>>>>>> Code-import-working
 }

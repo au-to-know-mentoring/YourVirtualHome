@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+<<<<<<< HEAD
 using UnityEditor;
 
 [CustomEditor(typeof(OVRUnityHumanoidSkeletonRetargeter))]
@@ -32,3 +33,5 @@ public class OVRUnityHumanoidSkeletonRetargeterEditor : OVRSkeletonEditor
         serializedObject.ApplyModifiedProperties();
     }
 }
+=======
+>>>>>>> Code-import-working

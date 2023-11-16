@@ -48,4 +48,12 @@ public class OVRAutoDestroyInMRC : MonoBehaviour
             Destroy(gameObject);
         }
     }
+<<<<<<< HEAD
+=======
+
+    // Update is called once per frame
+    void Update()
+    {
+    }
+>>>>>>> Code-import-working
 }

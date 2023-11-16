@@ -35,7 +35,10 @@ using UnityEngine.Serialization;
 /// Simple script for running the ControllerDrivenHandPosesSample
 /// </summary>
 [DisallowMultipleComponent]
+<<<<<<< HEAD
 [HelpURL("https://developer.oculus.com/reference/unity/latest/class_o_v_r_controller_driven_hand_poses_sample")]
+=======
+>>>>>>> Code-import-working
 public class OVRControllerDrivenHandPosesSample : MonoBehaviour
 {
     [SerializeField]
@@ -132,6 +135,13 @@ public class OVRControllerDrivenHandPosesSample : MonoBehaviour
         linePointer.SetPosition(1, inputPosition + ray.direction * 2.5f);
     }
 
+<<<<<<< HEAD
+=======
+    private void LateUpdate()
+    {
+    }
+
+>>>>>>> Code-import-working
     public void SetControllerDrivenHandPosesTypeToNone()
     {
         OVRManager.instance.controllerDrivenHandPosesType = OVRManager.ControllerDrivenHandPosesType.None;

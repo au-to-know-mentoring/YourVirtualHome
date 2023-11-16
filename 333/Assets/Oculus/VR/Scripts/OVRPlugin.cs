@@ -55,7 +55,11 @@ public static partial class OVRPlugin
 #if OVRPLUGIN_UNSUPPORTED_PLATFORM
     public static readonly System.Version wrapperVersion = _versionZero;
 #else
+<<<<<<< HEAD
     public static readonly System.Version wrapperVersion = OVRP_1_89_0.version;
+=======
+    public static readonly System.Version wrapperVersion = OVRP_1_88_0.version;
+>>>>>>> Code-import-working
 #endif
 
 #if !OVRPLUGIN_UNSUPPORTED_PLATFORM
@@ -1175,6 +1179,7 @@ public static partial class OVRPlugin
     }
 
     [StructLayout(LayoutKind.Sequential)]
+<<<<<<< HEAD
     public struct RectiPair
     {
         public Recti Rect0;
@@ -1208,6 +1213,8 @@ public static partial class OVRPlugin
     }
 
     [StructLayout(LayoutKind.Sequential)]
+=======
+>>>>>>> Code-import-working
     public struct Rectf
     {
         public Vector2f Pos;
@@ -1215,6 +1222,7 @@ public static partial class OVRPlugin
     }
 
     [StructLayout(LayoutKind.Sequential)]
+<<<<<<< HEAD
     public struct RectfPair
     {
         public Rectf Rect0;
@@ -1248,6 +1256,8 @@ public static partial class OVRPlugin
     }
 
     [StructLayout(LayoutKind.Sequential)]
+=======
+>>>>>>> Code-import-working
     public struct Boundsf
     {
         public Vector3f Pos;
@@ -1324,6 +1334,7 @@ public static partial class OVRPlugin
     }
 
     [StructLayout(LayoutKind.Sequential)]
+<<<<<<< HEAD
     public struct FovfPair
     {
         public Fovf Fov0;
@@ -1357,6 +1368,8 @@ public static partial class OVRPlugin
     }
 
     [StructLayout(LayoutKind.Sequential)]
+=======
+>>>>>>> Code-import-working
     public struct CameraIntrinsics
     {
         public Bool IsValid;
@@ -1411,8 +1424,13 @@ public static partial class OVRPlugin
         public int LayerFlags;
 
         //Eye FOV-only members.
+<<<<<<< HEAD
         public FovfPair Fov;
         public RectfPair VisibleRect;
+=======
+        public Fovf[] Fov;
+        public Rectf[] VisibleRect;
+>>>>>>> Code-import-working
         public Sizei MaxViewportSize;
         public EyeTextureFormat DepthFormat;
 
@@ -1433,6 +1451,83 @@ public static partial class OVRPlugin
         }
     }
 
+<<<<<<< HEAD
+=======
+    [StructLayout(LayoutKind.Sequential)]
+    private struct LayerDescInternal
+    {
+        public OverlayShape Shape;
+        public LayerLayout Layout;
+        public Sizei TextureSize;
+        public int MipLevels;
+        public int SampleCount;
+        public EyeTextureFormat Format;
+        public int LayerFlags;
+
+        public Fovf Fov0;
+        public Fovf Fov1;
+        public Rectf VisibleRect0;
+        public Rectf VisibleRect1;
+        public Sizei MaxViewportSize;
+        public EyeTextureFormat DepthFormat;
+
+        public EyeTextureFormat MotionVectorFormat;
+        public EyeTextureFormat MotionVectorDepthFormat;
+        public Sizei MotionVectorTextureSize;
+
+        public LayerDescInternal(LayerDesc layerDesc)
+        {
+            Shape = layerDesc.Shape;
+            Layout = layerDesc.Layout;
+            TextureSize = layerDesc.TextureSize;
+            MipLevels = layerDesc.MipLevels;
+            SampleCount = layerDesc.SampleCount;
+            Format = layerDesc.Format;
+            LayerFlags = layerDesc.LayerFlags;
+
+            Fov0 = layerDesc.Fov[0];
+            Fov1 = layerDesc.Fov[1];
+            VisibleRect0 = layerDesc.VisibleRect[0];
+            VisibleRect1 = layerDesc.VisibleRect[1];
+
+            MaxViewportSize = layerDesc.MaxViewportSize;
+            DepthFormat = layerDesc.DepthFormat;
+            MotionVectorFormat = layerDesc.MotionVectorFormat;
+            MotionVectorDepthFormat = layerDesc.MotionVectorDepthFormat;
+            MotionVectorTextureSize = layerDesc.MotionVectorTextureSize;
+        }
+
+        public LayerDesc ToLayerDesc()
+        {
+            LayerDesc layerDesc = new LayerDesc();
+            layerDesc.Shape = Shape;
+            layerDesc.Layout = Layout;
+            layerDesc.TextureSize = TextureSize;
+            layerDesc.MipLevels = MipLevels;
+            layerDesc.SampleCount = SampleCount;
+            layerDesc.Format = Format;
+            layerDesc.LayerFlags = LayerFlags;
+
+            Array.Resize(ref layerDesc.Fov, 2);
+            layerDesc.Fov[0] = Fov0;
+            layerDesc.Fov[1] = Fov1;
+
+
+            Array.Resize(ref layerDesc.VisibleRect, 2);
+            layerDesc.VisibleRect[0] = VisibleRect0;
+            layerDesc.VisibleRect[1] = VisibleRect1;
+
+            layerDesc.MaxViewportSize = MaxViewportSize;
+            layerDesc.DepthFormat = DepthFormat;
+            layerDesc.MotionVectorFormat = MotionVectorFormat;
+            layerDesc.MotionVectorDepthFormat = MotionVectorDepthFormat;
+            layerDesc.MotionVectorTextureSize = MotionVectorTextureSize;
+
+            return layerDesc;
+        }
+    }
+
+>>>>>>> Code-import-working
 
     public enum BlendFactor
     {
@@ -1450,7 +1545,12 @@ public static partial class OVRPlugin
         int LayerId;
         int TextureStage;
 
+<<<<<<< HEAD
         RectiPair ViewportRect;
+=======
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
+        Recti[] ViewportRect;
+>>>>>>> Code-import-working
 
         Posef Pose;
         int LayerSubmitFlags;
@@ -2110,7 +2210,11 @@ public static partial class OVRPlugin
     {
         Unknown = 0,
         Opaque = 1,
+<<<<<<< HEAD
         MR = 2,
+=======
+        KeyLabel = 2,
+>>>>>>> Code-import-working
     }
 
     // Enum defining the type of the keyboard returned
@@ -2845,6 +2949,10 @@ public static partial class OVRPlugin
     }
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> Code-import-working
     //-----------------------------------------------------------------
     // Methods
     //-----------------------------------------------------------------
@@ -3735,11 +3843,19 @@ public static partial class OVRPlugin
             return new LayerDesc();
         }
 
+<<<<<<< HEAD
         LayerDesc layerDesc = new LayerDesc();
         OVRP_1_15_0.ovrp_CalculateLayerDesc(shape, layout, ref textureSize, mipLevels, sampleCount,
             format, layerFlags, ref layerDesc);
 
         return layerDesc;
+=======
+        LayerDescInternal layerDescInternal = new LayerDescInternal();
+        OVRP_1_15_0.ovrp_CalculateLayerDesc(shape, layout, ref textureSize, mipLevels, sampleCount,
+            format, layerFlags, ref layerDescInternal);
+
+        return layerDescInternal.ToLayerDesc();
+>>>>>>> Code-import-working
 #endif
     }
 
@@ -3751,9 +3867,16 @@ public static partial class OVRPlugin
         if (!initialized)
             return false;
 
+<<<<<<< HEAD
         if (version >= OVRP_1_28_0.version)
         {
             return OVRP_1_28_0.ovrp_EnqueueSetupLayer2(ref desc, compositionDepth, layerID) ==
+=======
+        LayerDescInternal layerDescInternal = new LayerDescInternal(desc);
+        if (version >= OVRP_1_28_0.version)
+        {
+            return OVRP_1_28_0.ovrp_EnqueueSetupLayer2(ref layerDescInternal, compositionDepth, layerID) ==
+>>>>>>> Code-import-working
                    Result.Success;
         }
 
@@ -3764,7 +3887,11 @@ public static partial class OVRPlugin
                 Debug.LogWarning("Use Oculus Plugin 1.28.0 or above to support non-zero compositionDepth");
             }
 
+<<<<<<< HEAD
             return OVRP_1_15_0.ovrp_EnqueueSetupLayer(ref desc, layerID) == Result.Success;
+=======
+            return OVRP_1_15_0.ovrp_EnqueueSetupLayer(ref layerDescInternal, layerID) == Result.Success;
+>>>>>>> Code-import-working
         }
 
         return false;
@@ -4787,7 +4914,10 @@ public static partial class OVRPlugin
 #endif
     }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> Code-import-working
     public static EyeTextureFormat GetDesiredEyeTextureFormat()
     {
 #if OVRPLUGIN_UNSUPPORTED_PLATFORM
@@ -7723,6 +7853,7 @@ public static partial class OVRPlugin
 
     private static Skeleton cachedSkeleton = new Skeleton();
     private static Skeleton2Internal cachedSkeleton2 = new Skeleton2Internal();
+<<<<<<< HEAD
     delegate Bone GetBoneSkeleton2Delegate();
     private static GetBoneSkeleton2Delegate[] Skeleton2GetBone = new GetBoneSkeleton2Delegate[]
     {
@@ -7804,6 +7935,8 @@ public static partial class OVRPlugin
         () => cachedSkeleton2.Bones_68,
         () => cachedSkeleton2.Bones_69,
     };
+=======
+>>>>>>> Code-import-working
     public static bool GetSkeleton2(SkeletonType skeletonType, ref Skeleton2 skeleton)
     {
 #if OVRPLUGIN_UNSUPPORTED_PLATFORM
@@ -7814,6 +7947,7 @@ public static partial class OVRPlugin
             Result res = OVRP_1_55_0.ovrp_GetSkeleton2(skeletonType, out cachedSkeleton2);
             if (res == Result.Success)
             {
+<<<<<<< HEAD
                 if (skeleton.BoneCapsules == null ||
                     skeleton.BoneCapsules.Length != (int)SkeletonConstants.MaxBoneCapsules)
                 {
@@ -7885,6 +8019,143 @@ public static partial class OVRPlugin
                     skeleton.Bones[i] = cachedSkeleton.Bones[i];
                 }
 
+=======
+                if (skeleton.Bones == null || skeleton.Bones.Length != (int)SkeletonConstants.MaxBones)
+                {
+                    skeleton.Bones = new Bone[(int)SkeletonConstants.MaxBones];
+                }
+
+                if (skeleton.BoneCapsules == null ||
+                    skeleton.BoneCapsules.Length != (int)SkeletonConstants.MaxBoneCapsules)
+                {
+                    skeleton.BoneCapsules = new BoneCapsule[(int)SkeletonConstants.MaxBoneCapsules];
+                }
+
+                skeleton.Type = cachedSkeleton2.Type;
+                skeleton.NumBones = cachedSkeleton2.NumBones;
+                skeleton.NumBoneCapsules = cachedSkeleton2.NumBoneCapsules;
+                skeleton.Bones[0] = cachedSkeleton2.Bones_0;
+                skeleton.Bones[1] = cachedSkeleton2.Bones_1;
+                skeleton.Bones[2] = cachedSkeleton2.Bones_2;
+                skeleton.Bones[3] = cachedSkeleton2.Bones_3;
+                skeleton.Bones[4] = cachedSkeleton2.Bones_4;
+                skeleton.Bones[5] = cachedSkeleton2.Bones_5;
+                skeleton.Bones[6] = cachedSkeleton2.Bones_6;
+                skeleton.Bones[7] = cachedSkeleton2.Bones_7;
+                skeleton.Bones[8] = cachedSkeleton2.Bones_8;
+                skeleton.Bones[9] = cachedSkeleton2.Bones_9;
+                skeleton.Bones[10] = cachedSkeleton2.Bones_10;
+                skeleton.Bones[11] = cachedSkeleton2.Bones_11;
+                skeleton.Bones[12] = cachedSkeleton2.Bones_12;
+                skeleton.Bones[13] = cachedSkeleton2.Bones_13;
+                skeleton.Bones[14] = cachedSkeleton2.Bones_14;
+                skeleton.Bones[15] = cachedSkeleton2.Bones_15;
+                skeleton.Bones[16] = cachedSkeleton2.Bones_16;
+                skeleton.Bones[17] = cachedSkeleton2.Bones_17;
+                skeleton.Bones[18] = cachedSkeleton2.Bones_18;
+                skeleton.Bones[19] = cachedSkeleton2.Bones_19;
+                skeleton.Bones[20] = cachedSkeleton2.Bones_20;
+                skeleton.Bones[21] = cachedSkeleton2.Bones_21;
+                skeleton.Bones[22] = cachedSkeleton2.Bones_22;
+                skeleton.Bones[23] = cachedSkeleton2.Bones_23;
+                skeleton.Bones[24] = cachedSkeleton2.Bones_24;
+                skeleton.Bones[25] = cachedSkeleton2.Bones_25;
+                skeleton.Bones[26] = cachedSkeleton2.Bones_26;
+                skeleton.Bones[27] = cachedSkeleton2.Bones_27;
+                skeleton.Bones[28] = cachedSkeleton2.Bones_28;
+                skeleton.Bones[29] = cachedSkeleton2.Bones_29;
+                skeleton.Bones[30] = cachedSkeleton2.Bones_30;
+                skeleton.Bones[31] = cachedSkeleton2.Bones_31;
+                skeleton.Bones[32] = cachedSkeleton2.Bones_32;
+                skeleton.Bones[33] = cachedSkeleton2.Bones_33;
+                skeleton.Bones[34] = cachedSkeleton2.Bones_34;
+                skeleton.Bones[35] = cachedSkeleton2.Bones_35;
+                skeleton.Bones[36] = cachedSkeleton2.Bones_36;
+                skeleton.Bones[37] = cachedSkeleton2.Bones_37;
+                skeleton.Bones[38] = cachedSkeleton2.Bones_38;
+                skeleton.Bones[39] = cachedSkeleton2.Bones_39;
+                skeleton.Bones[40] = cachedSkeleton2.Bones_40;
+                skeleton.Bones[41] = cachedSkeleton2.Bones_41;
+                skeleton.Bones[42] = cachedSkeleton2.Bones_42;
+                skeleton.Bones[43] = cachedSkeleton2.Bones_43;
+                skeleton.Bones[44] = cachedSkeleton2.Bones_44;
+                skeleton.Bones[45] = cachedSkeleton2.Bones_45;
+                skeleton.Bones[46] = cachedSkeleton2.Bones_46;
+                skeleton.Bones[47] = cachedSkeleton2.Bones_47;
+                skeleton.Bones[48] = cachedSkeleton2.Bones_48;
+                skeleton.Bones[49] = cachedSkeleton2.Bones_49;
+                skeleton.Bones[50] = cachedSkeleton2.Bones_50;
+                skeleton.Bones[51] = cachedSkeleton2.Bones_51;
+                skeleton.Bones[52] = cachedSkeleton2.Bones_52;
+                skeleton.Bones[53] = cachedSkeleton2.Bones_53;
+                skeleton.Bones[54] = cachedSkeleton2.Bones_54;
+                skeleton.Bones[55] = cachedSkeleton2.Bones_55;
+                skeleton.Bones[56] = cachedSkeleton2.Bones_56;
+                skeleton.Bones[57] = cachedSkeleton2.Bones_57;
+                skeleton.Bones[58] = cachedSkeleton2.Bones_58;
+                skeleton.Bones[59] = cachedSkeleton2.Bones_59;
+                skeleton.Bones[60] = cachedSkeleton2.Bones_60;
+                skeleton.Bones[61] = cachedSkeleton2.Bones_61;
+                skeleton.Bones[62] = cachedSkeleton2.Bones_62;
+                skeleton.Bones[63] = cachedSkeleton2.Bones_63;
+                skeleton.Bones[64] = cachedSkeleton2.Bones_64;
+                skeleton.Bones[65] = cachedSkeleton2.Bones_65;
+                skeleton.Bones[66] = cachedSkeleton2.Bones_66;
+                skeleton.Bones[67] = cachedSkeleton2.Bones_67;
+                skeleton.Bones[68] = cachedSkeleton2.Bones_68;
+                skeleton.Bones[69] = cachedSkeleton2.Bones_69;
+                skeleton.BoneCapsules[0] = cachedSkeleton2.BoneCapsules_0;
+                skeleton.BoneCapsules[1] = cachedSkeleton2.BoneCapsules_1;
+                skeleton.BoneCapsules[2] = cachedSkeleton2.BoneCapsules_2;
+                skeleton.BoneCapsules[3] = cachedSkeleton2.BoneCapsules_3;
+                skeleton.BoneCapsules[4] = cachedSkeleton2.BoneCapsules_4;
+                skeleton.BoneCapsules[5] = cachedSkeleton2.BoneCapsules_5;
+                skeleton.BoneCapsules[6] = cachedSkeleton2.BoneCapsules_6;
+                skeleton.BoneCapsules[7] = cachedSkeleton2.BoneCapsules_7;
+                skeleton.BoneCapsules[8] = cachedSkeleton2.BoneCapsules_8;
+                skeleton.BoneCapsules[9] = cachedSkeleton2.BoneCapsules_9;
+                skeleton.BoneCapsules[10] = cachedSkeleton2.BoneCapsules_10;
+                skeleton.BoneCapsules[11] = cachedSkeleton2.BoneCapsules_11;
+                skeleton.BoneCapsules[12] = cachedSkeleton2.BoneCapsules_12;
+                skeleton.BoneCapsules[13] = cachedSkeleton2.BoneCapsules_13;
+                skeleton.BoneCapsules[14] = cachedSkeleton2.BoneCapsules_14;
+                skeleton.BoneCapsules[15] = cachedSkeleton2.BoneCapsules_15;
+                skeleton.BoneCapsules[16] = cachedSkeleton2.BoneCapsules_16;
+                skeleton.BoneCapsules[17] = cachedSkeleton2.BoneCapsules_17;
+                skeleton.BoneCapsules[18] = cachedSkeleton2.BoneCapsules_18;
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            if (GetSkeleton(skeletonType, out cachedSkeleton))
+            {
+                if (skeleton.Bones == null || skeleton.Bones.Length != (int)SkeletonConstants.MaxBones)
+                {
+                    skeleton.Bones = new Bone[(int)SkeletonConstants.MaxBones];
+                }
+
+                if (skeleton.BoneCapsules == null ||
+                    skeleton.BoneCapsules.Length != (int)SkeletonConstants.MaxBoneCapsules)
+                {
+                    skeleton.BoneCapsules = new BoneCapsule[(int)SkeletonConstants.MaxBoneCapsules];
+                }
+
+                skeleton.Type = cachedSkeleton.Type;
+                skeleton.NumBones = cachedSkeleton.NumBones;
+                skeleton.NumBoneCapsules = cachedSkeleton.NumBoneCapsules;
+
+                for (int i = 0; i < skeleton.NumBones; i++)
+                {
+                    skeleton.Bones[i] = cachedSkeleton.Bones[i];
+                }
+
+>>>>>>> Code-import-working
                 for (int i = 0; i < skeleton.NumBoneCapsules; i++)
                 {
                     skeleton.BoneCapsules[i] = cachedSkeleton.BoneCapsules[i];
@@ -8410,6 +8681,10 @@ public static partial class OVRPlugin
         value == Bool.True;
 #endif //OVRPLUGIN_UNSUPPORTED_PLATFORM
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> Code-import-working
     private static FaceStateInternal cachedFaceState = new FaceStateInternal();
     private static bool GetFaceStateInternal(Step stepId, int frameIndex, ref FaceState faceState)
     {
@@ -9918,6 +10193,11 @@ public static partial class OVRPlugin
 
 
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> Code-import-working
     public class UnityOpenXR
     {
         public static bool Enabled = false; // OculusXRFeature will set it to true when being used
@@ -10607,10 +10887,17 @@ public static partial class OVRPlugin
         [DllImport(pluginName, CallingConvention = CallingConvention.Cdecl)]
         public static extern Result ovrp_CalculateLayerDesc(OverlayShape shape, LayerLayout layout,
             ref Sizei textureSize,
+<<<<<<< HEAD
             int mipLevels, int sampleCount, EyeTextureFormat format, int layerFlags, ref LayerDesc layerDesc);
 
         [DllImport(pluginName, CallingConvention = CallingConvention.Cdecl)]
         public static extern Result ovrp_EnqueueSetupLayer(ref LayerDesc desc, IntPtr layerId);
+=======
+            int mipLevels, int sampleCount, EyeTextureFormat format, int layerFlags, ref LayerDescInternal layerDesc);
+
+        [DllImport(pluginName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern Result ovrp_EnqueueSetupLayer(ref LayerDescInternal desc, IntPtr layerId);
+>>>>>>> Code-import-working
 
         [DllImport(pluginName, CallingConvention = CallingConvention.Cdecl)]
         public static extern Result ovrp_EnqueueDestroyLayer(IntPtr layerId);
@@ -10785,7 +11072,11 @@ public static partial class OVRPlugin
         public static extern Result ovrp_SendEvent(string name, string param);
 
         [DllImport(pluginName, CallingConvention = CallingConvention.Cdecl)]
+<<<<<<< HEAD
         public static extern Result ovrp_EnqueueSetupLayer2(ref LayerDesc desc, int compositionDepth,
+=======
+        public static extern Result ovrp_EnqueueSetupLayer2(ref LayerDescInternal desc, int compositionDepth,
+>>>>>>> Code-import-working
             IntPtr layerId);
 
     }
@@ -11714,6 +12005,10 @@ public static partial class OVRPlugin
         [DllImport(pluginName, CallingConvention = CallingConvention.Cdecl)]
         public static extern Result ovrp_QplDestroyMarkerHandle(int nameHandle);
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> Code-import-working
     }
 
     private static class OVRP_1_81_0
@@ -11849,12 +12144,15 @@ public static partial class OVRPlugin
         [DllImport(pluginName, CallingConvention = CallingConvention.Cdecl)]
         public static extern Result ovrp_SetSimultaneousHandsAndControllersEnabled(Bool enabled);
     }
+<<<<<<< HEAD
 
     private static class OVRP_1_89_0
     {
         public static readonly System.Version version = new System.Version(1, 89, 0);
 
     }
+=======
+>>>>>>> Code-import-working
     /* INSERT NEW OVRP CLASS ABOVE THIS LINE */
     // After modify this file, run `fbpython arvr/projects/integrations/codegen/generate_mockovrplugin.py` to update OculusInternal/Tests/MockOVRPlugin.cs
 }

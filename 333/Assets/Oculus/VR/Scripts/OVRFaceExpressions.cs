@@ -29,7 +29,10 @@ using UnityEngine;
 /// <remarks>
 /// Refers to the <see cref="OVRFaceExpressions.FaceExpression"/> enum for the list of face expressions.
 /// </remarks>
+<<<<<<< HEAD
 [HelpURL("https://developer.oculus.com/reference/unity/latest/class_o_v_r_face_expressions")]
+=======
+>>>>>>> Code-import-working
 public class OVRFaceExpressions : MonoBehaviour, IReadOnlyCollection<float>, OVRFaceExpressions.WeightProvider
 {
     /// <summary>
@@ -42,6 +45,10 @@ public class OVRFaceExpressions : MonoBehaviour, IReadOnlyCollection<float>, OVR
         float GetWeight(FaceExpression expression);
     }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> Code-import-working
     /// <summary>
     /// True if the facial expressions are valid, otherwise false.
     /// </summary>

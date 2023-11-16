@@ -26,13 +26,17 @@ using UnityEngine;
 /// <summary>
 /// Passthrough Color Look-Up Tables (LUTs).
 /// </summary>
+<<<<<<< HEAD
 [HelpURL("https://developer.oculus.com/reference/unity/latest/class_o_v_r_passthrough_color_lut")]
+=======
+>>>>>>> Code-import-working
 public class OVRPassthroughColorLut : System.IDisposable
 {
     private const int RecomendedBatchSize = 128;
 
     public uint Resolution { get; private set; }
     public ColorChannels Channels { get; private set; }
+<<<<<<< HEAD
 
     [System.Obsolete("IsInitialized is obsoleted. Instead use IsValid.", false)]
     public bool IsInitialized => IsValid;
@@ -41,6 +45,9 @@ public class OVRPassthroughColorLut : System.IDisposable
     /// Checks if the LUT is usable. Can become invalid at runtime.
     /// </summary>
     public bool IsValid => _createState != CreateState.Invalid;
+=======
+    public bool IsInitialized { get; private set; }
+>>>>>>> Code-import-working
 
     internal ulong _colorLutHandle;
     private GCHandle _allocHandle;
@@ -49,8 +56,11 @@ public class OVRPassthroughColorLut : System.IDisposable
     private byte[] _colorBytes;
     private object _locker = new object();
 
+<<<<<<< HEAD
     private CreateState _createState = CreateState.Invalid;
 
+=======
+>>>>>>> Code-import-working
     /// <summary>
     /// Initialize the color LUT data from a texture. Color channels are inferred from texture format.
     /// Use `UpdateFrom()` to update LUT data after construction.
@@ -171,6 +181,7 @@ public class OVRPassthroughColorLut : System.IDisposable
 
     public void Dispose()
     {
+<<<<<<< HEAD
         if (IsValid)
         {
             OVRManager.OnPassthroughInitializedStateChange -= RefreshIfInitialized;
@@ -182,6 +193,13 @@ public class OVRPassthroughColorLut : System.IDisposable
 
     private void FreeAllocHandle()
     {
+=======
+        if (IsInitialized)
+        {
+            Destroy();
+        }
+
+>>>>>>> Code-import-working
         if (_allocHandle != null && _allocHandle.IsAllocated)
         {
             _allocHandle.Free();
@@ -258,7 +276,11 @@ public class OVRPassthroughColorLut : System.IDisposable
 
     private bool IsValidUpdateResolution(int lutSize, int elementByteSize)
     {
+<<<<<<< HEAD
         if (!IsValid)
+=======
+        if (!IsInitialized)
+>>>>>>> Code-import-working
         {
             Debug.LogError("Can not update an uninitialized lut object.");
             return false;
@@ -371,6 +393,7 @@ public class OVRPassthroughColorLut : System.IDisposable
     private void Create(OVRPlugin.PassthroughColorLutData lutData)
     {
         _lutData = lutData;
+<<<<<<< HEAD
         if (OVRManager.IsInsightPassthroughInitialized())
         {
             InternalCreate();
@@ -406,6 +429,11 @@ public class OVRPassthroughColorLut : System.IDisposable
             Resolution, _lutData, out _colorLutHandle);
         _createState = result ? CreateState.Created : CreateState.Invalid;
         if (!IsValid)
+=======
+        IsInitialized = OVRPlugin.CreatePassthroughColorLut((OVRPlugin.PassthroughColorLutChannels)Channels,
+            Resolution, _lutData, out _colorLutHandle);
+        if (!IsInitialized)
+>>>>>>> Code-import-working
         {
             Debug.LogError("Failed to create Passthrough Color LUT.");
         }
@@ -488,14 +516,24 @@ public class OVRPassthroughColorLut : System.IDisposable
 
     private void Destroy()
     {
+<<<<<<< HEAD
         if (_createState == CreateState.Created)
+=======
+        if (IsInitialized)
+>>>>>>> Code-import-working
         {
             lock (_locker)
             {
                 OVRPlugin.DestroyPassthroughColorLut(_colorLutHandle);
+<<<<<<< HEAD
             }
         }
         _createState = CreateState.Invalid;
+=======
+                IsInitialized = false;
+            }
+        }
+>>>>>>> Code-import-working
     }
 
     public enum ColorChannels
@@ -660,9 +698,12 @@ public class OVRPassthroughColorLut : System.IDisposable
             }
         }
     }
+<<<<<<< HEAD
 
     private enum CreateState
     {
         Invalid, Pending, Created
     }
+=======
+>>>>>>> Code-import-working
 }

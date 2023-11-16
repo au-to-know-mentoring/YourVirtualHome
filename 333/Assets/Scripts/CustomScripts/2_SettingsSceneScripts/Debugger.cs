@@ -46,7 +46,8 @@ public class Debugger : MonoBehaviour
         textElement.text = currentText;
     }
 
-    /*void OnGUI()
+
+	/*void OnGUI()
     {
         GUI.Label(
            new Rect(

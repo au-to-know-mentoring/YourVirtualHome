@@ -28,7 +28,10 @@ using UnityEngine.Rendering;
 /// </summary>
 [RequireComponent(typeof(Camera))]
 [ExecuteInEditMode]
+<<<<<<< HEAD
 [HelpURL("https://developer.oculus.com/reference/unity/latest/class_o_v_r_vignette")]
+=======
+>>>>>>> Code-import-working
 public class OVRVignette : MonoBehaviour
 {
     /// <summary>

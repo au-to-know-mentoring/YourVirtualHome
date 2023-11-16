@@ -53,6 +53,7 @@ public class OVRHand : MonoBehaviour,
     }
 
     [SerializeField]
+<<<<<<< HEAD
     internal Hand HandType = Hand.None;
 
     [SerializeField]
@@ -63,6 +64,23 @@ public class OVRHand : MonoBehaviour,
     /// </summary>
     public OVRInput.InputDeviceShowState m_showState = OVRInput.InputDeviceShowState.ControllerNotInHand;
 
+=======
+    private Hand HandType = Hand.None;
+
+    internal void SetHandType(Hand type)
+    {
+        HandType = type;
+    }
+
+    [SerializeField]
+    private Transform _pointerPoseRoot = null;
+
+    /// <summary>
+    /// Determines if the controller should be hidden based on held state.
+    /// </summary>
+    public OVRInput.InputDeviceShowState m_showState = OVRInput.InputDeviceShowState.ControllerNotInHand;
+
+>>>>>>> Code-import-working
     private GameObject _pointerPoseGO;
     private OVRPlugin.HandState _handState = new OVRPlugin.HandState();
 

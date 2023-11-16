@@ -55,8 +55,12 @@ public partial class OVRUnityHumanoidSkeletonRetargeter : OVRSkeleton
 
     private int _lastSkelChangeCount = -1;
 
+<<<<<<< HEAD
     [Serializable]
     public class JointAdjustment
+=======
+    protected class JointAdjustment
+>>>>>>> Code-import-working
     {
         /// <summary>
         /// Joint to adjust.
@@ -92,8 +96,12 @@ public partial class OVRUnityHumanoidSkeletonRetargeter : OVRSkeleton
         _skeletonType = SkeletonType.Body;
     }
 
+<<<<<<< HEAD
     [SerializeField]
     protected JointAdjustment[] _adjustments =
+=======
+    private readonly JointAdjustment[] _adjustments =
+>>>>>>> Code-import-working
     {
         new JointAdjustment
         {
@@ -107,8 +115,12 @@ public partial class OVRUnityHumanoidSkeletonRetargeter : OVRSkeleton
         get => _adjustments;
     }
 
+<<<<<<< HEAD
     [SerializeField]
     protected OVRHumanBodyBonesMappings.BodySection[] _bodySectionsToAlign =
+=======
+    private readonly OVRHumanBodyBonesMappings.BodySection[] _bodySectionsToAlign =
+>>>>>>> Code-import-working
     {
         OVRHumanBodyBonesMappings.BodySection.LeftArm, OVRHumanBodyBonesMappings.BodySection.RightArm,
         OVRHumanBodyBonesMappings.BodySection.LeftHand, OVRHumanBodyBonesMappings.BodySection.RightHand,
@@ -121,8 +133,12 @@ public partial class OVRUnityHumanoidSkeletonRetargeter : OVRSkeleton
         get => _bodySectionsToAlign;
     }
 
+<<<<<<< HEAD
     [SerializeField]
     protected OVRHumanBodyBonesMappings.BodySection[] _bodySectionToPosition =
+=======
+    private readonly OVRHumanBodyBonesMappings.BodySection[] _bodySectionToPosition =
+>>>>>>> Code-import-working
     {
         OVRHumanBodyBonesMappings.BodySection.LeftArm, OVRHumanBodyBonesMappings.BodySection.RightArm,
         OVRHumanBodyBonesMappings.BodySection.LeftHand, OVRHumanBodyBonesMappings.BodySection.RightHand,

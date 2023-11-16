@@ -4,7 +4,11 @@
 TagManager:
   serializedVersion: 2
   tags:
+  - InputField
+  - SamplesInfoPanel
   - SettingsCanvas
+  - Button
+  - GoToScene
   layers:
   - Default
   - TransparentFX

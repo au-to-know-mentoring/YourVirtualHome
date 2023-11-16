@@ -28,7 +28,10 @@ using UnityEngine;
 /// </summary>
 [DisallowMultipleComponent]
 [RequireComponent(typeof(OVRSceneAnchor))]
+<<<<<<< HEAD
 [HelpURL("https://developer.oculus.com/reference/unity/latest/class_o_v_r_scene_room")]
+=======
+>>>>>>> Code-import-working
 public class OVRSceneRoom : MonoBehaviour, IOVRSceneComponent
 {
     /// <summary>

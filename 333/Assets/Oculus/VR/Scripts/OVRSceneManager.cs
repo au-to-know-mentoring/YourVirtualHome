@@ -317,6 +317,7 @@ public class OVRSceneManager : MonoBehaviour
     private int _roomCounter;
     private Action<bool, List<OVRAnchor>> _onAnchorsFetchCompleted;
     private bool _hasLoadedScene = false;
+<<<<<<< HEAD
 
     private Action<bool> _onFloorAnchorsFetchCompleted;
     private Action<bool, OVRAnchor> _onFloorAnchorLocalizationCompleted;
@@ -324,6 +325,8 @@ public class OVRSceneManager : MonoBehaviour
     private readonly HashSet<Guid> _pendingLocatable = OVRObjectPool.Get<HashSet<Guid>>();
     private Dictionary<Guid, OVRAnchor> _roomAndFloorPairs = OVRObjectPool.Get<Dictionary<Guid, OVRAnchor>>();
     private List<OVRAnchor> _roomLayoutAnchors = new List<OVRAnchor>();
+=======
+>>>>>>> Code-import-working
 
     #endregion
 
@@ -373,8 +376,11 @@ public class OVRSceneManager : MonoBehaviour
         }
 
         _onAnchorsFetchCompleted = OnAnchorsFetchCompleted;
+<<<<<<< HEAD
         _onFloorAnchorsFetchCompleted = OnFloorAnchorsFetchCompleted;
         _onFloorAnchorLocalizationCompleted = OnFloorAnchorLocalizationCompleted;
+=======
+>>>>>>> Code-import-working
     }
 
     internal async void OnApplicationPause(bool isPaused)
@@ -420,8 +426,12 @@ public class OVRSceneManager : MonoBehaviour
                 uuids.Add(anchor.Uuid);
             }
 
+<<<<<<< HEAD
             if (uuids.Any())
                 await OVRAnchor.FetchAnchorsAsync(uuids, anchors);
+=======
+            await OVRAnchor.FetchAnchorsAsync(uuids, anchors);
+>>>>>>> Code-import-working
             UpdateAllSceneAnchors();
         }
     }
@@ -453,6 +463,7 @@ public class OVRSceneManager : MonoBehaviour
         {
             if (roomLayoutAnchors.Any())
             {
+<<<<<<< HEAD
                 if (ActiveRoomsOnly)
                     InstantiateActiveRooms(roomLayoutAnchors);
                 else
@@ -471,6 +482,12 @@ public class OVRSceneManager : MonoBehaviour
                     }
                 }
 
+=======
+                InstantiateSceneRooms(roomLayoutAnchors);
+            }
+            else
+            {
+>>>>>>> Code-import-working
                 Development.LogWarning(nameof(OVRSceneManager),
                     "Loading the Scene definition yielded no result. "
                     + "Typically, this means the user has not captured the room they are in yet. "
@@ -483,6 +500,7 @@ public class OVRSceneManager : MonoBehaviour
         OVRObjectPool.Return(roomLayoutAnchors);
     }
 
+<<<<<<< HEAD
     #region Loading active room(s)
 
     private void InstantiateActiveRooms(List<OVRAnchor> roomLayoutAnchors)
@@ -591,6 +609,8 @@ public class OVRSceneManager : MonoBehaviour
 
     #endregion
 
+=======
+>>>>>>> Code-import-working
     private void InstantiateSceneRooms(List<OVRAnchor> roomLayoutAnchors)
     {
         _roomCounter = roomLayoutAnchors.Count;
@@ -888,6 +908,7 @@ public class OVRSceneManager : MonoBehaviour
         }
     }
 
+<<<<<<< HEAD
     /// <summary>
     /// Determines if a point is inside of a 2d polygon.
     /// </summary>
@@ -921,6 +942,8 @@ public class OVRSceneManager : MonoBehaviour
         return collision != 0;
     }
 
+=======
+>>>>>>> Code-import-working
     #region Action callbacks
 
     private void OVRManager_SceneCaptureComplete(UInt64 requestId, bool result)

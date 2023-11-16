@@ -19,7 +19,10 @@
  */
 
 using System;
+<<<<<<< HEAD
 using UnityEngine;
+=======
+>>>>>>> Code-import-working
 using static OVRTelemetry;
 
 internal struct OVRTelemetryMarker : IDisposable
@@ -85,6 +88,7 @@ internal struct OVRTelemetryMarker : IDisposable
         return this;
     }
 
+<<<<<<< HEAD
     public OVRTelemetryMarker AddAnnotationIfNotNullOrEmpty(string annotationKey, string annotationValue)
     {
         return string.IsNullOrEmpty(annotationValue) ? this : AddAnnotation(annotationKey, annotationValue);
@@ -95,6 +99,11 @@ internal struct OVRTelemetryMarker : IDisposable
 
         AddAnnotation(OVRTelemetryConstants.OVRManager.AnnotationTypes.EngineVersion, Application.unityVersion);
 
+=======
+    public OVRTelemetryMarker Send()
+    {
+
+>>>>>>> Code-import-working
         State = new OVRTelemetryMarkerState(true, Result);
         _client.MarkerEnd(MarkerId, Result, InstanceKey);
         return this;

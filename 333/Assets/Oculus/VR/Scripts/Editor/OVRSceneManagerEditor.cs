@@ -40,8 +40,11 @@ internal class OVRSceneManagerEditor : Editor
         _verboseLogging = serializedObject.FindProperty(nameof(OVRSceneManager.VerboseLogging));
         _maxSceneAnchorUpdatesPerFrame =
             serializedObject.FindProperty(nameof(OVRSceneManager.MaxSceneAnchorUpdatesPerFrame));
+<<<<<<< HEAD
         _activeRoomsOnly = serializedObject.FindProperty(nameof(OVRSceneManager.ActiveRoomsOnly));
         _initialAnchorParent = serializedObject.FindProperty(nameof(OVRSceneManager._initialAnchorParent));
+=======
+>>>>>>> Code-import-working
     }
 
     public override void OnInspectorGUI()

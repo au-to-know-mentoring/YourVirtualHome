@@ -283,6 +283,7 @@ public readonly struct OVRAnchor : IEquatable<OVRAnchor>, IDisposable
     }
 
     /// <summary>
+<<<<<<< HEAD
     /// Tests whether or not the anchor supports a specific type of component.
     /// </summary>
     /// <remarks>
@@ -295,6 +296,12 @@ public readonly struct OVRAnchor : IEquatable<OVRAnchor>, IDisposable
     /// </remarks>
     /// <typeparam name="T">The type of the component.</typeparam>
     /// <returns>Whether or not the specified type of component is supported.</returns>
+=======
+    /// Tests whether or not the anchor supports a specific type of components.
+    /// </summary>
+    /// <typeparam name="T">The type of the component.</typeparam>
+    /// <returns>Wether or not the specified type of component is supported.</returns>
+>>>>>>> Code-import-working
     public bool SupportsComponent<T>() where T : struct, IOVRAnchorComponent<T>
     {
         var component = default(T);
@@ -302,6 +309,7 @@ public readonly struct OVRAnchor : IEquatable<OVRAnchor>, IDisposable
         return result.IsSuccess();
     }
 
+<<<<<<< HEAD
     /// <summary>
     /// Get all the supported components of an anchor.
     /// </summary>
@@ -331,6 +339,8 @@ public readonly struct OVRAnchor : IEquatable<OVRAnchor>, IDisposable
     }
     private static readonly SpaceComponentType[] SupportedComponentsArray = new SpaceComponentType[64];
 
+=======
+>>>>>>> Code-import-working
     public bool Equals(OVRAnchor other) => Handle.Equals(other.Handle) && Uuid.Equals(other.Uuid);
     public override bool Equals(object obj) => obj is OVRAnchor other && Equals(other);
     public static bool operator ==(OVRAnchor lhs, OVRAnchor rhs) => lhs.Equals(rhs);

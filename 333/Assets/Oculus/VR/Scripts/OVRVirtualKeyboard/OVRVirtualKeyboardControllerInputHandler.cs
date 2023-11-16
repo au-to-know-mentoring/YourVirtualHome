@@ -24,7 +24,10 @@ using UnityEngine;
 
 [Obsolete]
 [ExecuteInEditMode]
+<<<<<<< HEAD
 [HelpURL("https://developer.oculus.com/reference/unity/latest/class_o_v_r_virtual_keyboard_controller_input_handler")]
+=======
+>>>>>>> Code-import-working
 public class OVRVirtualKeyboardControllerInputHandler : MonoBehaviour
 {
     void Awake()

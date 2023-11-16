@@ -954,7 +954,11 @@ public static class OVRInput
                     return Vector3.zero;
                 }
             case Controller.RTouch:
+<<<<<<< HEAD
                 if (OVRNodeStateProperties.GetNodeStatePropertyVector3(Node.RightHand,
+=======
+                if (OVRNodeStateProperties.GetNodeStatePropertyVector3(Node.LeftHand,
+>>>>>>> Code-import-working
                         NodeStatePropertyType.AngularVelocity, OVRPlugin.Node.ControllerRight, stepType, out velocity))
                 {
                     return velocity;
@@ -1010,7 +1014,11 @@ public static class OVRInput
                     return Vector3.zero;
                 }
             case Controller.RTouch:
+<<<<<<< HEAD
                 if (OVRNodeStateProperties.GetNodeStatePropertyVector3(Node.RightHand,
+=======
+                if (OVRNodeStateProperties.GetNodeStatePropertyVector3(Node.LeftHand,
+>>>>>>> Code-import-working
                         NodeStatePropertyType.AngularAcceleration, OVRPlugin.Node.ControllerRight, stepType, out accel))
                 {
                     return accel;
@@ -2939,7 +2947,11 @@ public static class OVRInput
             buttonMap.Two                      = RawButton.B;
             buttonMap.Three                    = RawButton.None;
             buttonMap.Four                     = RawButton.None;
+<<<<<<< HEAD
             buttonMap.Start                    = RawButton.Start;
+=======
+            buttonMap.Start                    = RawButton.None;
+>>>>>>> Code-import-working
             buttonMap.Back                     = RawButton.None;
             buttonMap.PrimaryShoulder          = RawButton.None;
             buttonMap.PrimaryIndexTrigger      = RawButton.RIndexTrigger;

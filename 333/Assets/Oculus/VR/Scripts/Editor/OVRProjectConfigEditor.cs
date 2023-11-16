@@ -212,6 +212,7 @@ public class OVRProjectConfigEditor : Editor
                     OVREditorUtil.SetupEnumField(projectConfig, new GUIContent("Virtual Keyboard Support",
                             "Provides a consistent typing experience across Meta Quest VR applications."),
                         ref projectConfig.virtualKeyboardSupport, ref hasModified);
+<<<<<<< HEAD
 
                     if (projectConfig.requiresSystemKeyboard)
                     {
@@ -219,6 +220,8 @@ public class OVRProjectConfigEditor : Editor
                             "Using the System Keyboard with Virtual Keyboard is not recommended.",
                             MessageType.Warning);
                     }
+=======
+>>>>>>> Code-import-working
                 }
 
                 // Anchor Support - linked to Shared Spatial Anchors and Scene
@@ -383,7 +386,6 @@ public class OVRProjectConfigEditor : Editor
                 OVREditorUtil.SetupBoolField(projectConfig, new GUIContent("Experimental Features Enabled",
                         "If checked, this application can use experimental features. Note that such features are for developer use only. This option must be disabled when submitting to the Oculus Store."),
                     ref projectConfig.experimentalFeaturesEnabled, ref hasModified);
-
 
                 break;
         }

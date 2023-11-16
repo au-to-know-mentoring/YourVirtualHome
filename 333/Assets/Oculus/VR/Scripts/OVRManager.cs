@@ -61,11 +61,14 @@ using UnityEngine.Experimental.XR;
 
 #if USING_XR_SDK_OPENXR
 using Meta.XR;
+<<<<<<< HEAD
 using UnityEngine.XR.OpenXR;
 #endif
 
 #if USING_XR_MANAGEMENT
 using UnityEngine.XR.Management;
+=======
+>>>>>>> Code-import-working
 #endif
 
 using Settings = UnityEngine.XR.XRSettings;
@@ -1481,8 +1484,10 @@ public class OVRManager : MonoBehaviour, OVRMixedRealityCaptureConfiguration
     /// </summary>
     public static FoveatedRenderingLevel foveatedRenderingLevel
     {
+#if UNITY_OPENXR_1_5_3
         get
         {
+<<<<<<< HEAD
 #if USING_XR_SDK_OPENXR
             if (IsOpenXRLoaderActive())
                 return MetaXRFoveationFeature.foveatedRenderingLevel;
@@ -1498,7 +1503,18 @@ public class OVRManager : MonoBehaviour, OVRMixedRealityCaptureConfiguration
             else
 #endif
                 OVRPlugin.foveatedRenderingLevel = (OVRPlugin.FoveatedRenderingLevel)value;
+=======
+            return MetaXRFoveationFeature.foveatedRenderingLevel;
         }
+        set
+        {
+            MetaXRFoveationFeature.foveatedRenderingLevel = value;
+>>>>>>> Code-import-working
+        }
+#else
+        get { return (FoveatedRenderingLevel)OVRPlugin.foveatedRenderingLevel; }
+        set { OVRPlugin.foveatedRenderingLevel = (OVRPlugin.FoveatedRenderingLevel)value; }
+#endif
     }
 
     public static bool fixedFoveatedRenderingSupported
@@ -1515,8 +1531,10 @@ public class OVRManager : MonoBehaviour, OVRMixedRealityCaptureConfiguration
 
     public static bool useDynamicFoveatedRendering
     {
+#if UNITY_OPENXR_1_5_3
         get
         {
+<<<<<<< HEAD
 #if USING_XR_SDK_OPENXR
             if (IsOpenXRLoaderActive())
                 return MetaXRFoveationFeature.useDynamicFoveatedRendering;
@@ -1533,7 +1551,18 @@ public class OVRManager : MonoBehaviour, OVRMixedRealityCaptureConfiguration
 #endif
                 OVRPlugin.useDynamicFoveatedRendering = value;
 
+=======
+            return MetaXRFoveationFeature.useDynamicFoveatedRendering;
         }
+        set
+        {
+            MetaXRFoveationFeature.useDynamicFoveatedRendering = value;
+>>>>>>> Code-import-working
+        }
+#else
+        get { return OVRPlugin.useDynamicFoveatedRendering; }
+        set { OVRPlugin.useDynamicFoveatedRendering = value; }
+#endif
     }
 
     /// <summary>
@@ -1828,7 +1857,10 @@ public class OVRManager : MonoBehaviour, OVRMixedRealityCaptureConfiguration
     [Tooltip("Defines if hand poses can be populated by controller data.")]
     public OVRManager.ControllerDrivenHandPosesType controllerDrivenHandPosesType = OVRManager.ControllerDrivenHandPosesType.None;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> Code-import-working
     public bool IsSimultaneousHandsAndControllersSupported
     {
         get => (_readOnlyControllerDrivenHandPosesType != OVRManager.ControllerDrivenHandPosesType.None) || launchMultimodalHandsControllersOnStartup;
@@ -2709,7 +2741,10 @@ public class OVRManager : MonoBehaviour, OVRMixedRealityCaptureConfiguration
             }
         }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> Code-import-working
         OVRInput.Update();
 
         UpdateHMDEvents();
@@ -2945,6 +2980,7 @@ public class OVRManager : MonoBehaviour, OVRMixedRealityCaptureConfiguration
         if (m_SpaceWarpEnabled)
         {
 #if USING_XR_SDK_OCULUS
+<<<<<<< HEAD
             if (m_AppSpaceTransform != null)
             {
                 OculusXRPlugin.SetAppSpacePosition(m_AppSpaceTransform.position.x, m_AppSpaceTransform.position.y,
@@ -2957,6 +2993,12 @@ public class OVRManager : MonoBehaviour, OVRMixedRealityCaptureConfiguration
                 OculusXRPlugin.SetAppSpacePosition(0.0f, 0.0f, 0.0f);
                 OculusXRPlugin.SetAppSpaceRotation(0.0f, 0.0f, 0.0f, 1.0f);
             }
+=======
+            OculusXRPlugin.SetAppSpacePosition(m_AppSpaceTransform.position.x, m_AppSpaceTransform.position.y,
+                m_AppSpaceTransform.position.z);
+            OculusXRPlugin.SetAppSpaceRotation(m_AppSpaceTransform.rotation.x, m_AppSpaceTransform.rotation.y,
+                m_AppSpaceTransform.rotation.z, m_AppSpaceTransform.rotation.w);
+>>>>>>> Code-import-working
 #endif
         }
     }
@@ -3161,11 +3203,16 @@ public class OVRManager : MonoBehaviour, OVRMixedRealityCaptureConfiguration
         Failed
     };
 
+<<<<<<< HEAD
     public static Action<bool> OnPassthroughInitializedStateChange;
 
     private static Observable<PassthroughInitializationState> _passthroughInitializationState
         = new Observable<PassthroughInitializationState>(PassthroughInitializationState.Unspecified,
             newValue => OnPassthroughInitializedStateChange?.Invoke(newValue == PassthroughInitializationState.Initialized));
+=======
+    private static PassthroughInitializationState _passthroughInitializationState =
+        PassthroughInitializationState.Unspecified;
+>>>>>>> Code-import-working
 
     private static bool PassthroughInitializedOrPending(PassthroughInitializationState state)
     {
@@ -3181,7 +3228,11 @@ public class OVRManager : MonoBehaviour, OVRMixedRealityCaptureConfiguration
         OVRPlugin.Result result = OVRPlugin.GetInsightPassthroughInitializationState();
         if (result < 0)
         {
+<<<<<<< HEAD
             _passthroughInitializationState.Value = PassthroughInitializationState.Failed;
+=======
+            _passthroughInitializationState = PassthroughInitializationState.Failed;
+>>>>>>> Code-import-working
 #if UNITY_EDITOR_WIN
             // Looks like the developer is trying to run PT over Link. One possible failure cause is missing PTOL setup.
             string ptolDocLink = "https://developer.oculus.com/documentation/unity/unity-passthrough-over-link/";
@@ -3205,7 +3256,11 @@ public class OVRManager : MonoBehaviour, OVRMixedRealityCaptureConfiguration
             }
         }
 
+<<<<<<< HEAD
         return PassthroughInitializedOrPending(_passthroughInitializationState.Value);
+=======
+        return PassthroughInitializedOrPending(_passthroughInitializationState);
+>>>>>>> Code-import-working
     }
 
     private static void ShutdownInsightPassthrough()
@@ -3264,7 +3319,11 @@ public class OVRManager : MonoBehaviour, OVRMixedRealityCaptureConfiguration
                 }
                 else if (result < 0)
                 {
+<<<<<<< HEAD
                     _passthroughInitializationState.Value = PassthroughInitializationState.Failed;
+=======
+                    _passthroughInitializationState = PassthroughInitializationState.Failed;
+>>>>>>> Code-import-working
                     Debug.LogError("Failed to initialize Insight Passthrough. " +
                                    "Passthrough will be unavailable. Error " + result.ToString() + ".");
                 }
@@ -3352,14 +3411,22 @@ public class OVRManager : MonoBehaviour, OVRMixedRealityCaptureConfiguration
     /// \return Boolean value to indicate the current state of passthrough. If the value returned is true, Passthrough is initialized.
     public static bool IsInsightPassthroughInitialized()
     {
+<<<<<<< HEAD
         return _passthroughInitializationState.Value == PassthroughInitializationState.Initialized;
+=======
+        return _passthroughInitializationState == PassthroughInitializationState.Initialized;
+>>>>>>> Code-import-working
     }
 
     /// Checks whether Passthrough has failed initialization.
     /// \return Boolean value to indicate the passthrough initialization failed status. If the value returned is true, Passthrough has failed the initialization.
     public static bool HasInsightPassthroughInitFailed()
     {
+<<<<<<< HEAD
         return _passthroughInitializationState.Value == PassthroughInitializationState.Failed;
+=======
+        return _passthroughInitializationState == PassthroughInitializationState.Failed;
+>>>>>>> Code-import-working
     }
 
     /// Checks whether Passthrough is in the process of initialization.
@@ -3381,6 +3448,7 @@ public class OVRManager : MonoBehaviour, OVRMixedRealityCaptureConfiguration
         return (preferences.Flags & OVRPlugin.PassthroughPreferenceFlags.DefaultToActive) ==
             OVRPlugin.PassthroughPreferenceFlags.DefaultToActive;
     }
+<<<<<<< HEAD
 
     public static bool IsOpenXRLoaderActive()
     {
@@ -3432,4 +3500,6 @@ public class OVRManager : MonoBehaviour, OVRMixedRealityCaptureConfiguration
     }
 
 #endregion
+=======
+>>>>>>> Code-import-working
 }

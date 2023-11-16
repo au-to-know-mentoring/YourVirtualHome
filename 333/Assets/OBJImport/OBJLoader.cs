@@ -101,7 +101,7 @@ namespace Dummiesman
         {
             var reader = new StreamReader(input);
             //var reader = new StringReader(inputReader.ReadToEnd());
-
+           
             Dictionary<string, OBJObjectBuilder> builderDict = new Dictionary<string, OBJObjectBuilder>();
             OBJObjectBuilder currentBuilder = null;
             string currentMaterial = "default";
@@ -300,13 +300,11 @@ namespace Dummiesman
         /// <returns>Returns a GameObject represeting the OBJ file, with each imported object as a child.</returns>
         public GameObject Load(string path, string mtlPath)
         {
-            Debug.Log("load function");
             _objInfo = new FileInfo(path);
             if (!string.IsNullOrEmpty(mtlPath) && File.Exists(mtlPath))
             {
-                Debug.Log("load functionpt2");
                 var mtlLoader = new MTLLoader();
-                //Materials = mtlLoader.Load(mtlPath);
+                Materials = mtlLoader.Load(mtlPath);
 
                 using (var fs = new FileStream(path, FileMode.Open))
                 {

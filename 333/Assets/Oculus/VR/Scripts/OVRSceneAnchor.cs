@@ -60,6 +60,7 @@ public sealed class OVRSceneAnchor : MonoBehaviour
     private OVRPlugin.Posef? _pose = null;
     private bool _isLocatable = false;
 
+<<<<<<< HEAD
     private readonly List<OVRPlugin.SpaceComponentType> _supportedComponents =
         new List<OVRPlugin.SpaceComponentType>();
 
@@ -77,6 +78,9 @@ public sealed class OVRSceneAnchor : MonoBehaviour
 
     internal bool IsComponentEnabled(OVRPlugin.SpaceComponentType spaceComponentType) =>
         IsComponentSupported(spaceComponentType) &&
+=======
+    internal bool IsComponentEnabled(OVRPlugin.SpaceComponentType spaceComponentType) =>
+>>>>>>> Code-import-working
         OVRPlugin.GetSpaceComponentStatus(Space, spaceComponentType, out var componentEnabled, out _)
         && componentEnabled;
 
@@ -126,9 +130,12 @@ public sealed class OVRSceneAnchor : MonoBehaviour
         AnchorReferenceCountDictionary.TryGetValue(Space, out var referenceCount);
         AnchorReferenceCountDictionary[Space] = referenceCount + 1;
 
+<<<<<<< HEAD
         // certain components are not locatable, such as room.
         _isLocatable = IsComponentSupported(OVRPlugin.SpaceComponentType.Locatable);
 
+=======
+>>>>>>> Code-import-working
         // Generally, we want to set the transform as soon as possible, but there is a valid use case where we want to
         // disable this component as soon as its added to override the transform.
         if (enabled)

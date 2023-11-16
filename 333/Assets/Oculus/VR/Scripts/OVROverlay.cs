@@ -104,10 +104,17 @@ public class OVROverlay : MonoBehaviour
     public bool isProtectedContent = false;
 
     //Source and dest rects
+<<<<<<< HEAD
     public Rect srcRectLeft = new Rect(0, 0, 1, 1);
     public Rect srcRectRight = new Rect(0, 0, 1, 1);
     public Rect destRectLeft = new Rect(0, 0, 1, 1);
     public Rect destRectRight = new Rect(0, 0, 1, 1);
+=======
+    public Rect srcRectLeft = new Rect();
+    public Rect srcRectRight = new Rect();
+    public Rect destRectLeft = new Rect();
+    public Rect destRectRight = new Rect();
+>>>>>>> Code-import-working
 
     // Used to support legacy behavior where the top left was considered the origin
     public bool invertTextureRects = false;
@@ -716,11 +723,16 @@ public class OVROverlay : MonoBehaviour
     }
 
     // A blit method that only draws into the specified rect by setting the viewport.
+<<<<<<< HEAD
     private void BlitSubImage(Texture src, RenderTexture dst, Material mat, Rect rect, bool invertRect = false)
+=======
+    private void BlitSubImage(Texture src, RenderTexture dst, Material mat, Rect rect)
+>>>>>>> Code-import-working
     {
         var p = RenderTexture.active;
         RenderTexture.active = dst;
 
+<<<<<<< HEAD
         if (invertRect)
         {
             // our rects are inverted
@@ -863,6 +875,142 @@ public class OVROverlay : MonoBehaviour
         return ret;
     }
 
+=======
+        // our rects are inverted
+        rect.y = 1 - rect.y - rect.height;
+        var viewport = new Rect(dst.width * rect.x, dst.height * rect.y, dst.width * rect.width,
+            dst.height * rect.height);
+
+        // do our blit using GL ops
+        GL.PushMatrix();
+        GL.Viewport(viewport);
+        GL.LoadPixelMatrix(viewport.x, viewport.x + viewport.width, viewport.y, viewport.y + viewport.height);
+        tex2DMaterial.mainTexture = src;
+        tex2DMaterial.SetPass(0);
+
+        GL.Begin(GL.TRIANGLES);
+        GL.TexCoord(new Vector2(rect.x, rect.y));
+        GL.Vertex3(viewport.x, viewport.y, 0);
+        GL.TexCoord(new Vector2(rect.x, rect.y + rect.height * 2));
+        GL.Vertex3(viewport.x, viewport.y + viewport.height * 2, 0);
+        GL.TexCoord(new Vector2(rect.x + rect.width * 2, rect.y));
+        GL.Vertex3(viewport.x + viewport.width * 2, viewport.y, 0);
+        GL.End();
+        GL.Flush();
+
+        GL.PopMatrix();
+        RenderTexture.active = p;
+    }
+
+    private bool PopulateLayer(int mipLevels, bool isHdr, OVRPlugin.Sizei size, int sampleCount, int stage)
+    {
+        if (isExternalSurface)
+        {
+            return true;
+        }
+
+        bool ret = false;
+
+        RenderTextureFormat rtFormat = (isHdr) ? RenderTextureFormat.ARGBHalf : RenderTextureFormat.ARGB32;
+
+        for (int eyeId = 0; eyeId < texturesPerStage; ++eyeId)
+        {
+            Texture et = layerTextures[eyeId].swapChain[stage];
+            if (et == null)
+                continue;
+
+            ret = true;
+
+            // PC requries premultiplied Alpha, premultiply it unless its already premultiplied
+            bool premultiplyAlpha = !Application.isMobilePlatform && !isAlphaPremultiplied;
+
+            // OpenGL does not support copy texture between different format
+            bool isOpenGL = SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.OpenGLES3 ||
+                            SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.OpenGLES2;
+            // Graphics.CopyTexture only works when textures are same size and same mipmap count
+            bool isSameSize = et.width == textures[eyeId].width && et.height == textures[eyeId].height;
+            bool sameMipMap = textures[eyeId].mipmapCount == et.mipmapCount;
+
+            bool bypassBlit = Application.isMobilePlatform && !isOpenGL && isSameSize && sameMipMap;
+            if (bypassBlit)
+            {
+                Graphics.CopyTexture(textures[eyeId], et);
+                continue;
+            }
+
+            // Need to run the blit shader for premultiply Alpha
+            for (int mip = 0; mip < mipLevels; ++mip)
+            {
+                RenderTexture tempRTDst = null;
+
+                int width = size.w >> mip;
+                if (width < 1) width = 1;
+                int height = size.h >> mip;
+                if (height < 1) height = 1;
+                RenderTextureDescriptor descriptor = new RenderTextureDescriptor(width, height, rtFormat, 0);
+                descriptor.msaaSamples = sampleCount;
+                descriptor.useMipMap = true;
+                descriptor.autoGenerateMips = false;
+                descriptor.sRGB = true;
+
+                tempRTDst = RenderTexture.GetTemporary(descriptor);
+
+                if (!tempRTDst.IsCreated())
+                {
+                    tempRTDst.Create();
+                }
+
+                tempRTDst.DiscardContents();
+
+                Material blitMat = null;
+                if (currentOverlayShape != OverlayShape.Cubemap && currentOverlayShape != OverlayShape.OffcenterCubemap)
+                {
+                    blitMat = tex2DMaterial;
+                }
+                else
+                {
+                    blitMat = cubeMaterial;
+                }
+
+                blitMat.SetInt("_premultiply", premultiplyAlpha ? 1 : 0);
+
+                if (currentOverlayShape != OverlayShape.Cubemap && currentOverlayShape != OverlayShape.OffcenterCubemap)
+                {
+                    blitMat.SetInt("_flip", OVRPlugin.nativeXrApi == OVRPlugin.XrApi.OpenXR ? 1 : 0);
+                    if (overrideTextureRectMatrix)
+                    {
+                        BlitSubImage(textures[eyeId], tempRTDst, tex2DMaterial, GetBlitRect(eyeId));
+                    }
+                    else
+                    {
+                        Graphics.Blit(textures[eyeId], tempRTDst, tex2DMaterial);
+                    }
+
+                    //Resolve, decompress, swizzle, etc not handled by simple CopyTexture.
+                    Graphics.CopyTexture(tempRTDst, 0, 0, et, 0, mip);
+                }
+                else // Cubemap
+                {
+                    for (int face = 0; face < 6; ++face)
+                    {
+                        cubeMaterial.SetInt("_face", face);
+                        //Resolve, decompress, swizzle, etc not handled by simple CopyTexture.
+                        Graphics.Blit(textures[eyeId], tempRTDst, cubeMaterial);
+                        Graphics.CopyTexture(tempRTDst, 0, 0, et, face, mip);
+                    }
+                }
+
+                if (tempRTDst != null)
+                {
+                    RenderTexture.ReleaseTemporary(tempRTDst);
+                }
+            }
+        }
+
+        return ret;
+    }
+
+>>>>>>> Code-import-working
     private bool SubmitLayer(bool overlay, bool headLocked, bool noDepthBufferTesting, OVRPose pose, Vector3 scale,
         int frameIndex)
     {
@@ -909,6 +1057,7 @@ public class OVROverlay : MonoBehaviour
     private void SetupEditorPreview()
     {
 #if UNITY_EDITOR
+<<<<<<< HEAD
         if (previewInEditor)
         {
             if (previewObject == null)
@@ -925,11 +1074,25 @@ public class OVROverlay : MonoBehaviour
         {
             previewObject.SetActive(false);
             DestroyImmediate(previewObject);
+=======
+        if (previewInEditor && previewObject == null)
+        {
+            previewObject = new GameObject();
+            previewObject.hideFlags = HideFlags.HideAndDontSave;
+            previewObject.transform.SetParent(this.transform, false);
+            OVROverlayMeshGenerator generator = previewObject.AddComponent<OVROverlayMeshGenerator>();
+            generator.SetOverlay(this);
+        }
+        else if (!previewInEditor && previewObject != null)
+        {
+            UnityEngine.Object.DestroyImmediate(previewObject);
+>>>>>>> Code-import-working
             previewObject = null;
         }
 #endif
     }
 
+<<<<<<< HEAD
     public void ResetEditorPreview()
     {
         previewInEditor = false;
@@ -981,6 +1144,58 @@ public class OVROverlay : MonoBehaviour
         SetupEditorPreview();
     }
 
+=======
+    public static bool IsPassthroughShape(OverlayShape shape)
+    {
+        return OVRPlugin.IsPassthroughShape((OVRPlugin.OverlayShape)shape);
+    }
+
+    #region Unity Messages
+
+    void Awake()
+    {
+        if (Application.isPlaying)
+        {
+            if (tex2DMaterial == null)
+                tex2DMaterial = new Material(Shader.Find("Oculus/Texture2D Blit"));
+
+            if (cubeMaterial == null)
+                cubeMaterial = new Material(Shader.Find("Oculus/Cubemap Blit"));
+        }
+
+        rend = GetComponent<Renderer>();
+
+        if (textures.Length == 0)
+            textures = new Texture[] { null };
+
+        // Backward compatibility
+        if (rend != null && textures[0] == null)
+            textures[0] = rend.sharedMaterial.mainTexture;
+
+        SetupEditorPreview();
+    }
+
+    static public string OpenVROverlayKey
+    {
+        get { return "unity:" + Application.companyName + "." + Application.productName; }
+    }
+
+    private ulong OpenVROverlayHandle = OVR.OpenVR.OpenVR.k_ulOverlayHandleInvalid;
+
+    void OnEnable()
+    {
+        if (OVRManager.OVRManagerinitialized)
+            InitOVROverlay();
+
+#if UNITY_EDITOR
+        if (previewObject != null)
+        {
+            previewObject.SetActive(true);
+        }
+#endif
+    }
+
+>>>>>>> Code-import-working
     void InitOVROverlay()
     {
 #if USING_XR_SDK_OPENXR
@@ -1202,7 +1417,11 @@ public class OVROverlay : MonoBehaviour
 
     void LateUpdate()
     {
+<<<<<<< HEAD
         if (!OVRManager.OVRManagerinitialized || !OVRPlugin.userPresent)
+=======
+        if (!OVRManager.OVRManagerinitialized)
+>>>>>>> Code-import-working
             return;
         if (!xrDeviceConstructed)
         {
@@ -1300,5 +1519,9 @@ public class OVROverlay : MonoBehaviour
         if (rend)
             rend.enabled = !isOverlayVisible;
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> Code-import-working
     #endregion
 }

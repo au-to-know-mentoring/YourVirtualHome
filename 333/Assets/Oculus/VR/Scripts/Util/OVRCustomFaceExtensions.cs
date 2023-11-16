@@ -25,7 +25,10 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
 
+<<<<<<< HEAD
 [HelpURL("https://developer.oculus.com/reference/unity/latest/class_o_v_r_custom_face_extensions")]
+=======
+>>>>>>> Code-import-working
 public static class OVRCustomFaceExtensions
 {
     /// <summary>

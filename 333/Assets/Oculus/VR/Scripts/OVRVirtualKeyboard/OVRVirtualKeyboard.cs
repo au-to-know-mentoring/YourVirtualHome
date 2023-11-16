@@ -28,11 +28,15 @@ using UnityEngine.UI;
 using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
 using System.Linq;
+<<<<<<< HEAD
 using UnityEngine.Events;
+=======
+>>>>>>> Code-import-working
 using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 
 /// <summary>
+<<<<<<< HEAD
 /// Enables Virtual Keyboard integration.
 /// </summary>
 [DisallowMultipleComponent]
@@ -42,6 +46,13 @@ public class OVRVirtualKeyboard : MonoBehaviour
     /// <summary>
     /// The initial position of the keyboard, which determines the input style used to type. Far uses raycasting to type. Near uses direct touch to type. If set to Far or Near, the keyboard position is runtime controlled, so the Transform component will be locked.
     /// </summary>
+=======
+/// Supports Virtual Keyboard integration by providing the implementation to necessary common patterns
+/// </summary>
+[DisallowMultipleComponent]
+public class OVRVirtualKeyboard : MonoBehaviour, OVRManager.EventListener
+{
+>>>>>>> Code-import-working
     public enum KeyboardPosition
     {
         Far = 0,
@@ -185,11 +196,17 @@ public class OVRVirtualKeyboard : MonoBehaviour
         private readonly OVRInput.Controller _controllerType;
         private readonly OVRVirtualKeyboard _keyboard;
         private int _lastFrameCount;
+<<<<<<< HEAD
 
         private bool TriggerIsPressed => OVRInput.Get(
             _controllerType == OVRInput.Controller.LTouch
             ? OVRInput.RawButton.LIndexTrigger | OVRInput.RawButton.X
             : OVRInput.RawButton.RIndexTrigger | OVRInput.RawButton.A);
+=======
+        private readonly OVRInput.RawButton _triggerButton;
+
+        private bool TriggerIsPressed => OVRInput.Get(_triggerButton);
+>>>>>>> Code-import-working
 
         public ControllerInputSource(OVRVirtualKeyboard keyboard, InputSource inputSource,
             OVRInput.Controller controllerType, Transform rootTransform, Transform directTransform) : base()
@@ -197,6 +214,12 @@ public class OVRVirtualKeyboard : MonoBehaviour
             _keyboard = keyboard;
             _inputSource = inputSource;
             _controllerType = controllerType;
+<<<<<<< HEAD
+=======
+            _triggerButton = _controllerType == OVRInput.Controller.LTouch
+                ? OVRInput.RawButton.LIndexTrigger
+                : OVRInput.RawButton.RIndexTrigger;
+>>>>>>> Code-import-working
             _rootTransform = rootTransform;
             _directTransform = directTransform;
         }
@@ -293,6 +316,7 @@ public class OVRVirtualKeyboard : MonoBehaviour
         }
     }
 
+<<<<<<< HEAD
     private class KeyboardEventListener : OVRManager.EventListener
     {
         private readonly OVRVirtualKeyboard keyboard_;
@@ -346,37 +370,54 @@ public class OVRVirtualKeyboard : MonoBehaviour
 
     }
 
+=======
+>>>>>>> Code-import-working
     private static OVRVirtualKeyboard singleton_;
 
     /// <summary>
     /// Occurs when text has been committed
     /// @params (string text)
     /// </summary>
+<<<<<<< HEAD
     [Obsolete("Use CommitTextEvent", false)]
+=======
+>>>>>>> Code-import-working
     public event Action<string> CommitText;
 
     /// <summary>
     /// Occurs when a backspace is pressed
     /// </summary>
+<<<<<<< HEAD
     [Obsolete("Use BackspaceEvent", false)]
+=======
+>>>>>>> Code-import-working
     public event Action Backspace;
 
     /// <summary>
     /// Occurs when a return key is pressed
     /// </summary>
+<<<<<<< HEAD
     [Obsolete("Use EnterEvent", false)]
+=======
+>>>>>>> Code-import-working
     public event Action Enter;
 
     /// <summary>
     /// Occurs when keyboard is shown
     /// </summary>
+<<<<<<< HEAD
     [Obsolete("Use KeyboardShownEvent", false)]
+=======
+>>>>>>> Code-import-working
     public event Action KeyboardShown;
 
     /// <summary>
     /// Occurs when keyboard is hidden
     /// </summary>
+<<<<<<< HEAD
     [Obsolete("Use KeyboardHiddenEvent", false)]
+=======
+>>>>>>> Code-import-working
     public event Action KeyboardHidden;
 
     public Collider Collider { get; private set; }
@@ -392,20 +433,27 @@ public class OVRVirtualKeyboard : MonoBehaviour
     private InputField textCommitField;
 
     [Header("Controller Input")]
+<<<<<<< HEAD
     /// <summary>
     /// Configure with the transform representing the left controller input.
     /// </summary>
+=======
+>>>>>>> Code-import-working
     [FormerlySerializedAs("leftControllerInputTransform")]
     public Transform leftControllerRootTransform;
     public Transform leftControllerDirectTransform;
 
+<<<<<<< HEAD
     /// <summary>
     /// Configure with the transform representing the right controller input.
     /// </summary>
+=======
+>>>>>>> Code-import-working
     [FormerlySerializedAs("rightControllerInputTransform")]
     public Transform rightControllerRootTransform;
     public Transform rightControllerDirectTransform;
 
+<<<<<<< HEAD
     /// <summary>
     /// Enables the controllers to directly interact with the keyboard.
     /// </summary>
@@ -474,6 +522,28 @@ public class OVRVirtualKeyboard : MonoBehaviour
     public UnityEvent KeyboardShownEvent = new UnityEvent();
     public UnityEvent KeyboardHiddenEvent = new UnityEvent();
 
+=======
+    public bool controllerDirectInteraction = true;
+    public bool controllerRayInteraction = true;
+    public OVRPhysicsRaycaster controllerRaycaster;
+
+    [Header("Hand Input")]
+    public OVRHand handLeft;
+
+    public OVRHand handRight;
+    public bool handDirectInteraction = true;
+    public bool handRayInteraction = true;
+    public OVRPhysicsRaycaster handRaycaster;
+
+    [Header("Graphics")]
+    public Shader keyboardModelShader;
+
+    public Shader keyboardModelAlphaBlendShader;
+
+    [NonSerialized]
+    public bool InputEnabled = true;
+
+>>>>>>> Code-import-working
     private bool isKeyboardCreated_ = false;
 
     private UInt64 keyboardSpace_;
@@ -490,7 +560,10 @@ public class OVRVirtualKeyboard : MonoBehaviour
     // Used to ignore internal invokes of OnValueChanged without unbinding/rebinding
     private bool ignoreTextCommmitFieldOnValueChanged_;
     private InputField runtimeInputField_;
+<<<<<<< HEAD
     private KeyboardEventListener keyboardEventListener_;
+=======
+>>>>>>> Code-import-working
 
     // ensures runtime updates to the TextCommitField keep text context in sync
     public InputField TextCommitField
@@ -557,28 +630,48 @@ public class OVRVirtualKeyboard : MonoBehaviour
         singleton_ = this;
         if (OVRManager.instance)
         {
+<<<<<<< HEAD
             keyboardEventListener_ = new KeyboardEventListener(this);
             OVRManager.instance.RegisterEventListener(keyboardEventListener_);
+=======
+            OVRManager.instance.RegisterEventListener(this);
+>>>>>>> Code-import-working
         }
 
         // Initialize serialized text commit field
         TextCommitField = textCommitField;
 
         // Register for events
+<<<<<<< HEAD
         CommitTextEvent.AddListener(OnCommitText);
         BackspaceEvent.AddListener(OnBackspace);
         EnterEvent.AddListener(OnEnter);
         KeyboardShownEvent.AddListener(OnKeyboardShown);
         KeyboardHiddenEvent.AddListener(OnKeyboardHidden);
+=======
+        CommitText += OnCommitText;
+        Backspace += OnBackspace;
+        Enter += OnEnter;
+        KeyboardShown += OnKeyboardShown;
+        KeyboardHidden += OnKeyboardHidden;
+>>>>>>> Code-import-working
     }
 
     void OnDestroy()
     {
+<<<<<<< HEAD
         CommitTextEvent.RemoveListener(OnCommitText);
         BackspaceEvent.RemoveListener(OnBackspace);
         EnterEvent.RemoveListener(OnEnter);
         KeyboardShownEvent.RemoveListener(OnKeyboardShown);
         KeyboardHiddenEvent.RemoveListener(OnKeyboardHidden);
+=======
+        CommitText -= OnCommitText;
+        Backspace -= OnBackspace;
+        Enter -= OnEnter;
+        KeyboardShown -= OnKeyboardShown;
+        KeyboardHidden -= OnKeyboardHidden;
+>>>>>>> Code-import-working
 
         TextCommitField = null;
 
@@ -586,11 +679,19 @@ public class OVRVirtualKeyboard : MonoBehaviour
         {
             if (OVRManager.instance != null)
             {
+<<<<<<< HEAD
                 OVRManager.instance.DeregisterEventListener(keyboardEventListener_);
             }
             singleton_ = null;
         }
         keyboardEventListener_ = null;
+=======
+                OVRManager.instance.DeregisterEventListener(this);
+            }
+
+            singleton_ = null;
+        }
+>>>>>>> Code-import-working
 
         DestroyKeyboard();
     }
@@ -654,9 +755,12 @@ public class OVRVirtualKeyboard : MonoBehaviour
 #endif
 
     // public functions
+<<<<<<< HEAD
     /// <summary>
     /// Updates the keyboard to a reference position.
     /// </summary>
+=======
+>>>>>>> Code-import-working
     public void UseSuggestedLocation(KeyboardPosition position)
     {
         OVRPlugin.VirtualKeyboardLocationInfo locationInfo = new OVRPlugin.VirtualKeyboardLocationInfo();
@@ -687,6 +791,7 @@ public class OVRVirtualKeyboard : MonoBehaviour
         SyncKeyboardLocation();
     }
 
+<<<<<<< HEAD
     /// <summary>
     /// Sends a ray input to the keyboard from a given transform.
     /// </summary>
@@ -695,6 +800,8 @@ public class OVRVirtualKeyboard : MonoBehaviour
     /// <param name="isPressed">If true, will trigger a key press if the ray collides with a keyboard key.</param>
     /// <param name="useRaycastMask">Defaults to true. Will use the configured raycast mask for the given input source.</param>
 
+=======
+>>>>>>> Code-import-working
     public void SendVirtualKeyboardRayInput(Transform inputTransform,
         InputSource source, bool isPressed, bool useRaycastMask = true)
     {
@@ -727,12 +834,15 @@ public class OVRVirtualKeyboard : MonoBehaviour
         SendVirtualKeyboardInput(inputSource, inputTransform.ToOVRPose(), isPressed);
     }
 
+<<<<<<< HEAD
     /// <summary>
     /// Sends a direct input to the keyboard from a given transform.
     /// </summary>
     /// <param name="position">The collision point which is interacting with the keyboard. For example, a hand index finger tip.</param>
     /// <param name="source">The input source to use (ex. Controller/Hand Left/Right).</param>
     /// <param name="isPressed">If the input is triggering a press or not.</param>
+=======
+>>>>>>> Code-import-working
     public void SendVirtualKeyboardDirectInput(Vector3 position,
         InputSource source, bool isPressed, Transform interactorRootTransform = null)
     {
@@ -750,9 +860,47 @@ public class OVRVirtualKeyboard : MonoBehaviour
         }, isPressed, interactorRootTransform);
     }
 
+<<<<<<< HEAD
     /// <summary>
     /// Enables custom handling of text context. Use this when changing input fields or if the input text has changed via another script.
     /// </summary>
+=======
+    public void OnEvent(OVRPlugin.EventDataBuffer eventDataBuffer)
+    {
+        switch (eventDataBuffer.EventType)
+        {
+            case OVRPlugin.EventType.VirtualKeyboardCommitText:
+            {
+                CommitText?.Invoke(
+                    Encoding.UTF8.GetString(eventDataBuffer.EventData)
+                        .Replace("\0", "")
+                );
+                break;
+            }
+            case OVRPlugin.EventType.VirtualKeyboardBackspace:
+            {
+                Backspace?.Invoke();
+                break;
+            }
+            case OVRPlugin.EventType.VirtualKeyboardEnter:
+            {
+                Enter?.Invoke();
+                break;
+            }
+            case OVRPlugin.EventType.VirtualKeyboardShown:
+            {
+                KeyboardShown?.Invoke();
+                break;
+            }
+            case OVRPlugin.EventType.VirtualKeyboardHidden:
+            {
+                KeyboardHidden?.Invoke();
+                break;
+            }
+        }
+    }
+
+>>>>>>> Code-import-working
     public void ChangeTextContext(string textContext)
     {
         if (TextCommitField != null && TextCommitField.text != textContext)

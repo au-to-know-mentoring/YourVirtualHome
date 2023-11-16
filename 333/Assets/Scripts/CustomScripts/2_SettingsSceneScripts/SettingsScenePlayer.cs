@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
 
 public class SettingsScenePlayer : MonoBehaviour
 {
@@ -31,12 +30,6 @@ public class SettingsScenePlayer : MonoBehaviour
     float maxNormalAngle = 45f;
     bool canPlaceSpawner = false;
 
-    [Header("MainMenuCanvas")]
-    [SerializeField] Transform VSlider0Point;
-    [SerializeField] Transform VSlider100point;
-    [SerializeField] Scrollbar VSlider;
-    private bool VSliderDragging = false;
-
     private void Start()
     {
         rightX.action.Enable();
@@ -62,7 +55,6 @@ public class SettingsScenePlayer : MonoBehaviour
     }
     private void GrabRelease(InputAction.CallbackContext context) {
         sliderDragging = false;
-        VSliderDragging = false;
         DataManager.Instance.SetHouse(dollhouse);
     }
     private void ResetButton(InputAction.CallbackContext context) {
@@ -73,7 +65,6 @@ public class SettingsScenePlayer : MonoBehaviour
     void Update()
     {
         DragSlider();
-        DragSliderVertical();
         PositionSpawner();
     }
 
@@ -101,42 +92,6 @@ public class SettingsScenePlayer : MonoBehaviour
         }
     }
 
-    void DragSliderVertical()
-    {
-        if (VSliderDragging)
-        {
-            //Debug.Log("VSlider  dragging");
-            RaycastHit[] hits;
-            hits = Physics.RaycastAll(controller.transform.position, controller.transform.TransformDirection(aimDirection), Mathf.Infinity);
-            for (int i = 0; i < hits.Length; i++)
-            {
-                if (hits[i].transform.gameObject.name == "VSlidingArea")
-                {
-                    //Debug.Log("VSlider moving");
-                    float dist = Vector3.Distance(hits[i].point, VSlider0Point.position);
-                    float maxDist = Vector3.Distance(VSlider100point.position, VSlider0Point.position);
-                    if (dist <= 0)
-                    {
-                        VSlider.value = 1;
-                    }
-                    else if (hits[i].point.y > VSlider0Point.position.y)
-                    {
-                        VSlider.value = 1;
-                    }
-                    else if (dist >= maxDist)
-                    {
-                        VSlider.value = 0;
-                    }
-                    else
-                    {
-                        dist = Mathf.Clamp(dist, 0, maxDist);
-                        VSlider.value = 1 - Remap(dist, 0, maxDist, 0, 1); // inverting the number
-                    }
-                }
-            }
-        }
-    }
-
     void PressButton()
     {
         RaycastHit[] hits;
@@ -148,19 +103,6 @@ public class SettingsScenePlayer : MonoBehaviour
             if (hits[i].transform.gameObject.name == "Handle")
             {
                 sliderDragging = true;
-                break;
-            }
-            if (hits[i].transform.gameObject.name == "VSlidingArea")
-            {
-                //Debug.Log("VSlider clicked");
-                VSliderDragging = true;
-                break;
-            }
-            if (hits[i].transform.gameObject.name == "ArchitectInputField")
-            {
-                Debug.Log("inputfield clidked");
-                hits[i].transform.gameObject.GetComponent<InputField>().ActivateInputField();
-                hits[i].transform.gameObject.GetComponent<InputField>().Select();
                 break;
             }
             if (hits[i].transform.gameObject.GetComponent<Button>() != null) {
@@ -191,7 +133,7 @@ public class SettingsScenePlayer : MonoBehaviour
                 if (hits[i].transform.gameObject.tag == "SettingsCanvas") {
                     continue;
                 }
-                //Debug.Log(Vector3.Angle(Vector3.up, hits[i].normal));
+                Debug.Log(Vector3.Angle(Vector3.up, hits[i].normal));
                 if (Vector3.Angle(Vector3.up, hits[i].normal) < maxNormalAngle)
                 {
                     ChangeLineRendererColor(Color.green);
