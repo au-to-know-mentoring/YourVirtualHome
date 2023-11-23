@@ -32,7 +32,7 @@ public class GetModelFromDownloadHandler : MonoBehaviour
             
 		}
         //get the string value of the selected index
-        string value = menuOptions[menuIndex].text;
+       // string value = menuOptions[menuIndex].text;
         
       
 

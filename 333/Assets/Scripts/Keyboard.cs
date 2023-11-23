@@ -17,8 +17,8 @@ public class Keyboard : MonoBehaviour
     private RaycastHit hit;
     private bool isVisible;
     private float UiDistance;
-    private DownloadHandler DownloadHandlerScript;
-    public GameObject DownloadHandlerObject;
+   
+    public DownloadHandler DownloadHandlerObject;
 
     // Start is called before the first frame update
     void Start()
@@ -59,6 +59,7 @@ public class Keyboard : MonoBehaviour
 
         for (int i = 0; i < hits.Length; i++)
         {
+            Debug.Log("Hit Lenghth: " + hits.Length);
             Debug.Log(hits[i].transform.gameObject.name);
             if (hits[i].transform.gameObject.tag == "InputField")
             {
@@ -72,21 +73,22 @@ public class Keyboard : MonoBehaviour
 				}
 
 
-			}
-			if (OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger))
+			} else  if (hits[i].transform.gameObject.tag == "DownloadButton")
+				{
+                    if (OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger))
+                    {
+					DownloadHandlerObject.DownloadFile();
+                    }
+				}
+			 else if (hits[i].transform.gameObject.tag == "GoToScene")
 			{
-				ShowKeyboard();
-				if (hits[i].transform.gameObject.tag == "Button")
-				{
-					DownloadHandlerScript = DownloadHandlerObject.GetComponent<DownloadHandler>();
-					DownloadHandlerScript.DownloadFromMyLink();
-				}
-				if (hits[i].transform.gameObject.tag == "GoToScene")
-				{
-					DownloadHandlerScript = DownloadHandlerObject.GetComponent<DownloadHandler>();
-					DownloadHandlerScript.SwitchToModelScene();
-				}
+                if (OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger))
+                {
+					DownloadHandlerObject.SwitchToModelScene();
+                }
 			}
+			
+		
 
 			if (hits[i].transform.gameObject.layer == 5)
             {
@@ -114,10 +116,18 @@ public class Keyboard : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       
+        //if (DownloadHandlerObject != null)
+        //{
+        //    Debug.Log("does have DownloadHandlerScript");
+        //}
+		if (OVRInput.GetDown(OVRInput.Button.One))
+		{
+			DownloadHandlerObject.DownloadFromMyLink();
+		}
 
-        RaycastInputField();
+		RaycastInputField();
         iField.text = overlayKeyboard.text;
         Canvastext.text = iField.text;
-    }
+		
+	}
 }
