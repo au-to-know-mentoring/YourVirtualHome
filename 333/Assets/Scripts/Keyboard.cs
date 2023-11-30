@@ -86,6 +86,12 @@ public class Keyboard : MonoBehaviour
                 {
 					DownloadHandlerObject.SwitchToModelScene();
                 }
+			}else if (hits[i].transform.gameObject.tag == "ChooseModelTest")
+            {
+				if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger, OVRInput.Controller.RTouch))
+				{
+                    DownloadHandlerObject.choiceTest = 5;
+				}
 			}
 			
 		
@@ -120,10 +126,7 @@ public class Keyboard : MonoBehaviour
         //{
         //    Debug.Log("does have DownloadHandlerScript");
         //}
-		if (OVRInput.GetDown(OVRInput.Button.One))
-		{
-			DownloadHandlerObject.DownloadFromMyLink();
-		}
+		
 
 		RaycastInputField();
         iField.text = overlayKeyboard.text;

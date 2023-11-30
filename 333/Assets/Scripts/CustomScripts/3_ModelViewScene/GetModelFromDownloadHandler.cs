@@ -45,7 +45,7 @@ public class GetModelFromDownloadHandler : MonoBehaviour
     {
         if (modelSelectDropDown.value >= 0)
 		{
-            DownloadhandlerScript.choiceTest = modelSelectDropDown.value;
+           // DownloadhandlerScript.choiceTest = modelSelectDropDown.value;
             
         }
 
@@ -56,7 +56,7 @@ public class GetModelFromDownloadHandler : MonoBehaviour
             modelSelectDropDown.options.Add(new TMP_Dropdown.OptionData() { text = DropMenuName });
         }  
      
-        Debug.Log(DownloadhandlerScript.ListOfModelFolders.Count);
+       // Debug.Log(DownloadhandlerScript.ListOfModelFolders.Count);
         TestChangeModel();
         
     }
