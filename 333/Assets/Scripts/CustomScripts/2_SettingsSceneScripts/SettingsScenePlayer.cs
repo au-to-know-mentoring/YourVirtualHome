@@ -4,10 +4,16 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using TMPro;
 
 public class SettingsScenePlayer : MonoBehaviour
 {
-    [Header("Controller")]
+    private TMP_InputField myIField;
+
+	private TMP_InputField iField;
+	private TouchScreenKeyboard overlayKeyboard;
+
+	[Header("Controller")]
     [SerializeField] InputActionReference rightX;
     [SerializeField] InputActionReference rightTrigger;
     [SerializeField] GameObject controller;
@@ -39,7 +45,10 @@ public class SettingsScenePlayer : MonoBehaviour
 
     private void Start()
     {
-        rightX.action.Enable();
+		
+
+
+		rightX.action.Enable();
         rightX.action.performed += GrabButton;
         rightX.action.canceled += GrabRelease;
         rightTrigger.action.Enable();
@@ -63,7 +72,7 @@ public class SettingsScenePlayer : MonoBehaviour
     private void GrabRelease(InputAction.CallbackContext context) {
         sliderDragging = false;
         VSliderDragging = false;
-        DataManager.Instance.SetHouse(dollhouse);
+        //DataManager.Instance.SetHouse(dollhouse);
     }
     private void ResetButton(InputAction.CallbackContext context) {
         //dollhouse.transform.eulerAngles = Vector3.zero;
@@ -159,18 +168,45 @@ public class SettingsScenePlayer : MonoBehaviour
             if (hits[i].transform.gameObject.name == "ArchitectInputField")
             {
                 Debug.Log("inputfield clidked");
-                hits[i].transform.gameObject.GetComponent<InputField>().ActivateInputField();
-                hits[i].transform.gameObject.GetComponent<InputField>().Select();
-                break;
+                if (hits[i].transform.gameObject.GetComponent<TMP_InputField>() != null)
+                {
+                    myIField = hits[i].transform.gameObject.GetComponent<TMP_InputField>();
+                    hits[i].transform.gameObject.GetComponent<TMP_InputField>().ActivateInputField();
+                    hits[i].transform.gameObject.GetComponent<TMP_InputField>().Select();
+                }
+                else
+                {
+                    if (myIField != null)
+                    {
+						myIField.gameObject.GetComponent<TMP_InputField>().DeactivateInputField();
+					}
+                }
+				break;
             }
             if (hits[i].transform.gameObject.GetComponent<Button>() != null) {
                 hits[i].transform.gameObject.GetComponent<Button>().onClick.Invoke();
                 break;
             }
         }
+        
+    }
+	public void ShowKeyboard(TMP_InputField iField)
+	{
+        iField.text = overlayKeyboard.text;
+		overlayKeyboard = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.Default);
+
+		if (overlayKeyboard != null)
+		{
+			Debug.Log("true");
+		}
+	}
+    public void applyDownloadCode(TMP_InputField iField)
+    {
+       DownloadHandler handler = FindObjectOfType<DownloadHandler>();
+        handler.DownloadFile(iField.text);
     }
 
-    public void EnableSpawnerPlacement() {
+    public void EnableSpawnerPlacement() { 
         placingSpawner = true;
     }
 

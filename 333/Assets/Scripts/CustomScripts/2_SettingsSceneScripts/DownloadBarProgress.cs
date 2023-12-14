@@ -21,7 +21,8 @@ public class DownloadBarProgress : MonoBehaviour
 
     void Start()
 	{
-        DownloadHandlerScript = downloadCanvas.GetComponent<DownloadHandler>();
+        //DownloadHandlerScript = downloadCanvas.GetComponent<DownloadHandler>();
+        DownloadHandlerScript = gameObject.GetComponent<DownloadHandler>();
         
         ProgressSlider.maxValue = 100; 
     }
@@ -42,7 +43,6 @@ public class DownloadBarProgress : MonoBehaviour
                 DownloadPercentText.text = PercentString + "%"; // writes percent
                 ProgressSlider.value = downloadBar; // filles download bar 
             } 
-        }
-       
+        } 
     }
 }

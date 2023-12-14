@@ -19,7 +19,7 @@ public class SettingsSceneManager : MonoBehaviour
 
     void Start()
     {
-        SetupHouseDummy();
+       // SetupHouseDummy();
     }
 
     // Update is called once per frame
@@ -70,20 +70,23 @@ public class SettingsSceneManager : MonoBehaviour
 
     #region setup
 
-    void SetupHouseDummy() {
-        GameObject dollhousePrefab = FindObjectOfType<DataManager>().GetHouse();
-        GameObject dh = Instantiate(dollhousePrefab, dummyPosition, Quaternion.identity);
-        dh.transform.parent = dollhouseParent.transform;
-        dh.transform.localPosition = new Vector3(0, 0, 0);
+    public void SetupHouseDummy() {
+		    //GameObject dollhousePrefab = FindObjectOfType<DataManager>().GetHouse();
+		    //GameObject dh = Instantiate(dollhousePrefab, dummyPosition, Quaternion.identity);
+		    //dh.transform.parent = dollhouseParent.transform;
+		    //dh.transform.localPosition = new Vector3(0, 0, 0);  
+		var dh = FindObjectOfType<DataManager>().GetHouse();
+        dh.transform.SetParent(dollhouseParent.transform);
+       // dh.transform.localPosition = new Vector3(0, 0, 0);
         
         // set layer to dummy house layer
         //SetHouseObjectsLayers(dh);
 
         // position dollhouse in front of camera
-        dollhouseParent.transform.position = dummyPosition;
+      //  dollhouseParent.transform.position = dummyPosition;
 
-        Vector3 playerpos = new Vector3(0, 5, FindEdgeOfHouse(dh, 0) - 10);
-        player.transform.position = playerpos;
+       // Vector3 playerpos = new Vector3(0, 5, FindEdgeOfHouse(dh, 0) - 10);
+       // player.transform.position = playerpos;
     }
 
     private float FindEdgeOfHouse(GameObject g, float z) {

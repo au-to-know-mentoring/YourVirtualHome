@@ -41,10 +41,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 3678164982560232534}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: efb55fe43b6f1914db209b7a4be20a5d, type: 3}
+  m_Script: {fileID: 11500000, guid: f7c9356dc997fcc4d98de591221961c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   dollhouseParent: {fileID: 0}
   player: {fileID: 0}
+  playerScript: {fileID: 0}
   perspectiveCompensation: 0.95
   scaleSlider: {fileID: 0}
