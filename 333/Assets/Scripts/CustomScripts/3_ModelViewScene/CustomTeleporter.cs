@@ -23,9 +23,10 @@ public class CustomTeleporter : MonoBehaviour
     GameObject ti;				// reference to the flat cylinder that indicates where the user will teleport
     [SerializeField] GameObject tiPrefab; 			// prefab for the flat cylinder
     List<GameObject> FadedObjects;		// list of objects made transparent
- 
+    List<GameObject> Previous;
 
-    Wand wand;	// reference to the wand
+
+	Wand wand;	// reference to the wand
 
     private float maxTeleportDistance = 20f;		// definition for the maximum distance that can be teleported
     private float maxNormalAngle = 45f;		// the maximum angle before a surface is considered a wall and not teleportable
@@ -71,6 +72,7 @@ public class CustomTeleporter : MonoBehaviour
         ti = Instantiate(tiPrefab, Vector3.zero, Quaternion.identity);
         wand = FindObjectOfType<Wand>();
         FadedObjects = new List<GameObject>();
+        Previous = new List<GameObject>();
         ChangeLineRendererColor(Color.red);
     }
 
@@ -128,8 +130,8 @@ public class CustomTeleporter : MonoBehaviour
                 if (hits[i].transform.gameObject.tag == "Wanded")
                 {
                     Debug.Log("Something is Wanded!");
-                    // if an object has been wanded, it can be passed through
-                    FadedObjects.Add(hits[i].transform.gameObject);
+					// if an object has been wanded, it can be passed through
+					FadedObjects.Add(hits[i].transform.gameObject);
                     continue;
                 }
                 if (Vector3.Angle(Vector3.up, hits[i].normal) < maxNormalAngle)

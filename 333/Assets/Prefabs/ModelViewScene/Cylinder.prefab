@@ -115,4 +115,5 @@ MonoBehaviour:
   leftController: {fileID: 0}
   wandButton: {fileID: 0}
   wandActivateButton: {fileID: 0}
+  wandUndo: {fileID: 0}
   TransparentDefault: {fileID: 0}

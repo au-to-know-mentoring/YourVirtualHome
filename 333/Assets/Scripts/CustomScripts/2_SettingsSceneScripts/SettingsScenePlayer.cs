@@ -8,15 +8,22 @@ using TMPro;
 
 public class SettingsScenePlayer : MonoBehaviour
 {
+	[SerializeField] GameObject VrRigParent;
+
+	public TMP_Text myText;
+
     private TMP_InputField myIField;
 
 	private TMP_InputField iField;
 	private TouchScreenKeyboard overlayKeyboard;
 
+    public DownloadHandler myDownloadHandler;
+
 	[Header("Controller")]
     [SerializeField] InputActionReference rightX;
     [SerializeField] InputActionReference rightTrigger;
     [SerializeField] GameObject controller;
+   
     //public OVRInput.Button grabButton;
     //public OVRInput.Button resetRotationButton;
     private Vector3 aimDirection;
@@ -183,10 +190,15 @@ public class SettingsScenePlayer : MonoBehaviour
                 }
 				break;
             }
-            if (hits[i].transform.gameObject.GetComponent<Button>() != null) {
-                hits[i].transform.gameObject.GetComponent<Button>().onClick.Invoke();
-                break;
-            }
+            
+				if (hits[i].transform.gameObject.GetComponent<Button>() != null)
+				{
+                    hits[i].transform.gameObject.GetComponent<Button>().onClick.Invoke();
+					break;
+				}
+				
+			
+            
         }
         
     }
@@ -202,8 +214,26 @@ public class SettingsScenePlayer : MonoBehaviour
 	}
     public void applyDownloadCode(TMP_InputField iField)
     {
-       DownloadHandler handler = FindObjectOfType<DownloadHandler>();
-        handler.DownloadFile(iField.text);
+        myDownloadHandler.DownloadFile(iField.text);
+		printText(iField.text);
+	}
+
+    private void printText(string inputText)
+    {
+		myText.text = inputText;
+	}
+
+    public void SwitchTeleportControllerOn()
+    {
+       CustomTeleporter myTP = FindObjectOfType<CustomTeleporter>();
+       myTP.enabled = true;
+
+		Wand myWand = FindObjectOfType<Wand>();
+		myWand.enabled = true;
+
+		
+        GameObject spawnI = GameObject.Find("SpawnerIndicator");
+		VrRigParent.transform.position = spawnI.transform.position;
     }
 
     public void EnableSpawnerPlacement() { 

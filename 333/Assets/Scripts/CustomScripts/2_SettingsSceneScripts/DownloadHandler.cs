@@ -23,7 +23,7 @@ using UnityEditor;
 public class DownloadHandler : MonoBehaviour
 {
 
-	private DataManager dataManager;
+
 	// event for completion of download
 	public event System.ComponentModel.AsyncCompletedEventHandler? DownloadFileCompleted;
 	// path to zip
@@ -31,7 +31,7 @@ public class DownloadHandler : MonoBehaviour
 	// zipFile name to delete on application quit
 	string zipFile = "";
 	public InputField iField; // forr Code input
-	//public InputField folderSelectIField;
+	public InputField folderSelectIField;
 	public string myInput = ""; // for Code input 
 
 	public List<string> ListOfModelFolders = new List<string>();
@@ -44,7 +44,7 @@ public class DownloadHandler : MonoBehaviour
 	//->
 
 	//<- 
-	 public GameObject ModelHolderParent; // will be obsolete when settings scene has been introduced
+	[HideInInspector] public GameObject ModelHolderParent; // will be obsolete when settings scene has been introduced
 	public string unkownPathTwo;
 	//->
 
@@ -56,7 +56,7 @@ public class DownloadHandler : MonoBehaviour
 	string modelSelectKey = "ModelNum";
 	//->
 	//<- Scripts References
-	//public GetModelInfo getModelInfoScript;
+	public GetModelInfo getModelInfoScript;
 	public Keyboard myKeyboardScript;
 	//->
 
@@ -73,14 +73,11 @@ public class DownloadHandler : MonoBehaviour
 
 	public void Start()
 	{
-		
-
 		modelSelectInt = PlayerPrefs.GetInt(modelSelectKey);
 		Debug.Log(modelSelectInt + gameObject.name);
 
 
 		ListModelFolders();
-		
 	}
 	public void Update()
 	{
@@ -90,24 +87,18 @@ public class DownloadHandler : MonoBehaviour
 			FolderCount.text = ListOfModelFolders.Count.ToString();
 		}
 		Debug.Log(modelSelectInt);
-
 		// myInput = myKeyboardScript.iField.text;
 		// Debug.Log(myInput);
-
-
 	}
 
 
 
-	public void DownloadFromMyLink()
-	{
 
-		 // only called from UI button press and not on application start
-	}
 
 	public void DownloadFile(string Code)
 	{
 
+		
 		WebClient client = new WebClient();
 
 		zipFile = Application.productName + ".zip";
@@ -118,12 +109,15 @@ public class DownloadHandler : MonoBehaviour
 		client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(DownloadProgressCallback4);
 
 
-		Uri uri = new Uri("http://aumentoring.com.au/virtualhome-remote/getModel/" + Code);
+		Uri uri = new Uri("http://localhost:3000/virtualhome-remote/getModel/" + Code);
+		//Uri uri = new Uri("https://aumentoring.com.au/virtualhome-remote/getModel/" + Code);
 		// call download function 
 		Debug.Log(myInput);
 		Debug.Log(uri);
 
 		client.DownloadFileAsync(uri, path);
+
+		//CheckIfCodeIsValid();
 	}
 
 
@@ -140,6 +134,17 @@ public class DownloadHandler : MonoBehaviour
 			e.BytesReceived,
 			e.TotalBytesToReceive,
 			e.ProgressPercentage);// for DownloadBarProgress.cs to get percentage
+	}
+	public void CheckIfCodeIsValid()
+	{
+		if (ProgressVar.ProgressPercentage > 0)
+		{
+			Debug.Log("true");
+		}
+		else
+		{
+			Debug.Log("False");
+		}
 	}
 	public void ListModelFolders()
 	{
@@ -168,7 +173,9 @@ public class DownloadHandler : MonoBehaviour
 		ZipFile.ExtractToDirectory(path, unZipFolderLocation);
 		ListModelFolders(); // upadtes the Model Folders List with new folder
 
-
+		GetModelInfo myGetModelInfo = FindObjectOfType<GetModelInfo>();
+		myGetModelInfo.getModelInfo();
+		
 
 		// extract to download location
 
@@ -221,12 +228,10 @@ public class DownloadHandler : MonoBehaviour
 
 		var loadedObject = new OBJLoader().Load(objFilePath, mtlFilePath); // imports the obj
 
-		loadedObject.transform.SetParent(ModelHolderParent.transform);
-		loadedObject.transform.localPosition = Vector3.zero;
-		FindObjectOfType<DataManager>().SetHouse(loadedObject);
-		//loadedObject.gameObject.transform.SetParent(ModelHolderParent.transform); // putting our model in a cube allowing for rotation
+
+		loadedObject.gameObject.transform.SetParent(ModelHolderParent.transform); // putting our model in a cube allowing for rotation
 		//loadedObject.gameObject.transform.localScale = new Vector3(0.025f, 0.025f, 0.025f);
-		//loadedObject.gameObject.transform.localPosition = Vector3.zero;
+		loadedObject.gameObject.transform.localPosition = Vector3.zero;
 
 
 

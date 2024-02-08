@@ -14,8 +14,10 @@ public class Wand : MonoBehaviour
     [SerializeField] GameObject leftController; // reference to right controller
     [SerializeField] InputActionReference wandButton;
     [SerializeField] InputActionReference wandActivateButton;
+	[SerializeField] InputActionReference wandUndo;
 
-    bool wandActive = false;
+
+	bool wandActive = false;
     Vector3 aimDirection = Vector3.forward;
     private float maxWandDistance = 2.5f;   // Maximum interaction distance for wand
     private bool haveTarget = false; //boolean to confirm if wand should be useable and is on-target
@@ -130,7 +132,7 @@ public class Wand : MonoBehaviour
         // add a houseObject script to record materials history
         if (houseObject.GetComponent<HouseObject>() == null)
         {
-            Material[] oldMaterials = new Material[mr.materials.Length];
+            oldMaterials = new Material[mr.materials.Length];
             oldMaterials = mr.materials;
             houseObject.AddComponent<HouseObject>();
             houseObject.GetComponent<HouseObject>().SetMyMaterials(oldMaterials);
@@ -145,6 +147,7 @@ public class Wand : MonoBehaviour
         mr.materials = newMaterials;
     }
 
+   
     #endregion
 
     // define reference to house’s gameObject

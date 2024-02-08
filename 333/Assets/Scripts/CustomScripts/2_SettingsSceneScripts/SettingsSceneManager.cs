@@ -25,17 +25,17 @@ public class SettingsSceneManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        scaleDollhouse();
+     //   scaleDollhouse();
     }
 
     #region use_settings
-    public void scaleDollhouse() {
-        if (dollhouseParent == null)
-            return;
-        float sliderVal = mapToNewRange(0, 1, 0.05f, 1.5f, scaleSlider.value);
-        Vector3 newScale = new Vector3(sliderVal, sliderVal, sliderVal);
-        dollhouseParent.transform.localScale = newScale;
-    }
+    //public void scaleDollhouse() {
+    //    if (dollhouseParent == null)
+    //        return;
+    //    float sliderVal = mapToNewRange(0, 1, 0.05f, 1.5f, scaleSlider.value);
+    //    Vector3 newScale = new Vector3(sliderVal, sliderVal, sliderVal);
+    //    dollhouseParent.transform.localScale = newScale;
+    //}
 
     public float mapToNewRange(float OldMin, float OldMax, float NewMin, float NewMax, float OldValue)
     {
