@@ -29,8 +29,6 @@ public class PopulateScrollView : MonoBehaviour
 			count++;
 		}
 	}
-	
-
 
 	public void SetModelPref(string Key,string Value)
 	{
@@ -38,10 +36,6 @@ public class PopulateScrollView : MonoBehaviour
 		PlayerPrefs.SetString(Key, Value);
 	}
 
-	private void Update()
-	{
-		Debug.Log(PlayerPrefs.GetString("Model" + count));
-	}
 	/// <summary>
 	/// Used to Add a new model button that has not been saved to player pref
 	/// </summary>
@@ -56,7 +50,7 @@ public class PopulateScrollView : MonoBehaviour
 
 			buttonText.text = Name;
 			SetModelPref(Key, Name);
-
+		
 			buttonObject.transform.SetParent(parent.transform);
 			buttonObject.transform.localScale = Vector3.one;
 			buttonObject.transform.position = new Vector3(buttonObject.transform.position.x, buttonObject.transform.position.y, 0f);
@@ -64,17 +58,20 @@ public class PopulateScrollView : MonoBehaviour
 			buttonObject.GetComponent<RectTransform>().localPosition = new Vector3(buttonObject.transform.position.x, buttonObject.transform.position.y, 0f);
 
 			modelValueInButton modelValueInButton = buttonObject.GetComponent<modelValueInButton>();
-			modelValueInButton.modelVal = downloadHandler.ListOfModelFolders.Count;
+			modelValueInButton.modelVal = downloadHandler.ListOfModelFolders.Count - 1;
 			modelValueInButton.downloadHandler = downloadHandler;
 
 
 		
 	}
+
 	/// <summary>
 	/// used to add a button that has previously been saved to playerpref
 	/// </summary>
-	/// <param name="Key"></param>
-	public void AddModelButtonOnStart(string Key, int myCount)
+	/// <param name="ButtonText">Name/ClientName</param>
+	/// <param name="myModelVal" >DownloadHandler.LoadModelToScene(myModelVal)</param>
+
+	public void AddModelButtonOnStart(string ButtonText, int myModelVal)
 	{
 
 		var buttonObject = Instantiate(buttonPrefab);
@@ -82,7 +79,7 @@ public class PopulateScrollView : MonoBehaviour
 		//var ModelVal = buttonObject.GetComponent<modelValueInButton>();
 
 
-		buttonText.text = Key;
+		buttonText.text = ButtonText;
 
 		Debug.Log("Button Text: " + buttonText.text);
 
@@ -93,7 +90,7 @@ public class PopulateScrollView : MonoBehaviour
 		buttonObject.GetComponent<RectTransform>().localPosition = new Vector3(buttonObject.transform.position.x, buttonObject.transform.position.y, 0f);
 
 		modelValueInButton modelValueInButton = buttonObject.GetComponent<modelValueInButton>();
-		modelValueInButton.modelVal = myCount;
+		modelValueInButton.modelVal = myModelVal;
 		modelValueInButton.downloadHandler = downloadHandler;
 	}
 }

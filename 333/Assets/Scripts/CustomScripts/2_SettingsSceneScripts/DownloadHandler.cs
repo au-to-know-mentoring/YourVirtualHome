@@ -146,7 +146,7 @@ public class DownloadHandler : MonoBehaviour
 
 		var loadedObject = new OBJLoader().Load(objFilePath, mtlFilePath); // imports the obj
 
-
+		
 		loadedObject.gameObject.transform.SetParent(ModelHolderParent.transform); // putting our model in a cube allowing for rotation
 		//loadedObject.gameObject.transform.localScale = new Vector3(0.025f, 0.025f, 0.025f);
 		loadedObject.gameObject.transform.localPosition = Vector3.zero;

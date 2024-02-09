@@ -38,7 +38,7 @@ public class GetModelInfo : MonoBehaviour
 
 
 		// used to add the Name and Client Name to the button in the Model scrollview
-		Return = myModelList.Modelinfo[0].Name + " " + myModelList.Modelinfo[0].Client;
+		Return = "Name: " + myModelList.Modelinfo[0].Name + " " + "Client Name: " + myModelList.Modelinfo[0].Client;
 		PopulateScrollView myPopView = FindObjectOfType<PopulateScrollView>();
 		myPopView.AddModelButton(key, Return);
 		

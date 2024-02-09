@@ -7,7 +7,7 @@ public class modelValueInButton : MonoBehaviour
 {
 	public DownloadHandler downloadHandler;
     public int modelVal;
-	public GameObject controlPanel;
+	private GameObject controlPanel;
 
 	private bool showmodelPathBool;
 	public void showModelPath()
