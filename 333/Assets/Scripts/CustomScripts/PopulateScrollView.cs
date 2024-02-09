@@ -21,43 +21,41 @@ public class PopulateScrollView : MonoBehaviour
 
 	private void Start()
 	{
+		downloadHandler.ListModelFolders();
 		// use player pref each line contains Name/ClientName and array int
-		foreach(string  key in KeyNames)
+		foreach (string key in downloadHandler.ListOfModelFolders)
 		{
-			AddModelButton(key);
+			AddModelButtonOnStart(PlayerPrefs.GetString("Model" + count), count);
+			count++;
 		}
 	}
+	
 
-	public void SetModelPref(string Value)
+
+	public void SetModelPref(string Key,string Value)
 	{
-		KeyNames.Add(Value);
-		PlayerPrefs.SetString(KeyNames[KeyNames.Count], Value);
+		
+		PlayerPrefs.SetString(Key, Value);
 	}
 
 	private void Update()
 	{
-		
+		Debug.Log(PlayerPrefs.GetString("Model" + count));
 	}
-
-	public void AddModelButton(string Name)
+	/// <summary>
+	/// Used to Add a new model button that has not been saved to player pref
+	/// </summary>
+	/// <param name="Key"></param>
+	/// <param name="Name"></param>
+	public void AddModelButton(string Key, string Name)
 	{
-		if (count < downloadHandler.ListOfModelFolders.Count)
-		{
-			count++;
-
-			if (count > downloadHandler.ListOfModelFolders.Count)
-			{
-				StartCoutned = true;
-			}
 
 			var buttonObject = Instantiate(buttonPrefab);
 			var buttonText = buttonObject.GetComponentInChildren<TMP_Text>();
 			//var ModelVal = buttonObject.GetComponent<modelValueInButton>();
 
-
-
-			buttonText.text = Name + count.ToString();
-
+			buttonText.text = Name;
+			SetModelPref(Key, Name);
 
 			buttonObject.transform.SetParent(parent.transform);
 			buttonObject.transform.localScale = Vector3.one;
@@ -70,6 +68,32 @@ public class PopulateScrollView : MonoBehaviour
 			modelValueInButton.downloadHandler = downloadHandler;
 
 
-		}
+		
+	}
+	/// <summary>
+	/// used to add a button that has previously been saved to playerpref
+	/// </summary>
+	/// <param name="Key"></param>
+	public void AddModelButtonOnStart(string Key, int myCount)
+	{
+
+		var buttonObject = Instantiate(buttonPrefab);
+		var buttonText = buttonObject.GetComponentInChildren<TMP_Text>();
+		//var ModelVal = buttonObject.GetComponent<modelValueInButton>();
+
+
+		buttonText.text = Key;
+
+		Debug.Log("Button Text: " + buttonText.text);
+
+		buttonObject.transform.SetParent(parent.transform);
+		buttonObject.transform.localScale = Vector3.one;
+		buttonObject.transform.position = new Vector3(buttonObject.transform.position.x, buttonObject.transform.position.y, 0f);
+
+		buttonObject.GetComponent<RectTransform>().localPosition = new Vector3(buttonObject.transform.position.x, buttonObject.transform.position.y, 0f);
+
+		modelValueInButton modelValueInButton = buttonObject.GetComponent<modelValueInButton>();
+		modelValueInButton.modelVal = myCount;
+		modelValueInButton.downloadHandler = downloadHandler;
 	}
 }

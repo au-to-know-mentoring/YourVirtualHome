@@ -12,21 +12,21 @@ public class ImportModelToModelViewScene : MonoBehaviour
 
 	// Start is called before the first frame update
 
-	void Start()
-	{
+	//void Start()
+	//{
 		
-		DownloadHandlerScript = gameObject.GetComponent<DownloadHandler>();
-		DownloadHandlerScript.ModelHolderParent = spawnHere;
-		DownloadHandlerScript.choose = DownloadHandlerScript.modelSelectInt;
-		DownloadHandlerScript.LoadModelToScene();
-	}
-	void Update()
-	{
-		var modelSelectInt = DownloadHandlerScript.choose;
-		Debug.Log(modelSelectInt);
+	//	DownloadHandlerScript = gameObject.GetComponent<DownloadHandler>();
+	//	DownloadHandlerScript.ModelHolderParent = spawnHere;
+	//	//DownloadHandlerScript.choose = DownloadHandlerScript.modelSelectInt;
+	//	//DownloadHandlerScript.LoadModelToScene();
+	//}
+	//void Update()
+	//{
+	//	//var modelSelectInt = DownloadHandlerScript.choose;
+	//	Debug.Log(modelSelectInt);
 
 
-	}
+	//}
 
 
 }

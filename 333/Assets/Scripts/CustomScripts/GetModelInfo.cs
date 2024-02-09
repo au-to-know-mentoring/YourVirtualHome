@@ -20,14 +20,14 @@ public class GetModelInfo : MonoBehaviour
 	{
 		downloadHandler = FindObjectOfType<DownloadHandler>();
 	}
-	public void getModelInfo()
+	public void getModelInfo(string Code, string key)
 	{
-		var coroutine = ServerResonce();
+		var coroutine = ServerResonce(Code, key);
 		StartCoroutine(coroutine);
 	}
-	public IEnumerator ServerResonce()
+	public IEnumerator ServerResonce(string Code, string key)
 	{
-		var ModelInfoRequest = new WWW("http://localhost:3000/virtualhome-remote/getModelInfo/" + iField.text);
+		var ModelInfoRequest = new WWW("https://aumentoring.com.au/virtualhome-remote/getModelInfo/" + Code);
 
 		yield return ModelInfoRequest;
 
@@ -35,10 +35,14 @@ public class GetModelInfo : MonoBehaviour
 		Debug.Log(RequestInfo);
 		RunJsonDecode();
 
-		Return = myModelList.Modelinfo[0].Name + " " + myModelList.Modelinfo[0].Client;
 
+
+		// used to add the Name and Client Name to the button in the Model scrollview
+		Return = myModelList.Modelinfo[0].Name + " " + myModelList.Modelinfo[0].Client;
 		PopulateScrollView myPopView = FindObjectOfType<PopulateScrollView>();
-		myPopView.AddModelButton(Return); // used to add the Name and Client Name to the button in the Model scrollview
+		myPopView.AddModelButton(key, Return);
+		
+		
 	}
 
 	[System.Serializable]
@@ -61,5 +65,7 @@ public class GetModelInfo : MonoBehaviour
 
 
 		myModelList = JsonUtility.FromJson<ModelList>(jsonStartName + PlayerLoginInfoFromServer);
+
+		
 	}
 }

@@ -15,90 +15,41 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEditor;
-
-//using static System.Net.Mime.MediaTypeNames;
-
-
-// localhost:3000/virtualhome-remote/getModel/ 
 public class DownloadHandler : MonoBehaviour
 {
 
-
 	// event for completion of download
 	public event System.ComponentModel.AsyncCompletedEventHandler? DownloadFileCompleted;
-	// path to zip
-	string path = "";
-	// zipFile name to delete on application quit
-	string zipFile = "";
-	public InputField iField; // forr Code input
-	public InputField folderSelectIField;
-	public string myInput = ""; // for Code input 
-
+	
+	string path = ""; 
+	string zipFile = ""; 
+	string unZipFolderLocation; 
+	string ICode; // saves 6-digit code to use when calling GetModelInfo in DownloadFileCallback();
+	
 	public List<string> ListOfModelFolders = new List<string>();
 	public List<string> dirs = new List<string>();
-
-	public string unZipFolderLocation;
-	//<- Import OBJ files
+	
+	
 	string[] OBJfiles;
 	string[] ArrayMTLfiles;
-	//->
-
-	//<- 
+	
+	
 	[HideInInspector] public GameObject ModelHolderParent; // will be obsolete when settings scene has been introduced
 	public string unkownPathTwo;
-	//->
+	
 
-	//<- save selected model value
-	public int choiceTest;
-	public int showSelectInt;
-	public int choose;
-	public int modelSelectInt { get; set; }
-	string modelSelectKey = "ModelNum";
-	//->
-	//<- Scripts References
 	public GetModelInfo getModelInfoScript;
 	public Keyboard myKeyboardScript;
-	//->
+	
 
-	public Text FolderCount; // for debugging on the ui
-	public TMP_Dropdown modelSelectDropDown;
-
-
-
-
-	public void setModelSelect()
+	void Start()
 	{
-		PlayerPrefs.SetInt(modelSelectKey, choiceTest);
-	}
-
-	public void Start()
-	{
-		modelSelectInt = PlayerPrefs.GetInt(modelSelectKey);
-		Debug.Log(modelSelectInt + gameObject.name);
-
-
 		ListModelFolders();
 	}
-	public void Update()
-	{
-
-		if (FolderCount != null)
-		{
-			FolderCount.text = ListOfModelFolders.Count.ToString();
-		}
-		Debug.Log(modelSelectInt);
-		// myInput = myKeyboardScript.iField.text;
-		// Debug.Log(myInput);
-	}
-
-
-
-
 
 	public void DownloadFile(string Code)
 	{
-
-		
+		ICode = Code;
 		WebClient client = new WebClient();
 
 		zipFile = Application.productName + ".zip";
@@ -108,20 +59,11 @@ public class DownloadHandler : MonoBehaviour
 		// get ProgressPercent for DownloadBarProgress.cs
 		client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(DownloadProgressCallback4);
 
+		Uri uri = new Uri("https://aumentoring.com.au/virtualhome-remote/getModel/" + Code);
 
-		Uri uri = new Uri("http://localhost:3000/virtualhome-remote/getModel/" + Code);
-		//Uri uri = new Uri("https://aumentoring.com.au/virtualhome-remote/getModel/" + Code);
 		// call download function 
-		Debug.Log(myInput);
-		Debug.Log(uri);
-
 		client.DownloadFileAsync(uri, path);
-
-		//CheckIfCodeIsValid();
 	}
-
-
-
 
 
 	public DownloadProgressChangedEventArgs ProgressVar; // for DownloadBarProgress.cs to use Percentage value
@@ -135,17 +77,7 @@ public class DownloadHandler : MonoBehaviour
 			e.TotalBytesToReceive,
 			e.ProgressPercentage);// for DownloadBarProgress.cs to get percentage
 	}
-	public void CheckIfCodeIsValid()
-	{
-		if (ProgressVar.ProgressPercentage > 0)
-		{
-			Debug.Log("true");
-		}
-		else
-		{
-			Debug.Log("False");
-		}
-	}
+
 	public void ListModelFolders()
 	{
 		unZipFolderLocation = Application.persistentDataPath + "/" + Application.productName + "Model";
@@ -167,59 +99,45 @@ public class DownloadHandler : MonoBehaviour
 
 	public void DownloadFileCallback(object sender, AsyncCompletedEventArgs e)
 	{
-
 		unZipFolderLocation = Application.persistentDataPath + "/ " + Application.productName + "Model" + ListOfModelFolders.Count; // the extracted folder name
 
 		ZipFile.ExtractToDirectory(path, unZipFolderLocation);
 		ListModelFolders(); // upadtes the Model Folders List with new folder
 
+		// Gets model Name/ClientName then instantiates a new button inside of our Model ScrollView with PopulateScrollView.cs
 		GetModelInfo myGetModelInfo = FindObjectOfType<GetModelInfo>();
-		myGetModelInfo.getModelInfo();
+		myGetModelInfo.getModelInfo(ICode, "Model" + ListOfModelFolders.Count);
+	}
+
+
+	// May be removed, and instead turn ui controller off, and turn locomotion controller on
+
+	//public void SwitchToModelScene() 
+	//{
+	//	Scene scene = SceneManager.GetActiveScene();
+	//	StartCoroutine(LoadYourAsyncScene());
+	//}
+	//IEnumerator LoadYourAsyncScene() 
+	//{
+	//	UnityEngine.AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("ModelScene", LoadSceneMode.Single);
+
 		
-
-		// extract to download location
-
-
-	}
-
-
-	//<-    loads to ModelViewScene // will be obsolete once Settings scene is introduced
-	public void SwitchToModelScene() // load model view scene in background then import model to model view scene, then Switch from "Default Scene" to Model View Scene
-	{
-		Scene scene = SceneManager.GetActiveScene();
-		StartCoroutine(LoadYourAsyncScene());
-	}
-	IEnumerator LoadYourAsyncScene() // load ModelViewScene in back ground
-	{
-		UnityEngine.AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("ModelScene", LoadSceneMode.Single);
-
-		// Wait until the asynchronous scene fully loads
-		while (!asyncLoad.isDone)
-		{
-			setModelSelect();
-			//LoadModelToScene();
-			yield return null;
-		}
-	}
+	//	while (!asyncLoad.isDone)
+	//	{
+	//		yield return null;
+	//	}
+	//}
 	//->
-	public void LoadModelToScene() // used by ImportModelToModelViewScene.cs
+	public void LoadModelToScene(int Choice) // used by ImportModelToModelViewScene.cs
 	{
 
-		foreach (string dir in ListOfModelFolders)
-		{
-			unkownPathTwo = dir;
-		}
-
-		Debug.Log("UNKOWN PATH: " + unkownPathTwo);
-
-
-		string[] OBJfiles = Directory.GetFiles(ListOfModelFolders[choose], "*.obj", SearchOption.AllDirectories);
+		string[] OBJfiles = Directory.GetFiles(ListOfModelFolders[Choice], "*.obj", SearchOption.AllDirectories);
 
 
 		var objFilePath = OBJfiles[0];// get full path to the OBJ file
 
 
-		string[] ArrayMTLfiles = Directory.GetFiles(ListOfModelFolders[choose], "*.mtl", SearchOption.AllDirectories);
+		string[] ArrayMTLfiles = Directory.GetFiles(ListOfModelFolders[Choice], "*.mtl", SearchOption.AllDirectories);
 
 		var mtlFilePath = ArrayMTLfiles[0]; // get full path to the MTL file
 
@@ -245,8 +163,6 @@ public class DownloadHandler : MonoBehaviour
 		Debug.Log("wand");
 		// spawns player near house
 		//positionPlayer(loadedObject);
-
-
 	}
 
 
@@ -296,6 +212,4 @@ public class DownloadHandler : MonoBehaviour
 		}
 
 	}
-
-
 }

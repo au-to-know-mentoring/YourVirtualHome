@@ -12,7 +12,7 @@ public class modelValueInButton : MonoBehaviour
 	private bool showmodelPathBool;
 	public void showModelPath()
 	{
-		downloadHandler.modelSelectInt = modelVal;
+		//downloadHandler.modelSelectInt = modelVal;
 	}
 	public void showControlPanel()
 	{
@@ -23,7 +23,7 @@ public class modelValueInButton : MonoBehaviour
 	{
 		showControlPanel();
 
-		FindObjectOfType<DownloadHandler>().LoadModelToScene();
+		FindObjectOfType<DownloadHandler>().LoadModelToScene(modelVal);
 		FindObjectOfType<SettingsSceneManager>().SetupHouseDummy();
 		
 	}
