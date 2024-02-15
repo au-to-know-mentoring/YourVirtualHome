@@ -79,7 +79,7 @@ public class CustomTeleporter : MonoBehaviour
     void Update()
     {
         HandleTeleporter();
-        HandleSceneReset();
+       // HandleSceneReset();
     }
 
     private void HandleTeleporter()
@@ -174,22 +174,22 @@ public class CustomTeleporter : MonoBehaviour
         lr.endColor = color;
     }
 
-    private void HandleSceneReset() {
-        if (!leftSecondaryPressed || !rightSecondaryPressed) {
-            if (readyToReset) {
-                // clear files
-                dh.DeleteAllFiles();
-                // reload scene on release
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-            }
-            // otherwise hide canvas
-            SceneResetCanvas.SetActive(false);
-            return;
-        }
+    //private void HandleSceneReset() {
+    //    if (!leftSecondaryPressed || !rightSecondaryPressed) {
+    //        if (readyToReset) {
+    //            // clear files
+    //            dh.DeleteAllFiles();
+    //            // reload scene on release
+    //            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    //        }
+    //        // otherwise hide canvas
+    //        SceneResetCanvas.SetActive(false);
+    //        return;
+    //    }
 
-        // if both secondaries are pressed, enable canvas
-        SceneResetCanvas.SetActive(true);
-    }
+    //    // if both secondaries are pressed, enable canvas
+    //    SceneResetCanvas.SetActive(true);
+    //}
 
 }
 

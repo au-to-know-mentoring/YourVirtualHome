@@ -34,7 +34,7 @@ public class DownloadHandler : MonoBehaviour
 	string[] ArrayMTLfiles;
 	
 	
-	[HideInInspector] public GameObject ModelHolderParent; // will be obsolete when settings scene has been introduced
+	 public GameObject ModelHolderParent; // will be obsolete when settings scene has been introduced
 	public string unkownPathTwo;
 	
 
@@ -146,12 +146,13 @@ public class DownloadHandler : MonoBehaviour
 
 		var loadedObject = new OBJLoader().Load(objFilePath, mtlFilePath); // imports the obj
 
-		
+		Vector3 OriginalScale = loadedObject.gameObject.transform.localScale;
+
 		loadedObject.gameObject.transform.SetParent(ModelHolderParent.transform); // putting our model in a cube allowing for rotation
-		//loadedObject.gameObject.transform.localScale = new Vector3(0.025f, 0.025f, 0.025f);
+		loadedObject.gameObject.transform.localScale *= 0.025f;
 		loadedObject.gameObject.transform.localPosition = Vector3.zero;
 
-
+		DataManager.Instance.SetHouse(loadedObject);
 
 		Debug.Log("transform");
 		// apply collision 

@@ -83,7 +83,7 @@ public class SettingsScenePlayer : MonoBehaviour
     }
     private void ResetButton(InputAction.CallbackContext context) {
         //dollhouse.transform.eulerAngles = Vector3.zero;
-        ResetSpawnIndicator();
+       // ResetSpawnIndicator();
     }
 
     void Update()
@@ -225,18 +225,20 @@ public class SettingsScenePlayer : MonoBehaviour
 
     public void SwitchTeleportControllerOn()
     {
-       CustomTeleporter myTP = FindObjectOfType<CustomTeleporter>();
-       myTP.enabled = true;
+        CustomTeleporter myTP = FindObjectOfType<CustomTeleporter>();
+        myTP.enabled = true;
 
-		Wand myWand = FindObjectOfType<Wand>();
-		myWand.enabled = true;
-
-		
-        GameObject spawnI = GameObject.Find("SpawnerIndicator");
-		VrRigParent.transform.position = spawnI.transform.position;
+        Wand myWand = FindObjectOfType<Wand>();
+        myWand.enabled = true;
+        var House = FindObjectOfType<DataManager>().GetHouse();
+        House.transform.parent = null;
+        House.transform.localScale /= 0.025f;
+        House.transform.position += new Vector3(10f, 0, 0);
+        Debug.Log("spawnerIndicator");
+        VrRigParent.transform.position = FindObjectOfType<DataManager>().GetSpawnPosition();
     }
 
-    public void EnableSpawnerPlacement() { 
+	public void EnableSpawnerPlacement() { 
         placingSpawner = true;
     }
 
@@ -276,6 +278,8 @@ public class SettingsScenePlayer : MonoBehaviour
         placingSpawner = false;
         ChangeLineRendererColor(Color.red);
         DataManager.Instance.SetSpawnPosition(spawnerIndicator.transform.position);
+        spawnerIndicator.transform.SetParent(FindObjectOfType<DataManager>().GetHouse().transform);
+       
     }
     private void ResetSpawnIndicator()
     {

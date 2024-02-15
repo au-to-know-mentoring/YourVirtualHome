@@ -32,7 +32,7 @@ public class DataManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        Debug.Log(housePrefab.name + housePrefab.transform.localScale);
     }
 
     public void SetHouse(GameObject h)

@@ -14,7 +14,7 @@ public class PopulateScrollView : MonoBehaviour
     public DownloadHandler downloadHandler;
 	public GameObject parent;
 	public GameObject buttonPrefab;
-	private int count = 0;
+	private int count = 1;
 	private bool StartCoutned;
 
 	List<string> KeyNames = new List<string>();
@@ -32,7 +32,6 @@ public class PopulateScrollView : MonoBehaviour
 
 	public void SetModelPref(string Key,string Value)
 	{
-		
 		PlayerPrefs.SetString(Key, Value);
 	}
 
