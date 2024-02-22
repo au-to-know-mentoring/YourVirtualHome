@@ -84,13 +84,13 @@ public class Keyboard : MonoBehaviour
 			{
                 if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger, OVRInput.Controller.RTouch))
                 {
-					DownloadHandlerObject.SwitchToModelScene();
+					//DownloadHandlerObject.SwitchToModelScene();
                 }
 			}else if (hits[i].transform.gameObject.tag == "ChooseModelTest")
             {
 				if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger, OVRInput.Controller.RTouch))
 				{
-                    DownloadHandlerObject.choiceTest = 5;
+                   // DownloadHandlerObject.choiceTest = 5;
 				}
 			}
 			

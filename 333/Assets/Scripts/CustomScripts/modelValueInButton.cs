@@ -7,23 +7,29 @@ public class modelValueInButton : MonoBehaviour
 {
 	public DownloadHandler downloadHandler;
     public int modelVal;
-	public GameObject controlPanel;
+	private GameObject controlPanel;
 
 	private bool showmodelPathBool;
 	public void showModelPath()
 	{
-		downloadHandler.modelSelectInt = modelVal;
+		//downloadHandler.modelSelectInt = modelVal;
 	}
 	public void showControlPanel()
 	{
 		ControlPanelShow controlPanel = FindObjectOfType<ControlPanelShow>();
 		controlPanel.showControlPanel();
 	}
+
+	public void setSettingsScenePlayerModelVal()
+	{
+		FindObjectOfType<SettingsScenePlayer>().getModelIntFromUIButton(gameObject);
+	}
+
 	public void importModel()
 	{
 		showControlPanel();
 
-		FindObjectOfType<DownloadHandler>().LoadModelToScene();
+		FindObjectOfType<DownloadHandler>().LoadModelToScene(modelVal);
 		FindObjectOfType<SettingsSceneManager>().SetupHouseDummy();
 		
 	}

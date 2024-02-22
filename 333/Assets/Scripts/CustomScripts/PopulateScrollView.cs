@@ -8,63 +8,48 @@ using System.ComponentModel;
 using System;
 using JetBrains.Annotations;
 using Unity.VisualScripting;
-using UnityEngine.Windows;
 
 public class PopulateScrollView : MonoBehaviour
 {
     public DownloadHandler downloadHandler;
 	public GameObject parent;
 	public GameObject buttonPrefab;
-	private int count = 0;
+	private int count = 1;
 	private bool StartCoutned;
 
 	List<string> KeyNames = new List<string>();
 
 	private void Start()
 	{
+		downloadHandler.ListModelFolders();
 		// use player pref each line contains Name/ClientName and array int
-		//foreach(string  key in KeyNames)
-		//{
-		//	AddModelButton(key);
-		//}
-
-		
-	}
-
-	public void SetModelPref(string Value)
-	{
-		KeyNames.Add(Value);
-		PlayerPrefs.SetString(KeyNames[KeyNames.Count], Value);
-	}
-
-	private void Update()
-	{
-		if(UnityEngine.Input.GetKeyDown(KeyCode.L))
+		foreach (string key in downloadHandler.ListOfModelFolders)
 		{
-			AddModelButton("poopoo");
+			AddModelButtonOnStart(PlayerPrefs.GetString("Model" + count), count);
+			count++;
 		}
 	}
 
-	public void AddModelButton(string Name)
+	public void SetModelPref(string Key,string Value)
 	{
-		//if (count < downloadHandler.ListOfModelFolders.Count)
-		//{
-		//	count++;
+		PlayerPrefs.SetString(Key, Value);
+	}
 
-		//	if (count > downloadHandler.ListOfModelFolders.Count)
-		//	{
-		//		StartCoutned = true;
-		//	}
+	/// <summary>
+	/// Used to Add a new model button that has not been saved to player pref
+	/// </summary>
+	/// <param name="Key"></param>
+	/// <param name="Name"></param>
+	public void AddModelButton(string Key, string Name)
+	{
 
 			var buttonObject = Instantiate(buttonPrefab);
 			var buttonText = buttonObject.GetComponentInChildren<TMP_Text>();
 			//var ModelVal = buttonObject.GetComponent<modelValueInButton>();
 
-
-
-			buttonText.text = Name + count.ToString();
-
-
+			buttonText.text = Name;
+			SetModelPref(Key, Name);
+		
 			buttonObject.transform.SetParent(parent.transform);
 			buttonObject.transform.localScale = Vector3.one;
 			buttonObject.transform.position = new Vector3(buttonObject.transform.position.x, buttonObject.transform.position.y, 0f);
@@ -72,10 +57,39 @@ public class PopulateScrollView : MonoBehaviour
 			buttonObject.GetComponent<RectTransform>().localPosition = new Vector3(buttonObject.transform.position.x, buttonObject.transform.position.y, 0f);
 
 			modelValueInButton modelValueInButton = buttonObject.GetComponent<modelValueInButton>();
-			modelValueInButton.modelVal = downloadHandler.ListOfModelFolders.Count;
+			modelValueInButton.modelVal = downloadHandler.ListOfModelFolders.Count - 1;
 			modelValueInButton.downloadHandler = downloadHandler;
 
 
-	//	}
+		
+	}
+
+	/// <summary>
+	/// used to add a button that has previously been saved to playerpref
+	/// </summary>
+	/// <param name="ButtonText">Name/ClientName</param>
+	/// <param name="myModelVal" >DownloadHandler.LoadModelToScene(myModelVal)</param>
+
+	public void AddModelButtonOnStart(string ButtonText, int myModelVal)
+	{
+
+		var buttonObject = Instantiate(buttonPrefab);
+		var buttonText = buttonObject.GetComponentInChildren<TMP_Text>();
+		//var ModelVal = buttonObject.GetComponent<modelValueInButton>();
+
+
+		buttonText.text = ButtonText;
+
+		Debug.Log("Button Text: " + buttonText.text);
+
+		buttonObject.transform.SetParent(parent.transform);
+		buttonObject.transform.localScale = Vector3.one;
+		buttonObject.transform.position = new Vector3(buttonObject.transform.position.x, buttonObject.transform.position.y, 0f);
+
+		buttonObject.GetComponent<RectTransform>().localPosition = new Vector3(buttonObject.transform.position.x, buttonObject.transform.position.y, 0f);
+
+		modelValueInButton modelValueInButton = buttonObject.GetComponent<modelValueInButton>();
+		modelValueInButton.modelVal = myModelVal;
+		modelValueInButton.downloadHandler = downloadHandler;
 	}
 }
