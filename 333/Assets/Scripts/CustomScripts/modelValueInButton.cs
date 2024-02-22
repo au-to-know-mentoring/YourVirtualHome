@@ -19,6 +19,12 @@ public class modelValueInButton : MonoBehaviour
 		ControlPanelShow controlPanel = FindObjectOfType<ControlPanelShow>();
 		controlPanel.showControlPanel();
 	}
+
+	public void setSettingsScenePlayerModelVal()
+	{
+		FindObjectOfType<SettingsScenePlayer>().getModelIntFromUIButton(gameObject);
+	}
+
 	public void importModel()
 	{
 		showControlPanel();

@@ -14,7 +14,9 @@ public class SettingsScenePlayer : MonoBehaviour
 
     private TMP_InputField myIField;
 
-	private TMP_InputField iField;
+    [HideInInspector]public int ModelVal;
+
+	//private TMP_InputField iField;
 	private TouchScreenKeyboard overlayKeyboard;
 
     public DownloadHandler myDownloadHandler;
@@ -223,20 +225,74 @@ public class SettingsScenePlayer : MonoBehaviour
 		myText.text = inputText;
 	}
 
+    public void getModelIntFromUIButton(GameObject myButton)
+    {
+        ModelVal = myButton.GetComponent<modelValueInButton>().modelVal;
+    }
+
     public void SwitchTeleportControllerOn()
     {
-        CustomTeleporter myTP = FindObjectOfType<CustomTeleporter>();
+        saveModelRotation();
+		CustomTeleporter myTP = FindObjectOfType<CustomTeleporter>();
         myTP.enabled = true;
 
         Wand myWand = FindObjectOfType<Wand>();
         myWand.enabled = true;
+
         var House = FindObjectOfType<DataManager>().GetHouse();
+        Debug.Log(House.transform.rotation);
         House.transform.parent = null;
         House.transform.localScale /= 0.025f;
         House.transform.position += new Vector3(10f, 0, 0);
-        Debug.Log("spawnerIndicator");
+
+        if (PlayerPrefs.GetString("modelSettings" + ModelVal) != "")
+        {
+            House.transform.rotation = LoadModelWithSettingsApplied();
+        }
+		Debug.Log(House.transform.rotation);
+
+		Debug.Log("spawnerIndicator");
         VrRigParent.transform.position = FindObjectOfType<DataManager>().GetSpawnPosition();
     }
+
+	#region Model rotation/ PlayerPref
+	public void saveModelRotation()
+    {
+		PlayerPrefs.SetString("modelSettings" + ModelVal, new Vector3(FindObjectOfType<DataManager>().GetHouse().transform.rotation.x, FindObjectOfType<DataManager>().GetHouse().transform.rotation.y, FindObjectOfType<DataManager>().GetHouse().transform.rotation.z).ToString());
+	}
+
+	public Quaternion LoadModelWithSettingsApplied()
+    {
+		Quaternion myQuat = new Quaternion();
+		
+		Vector3 myVector3 = StringToVector3("(" + PlayerPrefs.GetString("modelSettings" + ModelVal) + ")");
+        Debug.Log(myVector3.ToString());
+		myQuat.x = myVector3.x;
+		myQuat.y = myVector3.y;
+		myQuat.z = myVector3.z;
+		return myQuat;
+	}
+
+	public static Vector3 StringToVector3(string sVector)
+	{
+		// Remove the parentheses
+		if (sVector.StartsWith("(") && sVector.EndsWith(")"))
+		{
+			sVector = sVector.Substring(1, sVector.Length - 2);
+		}
+
+		// split the items
+		string[] sArray = sVector.Split(',');
+
+		// store as a Vector3
+		Vector3 result = new Vector3(
+			float.Parse(sArray[0]),
+			float.Parse(sArray[1]),
+			float.Parse(sArray[2]));
+
+		return result;
+	}
+	#endregion
 
 	public void EnableSpawnerPlacement() { 
         placingSpawner = true;

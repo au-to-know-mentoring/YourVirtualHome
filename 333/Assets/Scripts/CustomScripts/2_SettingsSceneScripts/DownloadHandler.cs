@@ -151,6 +151,12 @@ public class DownloadHandler : MonoBehaviour
 		loadedObject.gameObject.transform.SetParent(ModelHolderParent.transform); // putting our model in a cube allowing for rotation
 		loadedObject.gameObject.transform.localScale *= 0.025f;
 		loadedObject.gameObject.transform.localPosition = Vector3.zero;
+		if (PlayerPrefs.GetString("modelsettings" + FindObjectOfType<SettingsScenePlayer>().ModelVal) != "")
+		{
+			loadedObject.gameObject.transform.localRotation = FindObjectOfType<SettingsScenePlayer>().LoadModelWithSettingsApplied();
+		}
+
+
 
 		DataManager.Instance.SetHouse(loadedObject);
 
@@ -163,7 +169,7 @@ public class DownloadHandler : MonoBehaviour
 		FindObjectOfType<Wand>().setHouse(loadedObject);
 		Debug.Log("wand");
 		// spawns player near house
-		//positionPlayer(loadedObject);
+		// positionPlayer(loadedObject);
 	}
 
 
