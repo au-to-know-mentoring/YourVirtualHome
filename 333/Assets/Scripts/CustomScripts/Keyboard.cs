@@ -129,8 +129,12 @@ public class Keyboard : MonoBehaviour
 		
 
 		RaycastInputField();
-        iField.text = overlayKeyboard.text;
-        Canvastext.text = iField.text;
+        if (overlayKeyboard != null)
+        {
+            iField.text = overlayKeyboard.text;
+        }
+
+        //Canvastext.text = iField.text;
 		
 	}
 }

@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System;
 using JetBrains.Annotations;
 using Unity.VisualScripting;
+using UnityEngine.Windows;
 
 public class PopulateScrollView : MonoBehaviour
 {
@@ -22,10 +23,12 @@ public class PopulateScrollView : MonoBehaviour
 	private void Start()
 	{
 		// use player pref each line contains Name/ClientName and array int
-		foreach(string  key in KeyNames)
-		{
-			AddModelButton(key);
-		}
+		//foreach(string  key in KeyNames)
+		//{
+		//	AddModelButton(key);
+		//}
+
+		
 	}
 
 	public void SetModelPref(string Value)
@@ -36,19 +39,22 @@ public class PopulateScrollView : MonoBehaviour
 
 	private void Update()
 	{
-		
+		if(UnityEngine.Input.GetKeyDown(KeyCode.L))
+		{
+			AddModelButton("poopoo");
+		}
 	}
 
 	public void AddModelButton(string Name)
 	{
-		if (count < downloadHandler.ListOfModelFolders.Count)
-		{
-			count++;
+		//if (count < downloadHandler.ListOfModelFolders.Count)
+		//{
+		//	count++;
 
-			if (count > downloadHandler.ListOfModelFolders.Count)
-			{
-				StartCoutned = true;
-			}
+		//	if (count > downloadHandler.ListOfModelFolders.Count)
+		//	{
+		//		StartCoutned = true;
+		//	}
 
 			var buttonObject = Instantiate(buttonPrefab);
 			var buttonText = buttonObject.GetComponentInChildren<TMP_Text>();
@@ -70,6 +76,6 @@ public class PopulateScrollView : MonoBehaviour
 			modelValueInButton.downloadHandler = downloadHandler;
 
 
-		}
+	//	}
 	}
 }
