@@ -8,31 +8,41 @@ using System.ComponentModel;
 using System;
 using JetBrains.Annotations;
 using Unity.VisualScripting;
+using Newtonsoft.Json.Linq;
+using UnityEngine.InputSystem;
 
 public class PopulateScrollView : MonoBehaviour
 {
     public DownloadHandler downloadHandler;
 	public GameObject parent;
 	public GameObject buttonPrefab;
-	private int count = 1;
+	private int Modelcount = 0;
+	private int PrefCount = 1;
 	private bool StartCoutned;
 
 	List<string> KeyNames = new List<string>();
 
 	private void Start()
 	{
+
+
 		downloadHandler.ListModelFolders();
 		// use player pref each line contains Name/ClientName and array int
 		foreach (string key in downloadHandler.ListOfModelFolders)
 		{
-			AddModelButtonOnStart(PlayerPrefs.GetString("Model" + count), count);
-			count++;
+
+			if (PlayerPrefs.GetString("FN" + "Model" + PrefCount) != "" && PlayerPrefs.GetString("LN" + "Model" + PrefCount) != "")
+			{
+				AddModelButtonOnStart(PlayerPrefs.GetString("FN" + "Model" + PrefCount), PlayerPrefs.GetString("LN" + "Model" + PrefCount), Modelcount);
+				Modelcount++;
+			}
 		}
 	}
 
-	public void SetModelPref(string Key,string Value)
+	public void SetModelPref(string Key,string FnValue, string LnValue)
 	{
-		PlayerPrefs.SetString(Key, Value);
+		PlayerPrefs.SetString("FN" + Key, FnValue);
+		PlayerPrefs.SetString("LN" + Key, LnValue);
 	}
 
 	/// <summary>
@@ -40,15 +50,17 @@ public class PopulateScrollView : MonoBehaviour
 	/// </summary>
 	/// <param name="Key"></param>
 	/// <param name="Name"></param>
-	public void AddModelButton(string Key, string Name)
+	public void AddModelButton(string Key, string FirstName, string ClientName)
 	{
+			SetModelPref(Key, FirstName, ClientName);
 
 			var buttonObject = Instantiate(buttonPrefab);
-			var buttonText = buttonObject.GetComponentInChildren<TMP_Text>();
+			modelValueInButton modelValueInButton = buttonObject.GetComponent<modelValueInButton>();
+			modelValueInButton.FirstName.text = FirstName;
+			modelValueInButton.ClientName.text = ClientName;
 			//var ModelVal = buttonObject.GetComponent<modelValueInButton>();
 
-			buttonText.text = Name;
-			SetModelPref(Key, Name);
+			
 		
 			buttonObject.transform.SetParent(parent.transform);
 			buttonObject.transform.localScale = Vector3.one;
@@ -56,7 +68,7 @@ public class PopulateScrollView : MonoBehaviour
 
 			buttonObject.GetComponent<RectTransform>().localPosition = new Vector3(buttonObject.transform.position.x, buttonObject.transform.position.y, 0f);
 
-			modelValueInButton modelValueInButton = buttonObject.GetComponent<modelValueInButton>();
+			
 			modelValueInButton.modelVal = downloadHandler.ListOfModelFolders.Count - 1;
 			modelValueInButton.downloadHandler = downloadHandler;
 
@@ -67,20 +79,20 @@ public class PopulateScrollView : MonoBehaviour
 	/// <summary>
 	/// used to add a button that has previously been saved to playerpref
 	/// </summary>
-	/// <param name="ButtonText">Name/ClientName</param>
+	/// <param name="FirstName">Name/ClientName</param>
+	/// <param name="ClientName">Name/ClientName</param>
 	/// <param name="myModelVal" >DownloadHandler.LoadModelToScene(myModelVal)</param>
 
-	public void AddModelButtonOnStart(string ButtonText, int myModelVal)
+	public void AddModelButtonOnStart(string FirstName, string ClientName, int myModelVal)
 	{
 
 		var buttonObject = Instantiate(buttonPrefab);
-		var buttonText = buttonObject.GetComponentInChildren<TMP_Text>();
-		//var ModelVal = buttonObject.GetComponent<modelValueInButton>();
 
 
-		buttonText.text = ButtonText;
-
-		Debug.Log("Button Text: " + buttonText.text);
+		modelValueInButton modelValueInButton = buttonObject.GetComponent<modelValueInButton>();
+		modelValueInButton.FirstName.text = FirstName;
+		modelValueInButton.ClientName.text = ClientName;
+	
 
 		buttonObject.transform.SetParent(parent.transform);
 		buttonObject.transform.localScale = Vector3.one;
@@ -88,7 +100,6 @@ public class PopulateScrollView : MonoBehaviour
 
 		buttonObject.GetComponent<RectTransform>().localPosition = new Vector3(buttonObject.transform.position.x, buttonObject.transform.position.y, 0f);
 
-		modelValueInButton modelValueInButton = buttonObject.GetComponent<modelValueInButton>();
 		modelValueInButton.modelVal = myModelVal;
 		modelValueInButton.downloadHandler = downloadHandler;
 	}

@@ -149,8 +149,19 @@ public class DownloadHandler : MonoBehaviour
 		Vector3 OriginalScale = loadedObject.gameObject.transform.localScale;
 
 		loadedObject.gameObject.transform.SetParent(ModelHolderParent.transform); // putting our model in a cube allowing for rotation
+
+		//if (PlayerPrefs.GetFloat("ModelX" + Choice) != null && PlayerPrefs.GetFloat("ModelY" + Choice) != null && PlayerPrefs.GetFloat("ModelZ" + Choice) != null) {
+			Vector3 RotationWithPlayerPrefs = new Vector3(PlayerPrefs.GetFloat("ModelX" + Choice), PlayerPrefs.GetFloat("ModelY" + Choice), PlayerPrefs.GetFloat("ModelZ" + Choice));
+			Quaternion houseRotation = Quaternion.Euler(RotationWithPlayerPrefs);
+			loadedObject.transform.rotation =  houseRotation;
+		//}
+
+
+
 		loadedObject.gameObject.transform.localScale *= 0.025f;
 		loadedObject.gameObject.transform.localPosition = Vector3.zero;
+
+
 		if (PlayerPrefs.GetString("modelsettings" + FindObjectOfType<SettingsScenePlayer>().ModelVal) != "")
 		{
 			loadedObject.gameObject.transform.localRotation = FindObjectOfType<SettingsScenePlayer>().LoadModelWithSettingsApplied();

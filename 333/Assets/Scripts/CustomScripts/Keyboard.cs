@@ -8,7 +8,7 @@ using TMPro;
 public class Keyboard : MonoBehaviour
 {
     private Collider InputFieldCollider;
-    public InputField iField;
+    public TMP_InputField iField;
     public Text Canvastext;
     public GameObject Controller;
     private TouchScreenKeyboard overlayKeyboard;
@@ -109,7 +109,7 @@ public class Keyboard : MonoBehaviour
     public void ShowKeyboard()
 	{
         Debug.Log("Trigger Pressed");
-        iField = iField.GetComponent<InputField>();
+        iField = iField.GetComponent<TMP_InputField>();
         overlayKeyboard = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.Default);
         
         if (overlayKeyboard != null)

@@ -8,24 +8,32 @@ using TMPro;
 
 public class SettingsScenePlayer : MonoBehaviour
 {
-	[SerializeField] GameObject VrRigParent;
 
-	public TMP_Text myText;
+    public int modelVal;
+
+    [SerializeField] private GameObject MainMenuCanvas;
+    [SerializeField] private GameObject ControlPanelCanvas;
+
+    private TMP_InputField CodeInputField;
+
+    [SerializeField] GameObject VrRigParent;
+
+    public TMP_Text myText;
 
     private TMP_InputField myIField;
 
-    [HideInInspector]public int ModelVal;
+    [HideInInspector] public int ModelVal;
 
-	//private TMP_InputField iField;
-	private TouchScreenKeyboard overlayKeyboard;
+    //private TMP_InputField iField;
+    private TouchScreenKeyboard overlayKeyboard;
 
     public DownloadHandler myDownloadHandler;
 
-	[Header("Controller")]
+    [Header("Controller")]
     [SerializeField] InputActionReference rightX;
     [SerializeField] InputActionReference rightTrigger;
     [SerializeField] GameObject controller;
-   
+
     //public OVRInput.Button grabButton;
     //public OVRInput.Button resetRotationButton;
     private Vector3 aimDirection;
@@ -54,13 +62,12 @@ public class SettingsScenePlayer : MonoBehaviour
 
     private void Start()
     {
-		
 
 
-		rightX.action.Enable();
+
+        rightX.action.Enable();
         rightX.action.performed += GrabButton;
         rightX.action.canceled += GrabRelease;
-        rightTrigger.action.Enable();
         rightTrigger.action.performed += ResetButton;
 
         lr.positionCount = 2;
@@ -76,7 +83,7 @@ public class SettingsScenePlayer : MonoBehaviour
         PressButton();
 
         lr.positionCount = 2;
-        lr.SetPosition(1, aimDirection*20);
+        lr.SetPosition(1, aimDirection * 20);
     }
     private void GrabRelease(InputAction.CallbackContext context) {
         sliderDragging = false;
@@ -85,12 +92,18 @@ public class SettingsScenePlayer : MonoBehaviour
     }
     private void ResetButton(InputAction.CallbackContext context) {
         //dollhouse.transform.eulerAngles = Vector3.zero;
-       // ResetSpawnIndicator();
+        ResetSpawnIndicator();
     }
 
     void Update()
     {
-        DragSlider();
+		//if (overlayKeyboard != null)
+		//{
+		//	CodeInputField.text = overlayKeyboard.text;
+		//	Debug.Log("true");
+		//}
+
+		DragSlider();
         DragSliderVertical();
         PositionSpawner();
     }
@@ -174,7 +187,7 @@ public class SettingsScenePlayer : MonoBehaviour
                 VSliderDragging = true;
                 break;
             }
-            if (hits[i].transform.gameObject.name == "ArchitectInputField")
+            if (hits[i].transform.gameObject.GetComponent<TMP_InputField>() != null)
             {
                 Debug.Log("inputfield clidked");
                 if (hits[i].transform.gameObject.GetComponent<TMP_InputField>() != null)
@@ -187,43 +200,44 @@ public class SettingsScenePlayer : MonoBehaviour
                 {
                     if (myIField != null)
                     {
-						myIField.gameObject.GetComponent<TMP_InputField>().DeactivateInputField();
-					}
+                        myIField.gameObject.GetComponent<TMP_InputField>().DeactivateInputField();
+                    }
                 }
-				break;
+                break;
             }
-            
-				if (hits[i].transform.gameObject.GetComponent<Button>() != null)
-				{
-                    hits[i].transform.gameObject.GetComponent<Button>().onClick.Invoke();
-					break;
-				}
-				
-			
-            
+
+            if (hits[i].transform.gameObject.GetComponent<Button>() != null)
+            {
+                hits[i].transform.gameObject.GetComponent<Button>().onClick.Invoke();
+                break;
+            }
+
+
+
         }
-        
+
     }
-	public void ShowKeyboard(TMP_InputField iField)
-	{
+    public void ShowKeyboard(TMP_InputField iField)
+    {
+    
         iField.text = overlayKeyboard.text;
 		overlayKeyboard = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.Default);
 
-		if (overlayKeyboard != null)
-		{
+        if (overlayKeyboard != null)
+        {
 			Debug.Log("true");
-		}
-	}
+        }
+    }
     public void applyDownloadCode(TMP_InputField iField)
     {
         myDownloadHandler.DownloadFile(iField.text);
-		printText(iField.text);
-	}
+        printText(iField.text);
+    }
 
     private void printText(string inputText)
     {
-		myText.text = inputText;
-	}
+        myText.text = inputText;
+    }
 
     public void getModelIntFromUIButton(GameObject myButton)
     {
@@ -232,28 +246,44 @@ public class SettingsScenePlayer : MonoBehaviour
 
     public void SwitchTeleportControllerOn()
     {
-        saveModelRotation();
-		CustomTeleporter myTP = FindObjectOfType<CustomTeleporter>();
+        
+
+        MainMenuCanvas.active = false;
+        ControlPanelCanvas.active = false;
+
+		saveModelRotation();
+
+        CustomTeleporter myTP = FindObjectOfType<CustomTeleporter>();
         myTP.enabled = true;
 
         Wand myWand = FindObjectOfType<Wand>();
         myWand.enabled = true;
 
-        var House = FindObjectOfType<DataManager>().GetHouse();
-        Debug.Log(House.transform.rotation);
+
+
+		var House = FindObjectOfType<DataManager>().GetHouse();
+        Vector3 HouseTransform = new Vector3(House.transform.rotation.x, House.transform.rotation.y, House.transform.rotation.z);
+       
         House.transform.parent = null;
         House.transform.localScale /= 0.025f;
         House.transform.position += new Vector3(10f, 0, 0);
+        
+         PlayerPrefs.SetFloat( "ModelX" + modelVal, House.transform.rotation.x);
+		 PlayerPrefs.SetFloat( "ModelZ" + modelVal, House.transform.rotation.y);
+		 PlayerPrefs.SetFloat( "ModelZ" + modelVal, House.transform.rotation.z);
+
+
+
+        VrRigParent.transform.position = DataManager.Instance.GetSpawnPosition().position;
+        spawnerIndicator.gameObject.SetActive(false);
 
         if (PlayerPrefs.GetString("modelSettings" + ModelVal) != "")
         {
             House.transform.rotation = LoadModelWithSettingsApplied();
         }
-		Debug.Log(House.transform.rotation);
 
-		Debug.Log("spawnerIndicator");
-        VrRigParent.transform.position = FindObjectOfType<DataManager>().GetSpawnPosition();
-    }
+        
+	}
 
 	#region Model rotation/ PlayerPref
 	public void saveModelRotation()
@@ -301,8 +331,9 @@ public class SettingsScenePlayer : MonoBehaviour
     private void PositionSpawner() {
         if (!placingSpawner)
             return;
-        // use tags or layermask to check if house?
-        spawnerIndicator.SetActive(false);
+		rightTrigger.action.Enable();
+		// use tags or layermask to check if house?
+		spawnerIndicator.SetActive(false);
         ChangeLineRendererColor(Color.red);
         canPlaceSpawner = false;
 
@@ -333,15 +364,17 @@ public class SettingsScenePlayer : MonoBehaviour
 
         placingSpawner = false;
         ChangeLineRendererColor(Color.red);
-        DataManager.Instance.SetSpawnPosition(spawnerIndicator.transform.position);
-        spawnerIndicator.transform.SetParent(FindObjectOfType<DataManager>().GetHouse().transform);
+        DataManager.Instance.SetSpawnPosition(spawnerIndicator.transform);
+		rightTrigger.action.Disable();
+
+		spawnerIndicator.transform.SetParent(FindObjectOfType<DataManager>().GetHouse().transform);
        
     }
     private void ResetSpawnIndicator()
     {
         placingSpawner = false;
         ChangeLineRendererColor(Color.red);
-        spawnerIndicator.transform.position = DataManager.Instance.GetSpawnPosition();
+        spawnerIndicator.transform.position = DataManager.Instance.GetSpawnPosition().position;
         spawnerIndicator.SetActive(true);
     }
 

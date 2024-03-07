@@ -11,7 +11,7 @@ public class AddModelDownloadStarted : MonoBehaviour
     private float downloadBaseY;
     public float downloadTopY;
 
-
+    [SerializeField] private Slider downloadProgressSlider;
     [SerializeField] private Image downloadingBar;
     [SerializeField] private Image downloadingBG;
     [SerializeField] private TMP_Text downloadingText;
@@ -20,7 +20,7 @@ public class AddModelDownloadStarted : MonoBehaviour
     private void Awake()
     {
         downloadBaseY = downloadButton.position.y;
-        //StartCoroutine(WaitForLoad());
+        
     }
 
     private void OnGUI()
@@ -43,7 +43,9 @@ public class AddModelDownloadStarted : MonoBehaviour
         }
         else
         {
-            StartCoroutine(FadeDownloadIn());
+			
+			StartCoroutine(DownloadSliderProgress());
+			StartCoroutine(FadeDownloadIn());
             yield return null;
         }
         yield return new WaitForSeconds(0.01f);
@@ -55,8 +57,20 @@ public class AddModelDownloadStarted : MonoBehaviour
         yield return new WaitForSeconds(5f);
         StartCoroutine(MoveButtonUp());
     }
-
-    private IEnumerator FadeDownloadIn()
+	private IEnumerator DownloadSliderProgress()
+	{
+		if (FindObjectOfType<DownloadHandler>().ProgressVar.ProgressPercentage != 100)
+		{
+            downloadProgressSlider.value = FindObjectOfType<DownloadHandler>().ProgressVar.ProgressPercentage;
+		}
+		else
+		{
+			yield return null;
+		}
+		yield return new WaitForSeconds(0.01f);
+		StartCoroutine(DownloadSliderProgress());
+	}
+	private IEnumerator FadeDownloadIn()
     {
         if (downloadingBar.color.a < 1f)
         {
@@ -66,12 +80,20 @@ public class AddModelDownloadStarted : MonoBehaviour
             downloadPercentage.color += new Color(0, 0, 0, 0.01f);
         }
         else 
-        { 
-            yield return null; 
+        {
+           
+			yield return null; 
         }
 
         yield return new WaitForSeconds(0.01f);
         StartCoroutine(FadeDownloadIn());
-
     }
+	private void Update()
+	{
+		if (Input.GetKeyDown(KeyCode.H))
+        {
+           // FindObjectOfType<DownloadHandler>().DownloadFile("515337");
+			//(MoveButtonUp());
+		}
+	}
 }
