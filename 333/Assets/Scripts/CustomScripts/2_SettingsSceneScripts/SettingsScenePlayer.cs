@@ -67,7 +67,7 @@ public class SettingsScenePlayer : MonoBehaviour
 
         rightX.action.Enable();
         rightX.action.performed += GrabButton;
-        rightX.action.canceled += GrabRelease;
+        //rightX.action.canceled += GrabRelease;
         rightTrigger.action.performed += ResetButton;
 
         lr.positionCount = 2;
@@ -80,7 +80,9 @@ public class SettingsScenePlayer : MonoBehaviour
 
     private void GrabButton(InputAction.CallbackContext context) {
         placeSpawner();
-        PressButton();
+       // PressButton();
+        //PressButtonDiff();
+        
 
         lr.positionCount = 2;
         lr.SetPosition(1, aimDirection * 20);
@@ -103,8 +105,11 @@ public class SettingsScenePlayer : MonoBehaviour
 		//	Debug.Log("true");
 		//}
 
-		DragSlider();
-        DragSliderVertical();
+		//DragSlider();
+        //DragSliderVertical();
+
+        PressButton();
+
         PositionSpawner();
     }
 
@@ -175,63 +180,66 @@ public class SettingsScenePlayer : MonoBehaviour
         hits = Physics.RaycastAll(controller.transform.position, direction, Mathf.Infinity);
         if (hits.Length < 1) { return; }
 
-        for (int i = 0; i < hits.Length; i++) {
-            if (hits[i].transform.gameObject.name == "Handle")
-            {
-                sliderDragging = true;
-                break;
-            }
-            if (hits[i].transform.gameObject.name == "VSlidingArea")
-            {
-                //Debug.Log("VSlider clicked");
-                VSliderDragging = true;
-                break;
-            }
-            if (hits[i].transform.gameObject.GetComponent<TMP_InputField>() != null)
-            {
-                Debug.Log("inputfield clidked");
+
+            for (int i = 0; i < hits.Length; i++) {
+            if (rightX.action.WasPressedThisFrame() == true) {
+                if (hits[i].transform.gameObject.GetComponent<Button>() != null)
+                {   
+                    hits[i].transform.gameObject.GetComponent<Button>().onClick.Invoke();    
+                    break;
+                }
+
                 if (hits[i].transform.gameObject.GetComponent<TMP_InputField>() != null)
                 {
-                    myIField = hits[i].transform.gameObject.GetComponent<TMP_InputField>();
                     hits[i].transform.gameObject.GetComponent<TMP_InputField>().ActivateInputField();
-                    hits[i].transform.gameObject.GetComponent<TMP_InputField>().Select();
+                    hits[i].transform.gameObject.GetComponent<TMP_InputField>().Select(); 
+                    myIField.gameObject.GetComponent<TMP_InputField>().DeactivateInputField();
+                    break;
                 }
-                else
-                {
-                    if (myIField != null)
-                    {
-                        myIField.gameObject.GetComponent<TMP_InputField>().DeactivateInputField();
-                    }
-                }
-                break;
             }
-
-            if (hits[i].transform.gameObject.GetComponent<Button>() != null)
-            {
-                hits[i].transform.gameObject.GetComponent<Button>().onClick.Invoke();
-                break;
-            }
-
-
-
         }
-
     }
+    TMP_InputField myInputField;
+    // void OnApplicationFocus(bool hasFocus)
+    // {
+    //     myInputField.Select()
+    // }
+    void PressButtonDiff()
+    {
+
+        RaycastHit hits;
+        Vector3 direction = controller.transform.TransformDirection(aimDirection);
+        if(Physics.Raycast(controller.transform.position, direction, out hits,Mathf.Infinity))
+        {
+            Debug.Log(hits.transform.gameObject.name);
+                if (hits.transform.gameObject.GetComponent<Button>() != null)
+                {   
+                    hits.transform.gameObject.GetComponent<Button>().onClick.Invoke();    
+                }
+
+                else if (hits.transform.gameObject.GetComponent<TMP_InputField>() != null)
+                {
+
+
+                    //hits.transform.gameObject.GetComponent<TMP_InputField>().Select(); 
+                }
+            
+        }
+    }
+
+    
+
+
+
     public void ShowKeyboard(TMP_InputField iField)
     {
-    
         iField.text = overlayKeyboard.text;
 		overlayKeyboard = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.Default);
-
-        if (overlayKeyboard != null)
-        {
-			Debug.Log("true");
-        }
     }
     public void applyDownloadCode(TMP_InputField iField)
     {
         myDownloadHandler.DownloadFile(iField.text);
-        printText(iField.text);
+        //printText(iField.text);
     }
 
     private void printText(string inputText)
@@ -267,7 +275,7 @@ public class SettingsScenePlayer : MonoBehaviour
         House.transform.parent = null;
         House.transform.localScale /= 0.025f;
         House.transform.position += new Vector3(10f, 0, 0);
-        
+
          PlayerPrefs.SetFloat( "ModelX" + modelVal, House.transform.rotation.x);
 		 PlayerPrefs.SetFloat( "ModelZ" + modelVal, House.transform.rotation.y);
 		 PlayerPrefs.SetFloat( "ModelZ" + modelVal, House.transform.rotation.z);
@@ -370,7 +378,7 @@ public class SettingsScenePlayer : MonoBehaviour
 		spawnerIndicator.transform.SetParent(FindObjectOfType<DataManager>().GetHouse().transform);
        
     }
-    private void ResetSpawnIndicator()
+    public void ResetSpawnIndicator()
     {
         placingSpawner = false;
         ChangeLineRendererColor(Color.red);

@@ -13,7 +13,7 @@ public class DebugKeyboard : MonoBehaviour
     {
       if (Input.GetKeyDown(KeyCode.O))
         {
-            SettingsScenePlayer.applyDownloadCode(InputField);
+            //SettingsScenePlayer.applyDownloadCode(InputField);
 
 		}  
     }

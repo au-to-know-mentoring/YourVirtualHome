@@ -340,7 +340,7 @@ public class OVRManifestPreprocessor
             "oculus.software.overlay_keyboard",
             projectConfig.requiresSystemKeyboard,
             modifyIfFound,
-            "required", "false");
+            "required", "true");
 
         //============================================================================
         // Experimental Features
