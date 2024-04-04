@@ -40,9 +40,6 @@ public class DownloadHandler : MonoBehaviour
 
 	public GetModelInfo getModelInfoScript;
 	public Keyboard myKeyboardScript;
-
-
-	public GameObject loadingScreen;
 	
 
 	void Start()
@@ -148,7 +145,7 @@ public class DownloadHandler : MonoBehaviour
 		Debug.Log(objFilePath);
 
 		var loadedObject = new OBJLoader().Load(objFilePath, mtlFilePath); // imports the obj
-		loadingScreen.SetActive(false);
+
 		Vector3 OriginalScale = loadedObject.gameObject.transform.localScale;
 
 		loadedObject.gameObject.transform.SetParent(ModelHolderParent.transform); // putting our model in a cube allowing for rotation
