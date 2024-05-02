@@ -34,9 +34,18 @@ public class modelValueInButton : MonoBehaviour
 		showControlPanel();
 		Debug.Log(modelVal);
 
-		FindObjectOfType<DownloadHandler>().LoadModelToScene(modelVal);
-		FindObjectOfType<SettingsSceneManager>().SetupHouseDummy();
-		FindObjectOfType<SettingsScenePlayer>().modelVal = modelVal;
-		
+		//get download handler
+		DownloadHandler dh = FindObjectOfType<DownloadHandler>();
+
+		//enable loading screen
+		dh.loadingCanvas.SetActive(true);
+
+		//load model
+        dh.LoadModelToScene(modelVal);
+        FindObjectOfType<SettingsSceneManager>().SetupHouseDummy();
+        FindObjectOfType<SettingsScenePlayer>().modelVal = modelVal;
+
+        //disable loading screen
+        dh.loadingCanvas.SetActive(false);
 	}
 }

@@ -40,10 +40,16 @@ public class DownloadHandler : MonoBehaviour
 
 	public GetModelInfo getModelInfoScript;
 	public Keyboard myKeyboardScript;
-	
+
+	public GameObject loadingCanvas;
 
 	void Start()
 	{
+		//get loading canvas object
+		loadingCanvas = GameObject.Find("LoadingCanvas");
+		loadingCanvas.SetActive(false);
+
+		
 		ListModelFolders();
 	}
 
