@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class CustomTeleporter : MonoBehaviour
 {
     // record input of secondary buttons for scene reset
+    [SerializeField] GameObject TrackingSpace;
     [SerializeField] InputActionReference leftSecondary;
     [SerializeField] InputActionReference rightSecondary;
     private bool leftSecondaryPressed = false;
@@ -145,7 +146,7 @@ public class CustomTeleporter : MonoBehaviour
 
                     if (AllowTeleport)
                     {
-                        gameObject.transform.position = hits[i].point;
+                        TrackingSpace.transform.position = hits[i].point;
                     }
                     break;
                 }

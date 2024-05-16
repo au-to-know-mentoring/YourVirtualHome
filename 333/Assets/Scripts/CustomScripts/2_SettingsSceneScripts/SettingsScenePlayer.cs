@@ -16,7 +16,8 @@ public class SettingsScenePlayer : MonoBehaviour
 
     private TMP_InputField CodeInputField;
 
-    [SerializeField] GameObject VrRigParent;
+    [SerializeField] GameObject TrackingAreaVr;
+    [SerializeField] GameObject CameraRigVR;
 
     public TMP_Text myText;
 
@@ -151,9 +152,16 @@ public class SettingsScenePlayer : MonoBehaviour
 		 PlayerPrefs.SetFloat( "ModelZ" + modelVal, House.transform.rotation.z);
 
 
-        VrRigParent.transform.SetParent(DataManager.Instance.GetHouse().transform);
-        VrRigParent.transform.position = DataManager.Instance.GetSpawnPosition().transform.position;
-        VrRigParent.transform.SetParent(null);
+        TrackingAreaVr.transform.SetParent(DataManager.Instance.GetHouse().transform);
+        TrackingAreaVr.transform.position = DataManager.Instance.GetSpawnPosition().transform.position;
+
+        // CameraRigVR.transform.position = TrackingAreaVr.transform.position;
+
+        // TrackingAreaVr.transform.SetParent(CameraRigVR.transform);
+        // TrackingAreaVr.transform.localPosition = Vector3.zero;
+
+        // TrackingAreaVr.transform.position = CameraRigVR.transform.position;
+        
         spawnerIndicator.gameObject.SetActive(false);
 
         if (PlayerPrefs.GetString("modelSettings" + ModelVal) != "")

@@ -488,7 +488,8 @@ MonoBehaviour:
   modelVal: 0
   MainMenuCanvas: {fileID: 4477747171513378982}
   ControlPanelCanvas: {fileID: 503186704}
-  VrRigParent: {fileID: 438170771}
+  TrackingAreaVr: {fileID: 438170771}
+  CameraRigVR: {fileID: 438170770}
   myText: {fileID: 0}
   ModelVal: 0
   myDownloadHandler: {fileID: 1579309680}
@@ -518,6 +519,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fca814d13f064ed4faca5d88043cd7a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TrackingSpace: {fileID: 438170771}
   leftSecondary: {fileID: -1570058082314052360, guid: 39d00506e5cbb05469def9dc743418b5,
     type: 3}
   rightSecondary: {fileID: -6801023459976336325, guid: 39d00506e5cbb05469def9dc743418b5,
@@ -1480,10 +1482,10 @@ MonoBehaviour:
   performSphereCastForGazepointer: 0
   useRightStickScroll: 1
   rightStickDeadZone: 0.15
-  useSwipeScroll: 1
+  useSwipeScroll: 0
   swipeDragThreshold: 1
   swipeDragScale: 1
-  InvertSwipeXAxis: 1
+  InvertSwipeXAxis: 0
   angleDragThreshold: 1
   m_SpherecastRadius: 1
   m_HorizontalAxis: Horizontal
