@@ -21,7 +21,7 @@ public class DataManager : MonoBehaviour
     }
 
     [SerializeField] GameObject housePrefab; // stored base version of downloaded house
-    Transform spawnPosition;
+    GameObject spawnPosition;
 
 
     void Start()
@@ -39,10 +39,10 @@ public class DataManager : MonoBehaviour
     {
         housePrefab = h;
     }
-    public void SetSpawnPosition(Transform sp) {
+    public void SetSpawnPosition(GameObject sp) {
         spawnPosition = sp;
     }
-    public Transform GetSpawnPosition() {
+    public GameObject GetSpawnPosition() {
         return spawnPosition;
     }
     public GameObject GetHouse() {

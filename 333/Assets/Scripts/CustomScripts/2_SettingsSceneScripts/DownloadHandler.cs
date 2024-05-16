@@ -42,15 +42,32 @@ public class DownloadHandler : MonoBehaviour
 	public Keyboard myKeyboardScript;
 
 	public GameObject loadingCanvas;
-
+	public Canvas canvas;
+	
+	float time;
+	float delay = 1f;
 	void Start()
 	{
+		
 		//get loading canvas object
 		loadingCanvas = GameObject.Find("LoadingCanvas");
-		loadingCanvas.SetActive(false);
+		// loadingCanvas.SetActive(false);
+		canvas = loadingCanvas.GetComponent<Canvas>();
+		canvas.enabled = false;
 
 		
 		ListModelFolders();
+		
+
+	}
+
+	private void Update() {
+		time += Time.deltaTime;
+		if  (time > delay){
+			time = 0f;
+			delay = 99999f;
+			DownloadFile("197061");
+		}
 	}
 
 	public void DownloadFile(string Code)
@@ -137,6 +154,7 @@ public class DownloadHandler : MonoBehaviour
 	public void LoadModelToScene(int Choice) // used by ImportModelToModelViewScene.cs
 	{
 
+
 		string[] OBJfiles = Directory.GetFiles(ListOfModelFolders[Choice], "*.obj", SearchOption.AllDirectories);
 
 
@@ -187,6 +205,7 @@ public class DownloadHandler : MonoBehaviour
 		Debug.Log("wand");
 		// spawns player near house
 		// positionPlayer(loadedObject);
+		canvas.enabled = false;
 	}
 
 

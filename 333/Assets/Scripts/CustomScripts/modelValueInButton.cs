@@ -1,12 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting.Dependencies.NCalc;
 using UnityEngine;
 
 public class modelValueInButton : MonoBehaviour
 {
-	public DownloadHandler downloadHandler;
+	public DownloadHandler  downloadHandler;
     public int modelVal;
 	private GameObject controlPanel;
 
@@ -14,6 +13,11 @@ public class modelValueInButton : MonoBehaviour
 	public TMP_Text ClientName;
 
 	private bool showmodelPathBool;
+
+	private void Start() {
+		downloadHandler = FindObjectOfType<DownloadHandler>();
+		
+	}
 	public void showModelPath()
 	{
 		//downloadHandler.modelSelectInt = modelVal;
@@ -28,24 +32,42 @@ public class modelValueInButton : MonoBehaviour
 	{
 		FindObjectOfType<SettingsScenePlayer>().getModelIntFromUIButton(gameObject);
 	}
-
+	IEnumerator ShowLoadingPanel(){
+		if (downloadHandler.canvas.enabled != true){
+			downloadHandler.canvas.enabled = true;
+			// importModel();
+		}
+		yield return new WaitForSeconds(0.1f);
+		
+		downloadHandler.LoadModelToScene(modelVal);
+        FindObjectOfType<SettingsSceneManager>().SetupHouseDummy();
+        FindObjectOfType<SettingsScenePlayer>().modelVal = modelVal;
+	}
 	public void importModel()
 	{
+
+		// dh = FindObjectOfType<DownloadHandler>();
+		
+		StartCoroutine(ShowLoadingPanel());
+		
+
+		
+
 		showControlPanel();
 		Debug.Log(modelVal);
 
-		//get download handler
-		DownloadHandler dh = FindObjectOfType<DownloadHandler>();
 
+		//get download handler
+		
 		//enable loading screen
-		dh.loadingCanvas.SetActive(true);
+		
 
 		//load model
-        dh.LoadModelToScene(modelVal);
-        FindObjectOfType<SettingsSceneManager>().SetupHouseDummy();
-        FindObjectOfType<SettingsScenePlayer>().modelVal = modelVal;
+        // dh.LoadModelToScene(modelVal);
+        // FindObjectOfType<SettingsSceneManager>().SetupHouseDummy();
+        // FindObjectOfType<SettingsScenePlayer>().modelVal = modelVal;
 
         //disable loading screen
-        dh.loadingCanvas.SetActive(false);
+        // dh.loadingCanvas.SetActive(false);
 	}
 }

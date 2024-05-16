@@ -67,8 +67,8 @@ public class SettingsScenePlayer : MonoBehaviour
 
         rightX.action.Enable();
         rightX.action.performed += GrabButton;
-        //rightX.action.canceled += GrabRelease;
-        rightTrigger.action.performed += ResetButton;
+  
+        // rightTrigger.action.performed += ResetButton;
 
         lr.positionCount = 2;
         aimDirection = Vector3.forward;
@@ -80,18 +80,12 @@ public class SettingsScenePlayer : MonoBehaviour
 
     private void GrabButton(InputAction.CallbackContext context) {
         placeSpawner();
-       // PressButton();
-        //PressButtonDiff();
+     
         
 
-        lr.positionCount = 2;
-        lr.SetPosition(1, aimDirection * 20);
+    
     }
-    private void GrabRelease(InputAction.CallbackContext context) {
-        sliderDragging = false;
-        VSliderDragging = false;
-        //DataManager.Instance.SetHouse(dollhouse);
-    }
+  
     private void ResetButton(InputAction.CallbackContext context) {
         //dollhouse.transform.eulerAngles = Vector3.zero;
         ResetSpawnIndicator();
@@ -99,134 +93,10 @@ public class SettingsScenePlayer : MonoBehaviour
 
     void Update()
     {
-		//if (overlayKeyboard != null)
-		//{
-		//	CodeInputField.text = overlayKeyboard.text;
-		//	Debug.Log("true");
-		//}
-
-		//DragSlider();
-        //DragSliderVertical();
-
-        PressButton();
-
         PositionSpawner();
     }
 
-    void DragSlider() {
-        if (sliderDragging) {
-            RaycastHit[] hits;
-            hits = Physics.RaycastAll(controller.transform.position, controller.transform.TransformDirection(aimDirection), Mathf.Infinity);
-            for (int i = 0; i < hits.Length; i++) {
-                if (hits[i].transform.gameObject.name == "SlidingArea") {
-                    float dist = Vector3.Distance(hits[i].point, Slider0Point.position);
-                    if (dist <= 0)
-                    {
-                        slider.value = 0;
-                    }
-                    else if (dist >= 6)
-                    {
-                        slider.value = 1;
-                    }
-                    else {
-                        dist = Mathf.Clamp(dist, 0, 6);
-                        slider.value = 1 - Remap(dist, 0, 6, 0, 1); // inverting the number
-                    }
-                }
-            }
-        }
-    }
-
-    void DragSliderVertical()
-    {
-        if (VSliderDragging)
-        {
-            //Debug.Log("VSlider  dragging");
-            RaycastHit[] hits;
-            hits = Physics.RaycastAll(controller.transform.position, controller.transform.TransformDirection(aimDirection), Mathf.Infinity);
-            for (int i = 0; i < hits.Length; i++)
-            {
-                if (hits[i].transform.gameObject.name == "VSlidingArea")
-                {
-                    //Debug.Log("VSlider moving");
-                    float dist = Vector3.Distance(hits[i].point, VSlider0Point.position);
-                    float maxDist = Vector3.Distance(VSlider100point.position, VSlider0Point.position);
-                    if (dist <= 0)
-                    {
-                        VSlider.value = 1;
-                    }
-                    else if (hits[i].point.y > VSlider0Point.position.y)
-                    {
-                        VSlider.value = 1;
-                    }
-                    else if (dist >= maxDist)
-                    {
-                        VSlider.value = 0;
-                    }
-                    else
-                    {
-                        dist = Mathf.Clamp(dist, 0, maxDist);
-                        VSlider.value = 1 - Remap(dist, 0, maxDist, 0, 1); // inverting the number
-                    }
-                }
-            }
-        }
-    }
-
-    void PressButton()
-    {
-        RaycastHit[] hits;
-        Vector3 direction = controller.transform.TransformDirection(aimDirection);
-        hits = Physics.RaycastAll(controller.transform.position, direction, Mathf.Infinity);
-        if (hits.Length < 1) { return; }
-
-
-            for (int i = 0; i < hits.Length; i++) {
-            if (rightX.action.WasPressedThisFrame() == true) {
-                if (hits[i].transform.gameObject.GetComponent<Button>() != null)
-                {   
-                    hits[i].transform.gameObject.GetComponent<Button>().onClick.Invoke();    
-                    break;
-                }
-
-                if (hits[i].transform.gameObject.GetComponent<TMP_InputField>() != null)
-                {
-                    hits[i].transform.gameObject.GetComponent<TMP_InputField>().ActivateInputField();
-                    hits[i].transform.gameObject.GetComponent<TMP_InputField>().Select(); 
-                    myIField.gameObject.GetComponent<TMP_InputField>().DeactivateInputField();
-                    break;
-                }
-            }
-        }
-    }
-    TMP_InputField myInputField;
-    // void OnApplicationFocus(bool hasFocus)
-    // {
-    //     myInputField.Select()
-    // }
-    void PressButtonDiff()
-    {
-
-        RaycastHit hits;
-        Vector3 direction = controller.transform.TransformDirection(aimDirection);
-        if(Physics.Raycast(controller.transform.position, direction, out hits,Mathf.Infinity))
-        {
-            Debug.Log(hits.transform.gameObject.name);
-                if (hits.transform.gameObject.GetComponent<Button>() != null)
-                {   
-                    hits.transform.gameObject.GetComponent<Button>().onClick.Invoke();    
-                }
-
-                else if (hits.transform.gameObject.GetComponent<TMP_InputField>() != null)
-                {
-
-
-                    //hits.transform.gameObject.GetComponent<TMP_InputField>().Select(); 
-                }
-            
-        }
-    }
-
+   
     
 
 
@@ -236,7 +106,7 @@ public class SettingsScenePlayer : MonoBehaviour
         iField.text = overlayKeyboard.text;
 		overlayKeyboard = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.Default);
     }
-    public void applyDownloadCode(TMP_InputField iField)
+    public void applyDownloadCode(InputField iField)
     {
         myDownloadHandler.DownloadFile(iField.text);
         //printText(iField.text);
@@ -281,8 +151,9 @@ public class SettingsScenePlayer : MonoBehaviour
 		 PlayerPrefs.SetFloat( "ModelZ" + modelVal, House.transform.rotation.z);
 
 
-
-        VrRigParent.transform.position = DataManager.Instance.GetSpawnPosition().position;
+        VrRigParent.transform.SetParent(DataManager.Instance.GetHouse().transform);
+        VrRigParent.transform.position = DataManager.Instance.GetSpawnPosition().transform.position;
+        VrRigParent.transform.SetParent(null);
         spawnerIndicator.gameObject.SetActive(false);
 
         if (PlayerPrefs.GetString("modelSettings" + ModelVal) != "")
@@ -372,17 +243,17 @@ public class SettingsScenePlayer : MonoBehaviour
 
         placingSpawner = false;
         ChangeLineRendererColor(Color.red);
-        DataManager.Instance.SetSpawnPosition(spawnerIndicator.transform);
+        DataManager.Instance.SetSpawnPosition(spawnerIndicator);
 		rightTrigger.action.Disable();
 
-		spawnerIndicator.transform.SetParent(FindObjectOfType<DataManager>().GetHouse().transform);
+		spawnerIndicator.transform.SetParent(DataManager.Instance.GetHouse().transform);
        
     }
     public void ResetSpawnIndicator()
     {
         placingSpawner = false;
         ChangeLineRendererColor(Color.red);
-        spawnerIndicator.transform.position = DataManager.Instance.GetSpawnPosition().position;
+        spawnerIndicator.transform.position = DataManager.Instance.GetSpawnPosition().transform.position;
         spawnerIndicator.SetActive(true);
     }
 
