@@ -122,6 +122,11 @@ public class SettingsScenePlayer : MonoBehaviour
     {
         ModelVal = myButton.GetComponent<modelValueInButton>().modelVal;
     }
+    IEnumerator TeleportToSpawn(){
+        yield return new WaitForSeconds(0.025f);
+        CameraRigVR.transform.position = DataManager.Instance.GetSpawnPosition().transform.position;
+
+    }
 
     public void SwitchTeleportControllerOn()
     {
@@ -132,11 +137,7 @@ public class SettingsScenePlayer : MonoBehaviour
 
 		saveModelRotation();
 
-        CustomTeleporter myTP = FindObjectOfType<CustomTeleporter>();
-        myTP.enabled = true;
-
-        Wand myWand = FindObjectOfType<Wand>();
-        myWand.enabled = true;
+        
 
 
 
@@ -145,29 +146,31 @@ public class SettingsScenePlayer : MonoBehaviour
        
         House.transform.parent = null;
         House.transform.localScale /= 0.025f;
-        House.transform.position += new Vector3(10f, 0, 0);
+        // House.transform.position += new Vector3(0, 0, 0);
 
-         PlayerPrefs.SetFloat( "ModelX" + modelVal, House.transform.rotation.x);
-		 PlayerPrefs.SetFloat( "ModelZ" + modelVal, House.transform.rotation.y);
-		 PlayerPrefs.SetFloat( "ModelZ" + modelVal, House.transform.rotation.z);
+        //  PlayerPrefs.SetFloat( "ModelX" + modelVal, House.transform.rotation.x);
+		//  PlayerPrefs.SetFloat( "ModelZ" + modelVal, House.transform.rotation.y);
+		//  PlayerPrefs.SetFloat( "ModelZ" + modelVal, House.transform.rotation.z);
 
-
-        TrackingAreaVr.transform.SetParent(DataManager.Instance.GetHouse().transform);
-        TrackingAreaVr.transform.position = DataManager.Instance.GetSpawnPosition().transform.position;
+   
+        
+        // CameraRigVR.transform.position = spawnerIndicator.transform.position;
 
         // CameraRigVR.transform.position = TrackingAreaVr.transform.position;
 
-        // TrackingAreaVr.transform.SetParent(CameraRigVR.transform);
-        // TrackingAreaVr.transform.localPosition = Vector3.zero;
+        // TrackingAreaVr.transform.SetParent(null);
 
+        StartCoroutine(TeleportToSpawn());
+
+        CustomTeleporter myTP = FindObjectOfType<CustomTeleporter>();
+        myTP.enabled = true;
+
+        Wand myWand = FindObjectOfType<Wand>();
+        myWand.enabled = true;
         // TrackingAreaVr.transform.position = CameraRigVR.transform.position;
         
-        spawnerIndicator.gameObject.SetActive(false);
+        // spawnerIndicator.gameObject.SetActive(false);
 
-        if (PlayerPrefs.GetString("modelSettings" + ModelVal) != "")
-        {
-            House.transform.rotation = LoadModelWithSettingsApplied();
-        }
 
         
 	}

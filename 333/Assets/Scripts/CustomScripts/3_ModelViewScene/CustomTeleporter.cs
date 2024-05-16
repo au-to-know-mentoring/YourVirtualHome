@@ -146,7 +146,7 @@ public class CustomTeleporter : MonoBehaviour
 
                     if (AllowTeleport)
                     {
-                        TrackingSpace.transform.position = hits[i].point;
+                        gameObject.transform.position = hits[i].point;
                     }
                     break;
                 }

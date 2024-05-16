@@ -502,7 +502,7 @@ MonoBehaviour:
   activationDistance: 500
   Slider0Point: {fileID: 1435567866}
   slider: {fileID: 2060135845}
-  spawnerIndicatorPrefab: {fileID: 5853488389498237362, guid: 8c59b85e878561b4e8301d928526aed1,
+  spawnerIndicatorPrefab: {fileID: 919132149155446097, guid: 7ca995fa44e271040957d0e4e86d4fe1,
     type: 3}
   VSlider0Point: {fileID: 0}
   VSlider100point: {fileID: 0}
