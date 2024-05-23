@@ -135,14 +135,13 @@ public class SettingsScenePlayer : MonoBehaviour
         MainMenuCanvas.active = false;
         ControlPanelCanvas.active = false;
 
-		saveModelRotation();
+		// saveModelRotation();
 
         
 
 
 
 		var House = FindObjectOfType<DataManager>().GetHouse();
-        Vector3 HouseTransform = new Vector3(House.transform.rotation.x, House.transform.rotation.y, House.transform.rotation.z);
        
         House.transform.parent = null;
         House.transform.localScale /= 0.025f;
@@ -169,7 +168,7 @@ public class SettingsScenePlayer : MonoBehaviour
         myWand.enabled = true;
         // TrackingAreaVr.transform.position = CameraRigVR.transform.position;
         
-        // spawnerIndicator.gameObject.SetActive(false);
+        spawnerIndicator.gameObject.SetActive(false);
 
 
         

@@ -59,9 +59,10 @@ public class AddModelDownloadStarted : MonoBehaviour
     }
 	private IEnumerator DownloadSliderProgress()
 	{
-		if (FindObjectOfType<DownloadHandler>().ProgressVar.ProgressPercentage != 100)
+		if (FindObjectOfType<DownloadHandler>().ProgressVar.ProgressPercentage <= 100)
 		{
             downloadProgressSlider.value = FindObjectOfType<DownloadHandler>().ProgressVar.ProgressPercentage;
+            downloadPercentage.text = downloadProgressSlider.value.ToString() + "%";
 		}
 		else
 		{

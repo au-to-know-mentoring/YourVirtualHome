@@ -110,59 +110,30 @@ public class CustomTeleporter : MonoBehaviour
         // disable teleport indicator by default
         ti.SetActive(false);
 
-        RaycastHit[] hits;
+        RaycastHit hits;
         // collect list of objects that the teleporter is pointing at as hits
-        hits = Physics.RaycastAll(rightController.transform.position, rightController.transform.TransformDirection(aimDirection), maxTeleportDistance);
-        if (hits.Length > 0) // layerMask
+        if (Physics.Raycast(rightController.transform.position, rightController.transform.TransformDirection(aimDirection), out hits,maxTeleportDistance)) 
         {
-            // sort the list from closest to farthest
-            System.Array.Sort(hits, (x, y) => x.distance.CompareTo(y.distance));
-            for (int i = 0; i < hits.Length; i++)
-            {
-                //Debug.Log(hits[i].transform.gameObject.name);
-                if (hits[i].transform.gameObject.tag == "SceneReset") {
-                    readyToReset = true;
-                    break;
-                }
-                else
-                {
-                    readyToReset = false;
-                }
-                if (hits[i].transform.gameObject.tag == "Wanded")
-                {
-                    Debug.Log("Something is Wanded!");
-					// if an object has been wanded, it can be passed through
-					FadedObjects.Add(hits[i].transform.gameObject);
-                    continue;
-                }
-                if (Vector3.Angle(Vector3.up, hits[i].normal) < maxNormalAngle)
+            if (Vector3.Angle(Vector3.up, hits.normal) < maxNormalAngle)
                 {
                     // if it is a valid floor that hasnt been wanded, then put the teleport indicator there
                     ChangeLineRendererColor(Color.green);
                     ti.SetActive(true);
-                    ti.gameObject.transform.position = hits[i].point;
+                    ti.gameObject.transform.position = hits.point;
 
                     ////////////
 
                     if (AllowTeleport)
                     {
-                        gameObject.transform.position = hits[i].point;
+                        gameObject.transform.position = hits.point;
                     }
-                    break;
                 }
                 else
                 {
                     // cannot teleport there
                     
                     ChangeLineRendererColor(Color.red);
-                    break;
                 }
-            }
-        }
-        else
-        {
-            // could not find a hit
-            ChangeLineRendererColor(Color.red);
         }
         AllowTeleport= false;
     }

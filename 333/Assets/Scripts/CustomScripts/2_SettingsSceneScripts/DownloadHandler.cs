@@ -175,9 +175,9 @@ public class DownloadHandler : MonoBehaviour
 		loadedObject.gameObject.transform.SetParent(ModelHolderParent.transform); // putting our model in a cube allowing for rotation
 
 		//if (PlayerPrefs.GetFloat("ModelX" + Choice) != null && PlayerPrefs.GetFloat("ModelY" + Choice) != null && PlayerPrefs.GetFloat("ModelZ" + Choice) != null) {
-			Vector3 RotationWithPlayerPrefs = new Vector3(PlayerPrefs.GetFloat("ModelX" + Choice), PlayerPrefs.GetFloat("ModelY" + Choice), PlayerPrefs.GetFloat("ModelZ" + Choice));
-			Quaternion houseRotation = Quaternion.Euler(RotationWithPlayerPrefs);
-			loadedObject.transform.rotation =  houseRotation;
+			// Vector3 RotationWithPlayerPrefs = new Vector3(PlayerPrefs.GetFloat("ModelX" + Choice), PlayerPrefs.GetFloat("ModelY" + Choice), PlayerPrefs.GetFloat("ModelZ" + Choice));
+			// Quaternion houseRotation = Quaternion.Euler(RotationWithPlayerPrefs);
+			// loadedObject.transform.rotation =  houseRotation;
 		//}
 
 
@@ -186,18 +186,17 @@ public class DownloadHandler : MonoBehaviour
 		loadedObject.gameObject.transform.localPosition = Vector3.zero;
 
 
-		if (PlayerPrefs.GetString("modelsettings" + FindObjectOfType<SettingsScenePlayer>().ModelVal) != "")
-		{
-			loadedObject.gameObject.transform.localRotation = FindObjectOfType<SettingsScenePlayer>().LoadModelWithSettingsApplied();
-		}
-
-
+		// if (PlayerPrefs.GetString("modelsettings" + FindObjectOfType<SettingsScenePlayer>().ModelVal) != "")
+		// {
+		// 	loadedObject.gameObject.transform.localRotation = FindObjectOfType<SettingsScenePlayer>().LoadModelWithSettingsApplied();
+		// }
 
 		DataManager.Instance.SetHouse(loadedObject);
 
 		Debug.Log("transform");
 		// apply collision 
-		WorldManager.ApplyCollidersToHouse(loadedObject);
+		WorldManager.Instance.ApplyCollidersToHouse(loadedObject);
+		
 		Debug.Log("collider");
 		// code for modelview scene
 		// give reference of house to wand
