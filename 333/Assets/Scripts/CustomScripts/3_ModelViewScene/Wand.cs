@@ -54,25 +54,37 @@ public class Wand : MonoBehaviour
 
     void Undo(InputAction.CallbackContext context) 
     {
-        if (timer >= delay) 
-        {   
+
+        foreach (GameObject g in objectList)
+        {
+
+            if (g.GetComponent<ObjectMaterials>() != null)
+            {
+                g.GetComponent<ObjectMaterials>().ResetMaterials();
+            }
+
+            g.GetComponent<MeshCollider>().enabled = true;
+
+        }
+        // if (timer >= delay) 
+        // {   
             
 
-            for (var x = 0; x < objectList.Count;  x++) {
-                objectList[x].GetComponent<MeshRenderer>().material = matList[x];
-                objectList[x].GetComponent<MeshCollider>().enabled = true;
-            }
-            // objectList.Remove(objectList[objectList.Count - 1]);
-            // matList.Remove(matList[matList.Count - 1]);
+        //     for (var x = 0; x < objectList.Count;  x++) {
+        //         objectList[x].GetComponent<MeshRenderer>().material = matList[x];
+        //         objectList[x].GetComponent<MeshCollider>().enabled = true;
+        //     }
+        //     // objectList.Remove(objectList[objectList.Count - 1]);
+        //     // matList.Remove(matList[matList.Count - 1]);
 
-            Debug.Log("objList: " + objectList.Count);
-            Debug.Log("matList: " + matList.Count);
+        //     Debug.Log("objList: " + objectList.Count);
+        //     Debug.Log("matList: " + matList.Count);
 
-            objectList.Clear();
-            matList.Clear();
+        //     objectList.Clear();
+        //     matList.Clear();
 
-            timer = 0f;
-        }
+        //     timer = 0f;
+        // }
     }
 
     void addToList(GameObject objectHit)
@@ -124,8 +136,11 @@ public class Wand : MonoBehaviour
 
     private void DestroyCollider(RaycastHit hit)
     {   
+
+
             if (hit.transform.gameObject.GetComponent<MeshCollider>() != null)
             {
+                hit.collider.gameObject.AddComponent<ObjectMaterials>();
                 
 
                 hit.transform.gameObject.tag = "Wanded";
@@ -134,6 +149,8 @@ public class Wand : MonoBehaviour
                 // MakeObjectTransparent(hit.transform.gameObject);
                 // SetFaded(hit.transform.gameObject);
                 // addToList(hit.collider.transform.gameObject);
+                
+                
                 hit.transform.gameObject.GetComponent<MeshRenderer>().material = transparentMat;
                 hit.transform.gameObject.GetComponent<MeshCollider>().enabled = false;
                 Debug.Log("Collider Destroyed");
@@ -185,6 +202,7 @@ public class Wand : MonoBehaviour
         MeshRenderer mr = houseObject.GetComponent<MeshRenderer>();
         Material[] newMaterials = new Material[mr.materials.Length];
 
+
         // add a houseObject script to record materials history
         if (houseObject.GetComponent<HouseObject>() == null)
         {
@@ -192,6 +210,8 @@ public class Wand : MonoBehaviour
             oldMaterials = mr.materials;
             houseObject.AddComponent<HouseObject>();
             houseObject.GetComponent<HouseObject>().SetMyMaterials(oldMaterials);
+
+            
 
         }
 

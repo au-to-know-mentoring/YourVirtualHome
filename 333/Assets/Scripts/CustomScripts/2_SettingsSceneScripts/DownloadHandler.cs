@@ -104,6 +104,8 @@ public class DownloadHandler : MonoBehaviour
 	public void ListModelFolders()
 	{
 		unZipFolderLocation = Application.persistentDataPath + "/" + Application.productName + "Model";
+
+
 		var headFolderPath = Path.GetDirectoryName(unZipFolderLocation);
 		headFolderPath += "/";
 
@@ -116,13 +118,15 @@ public class DownloadHandler : MonoBehaviour
 
 		foreach (string dir in dirsl)
 		{
+			Debug.Log(dir);
+
 			ListOfModelFolders.Add(dir);
 		}
 	}
 
 	public void DownloadFileCallback(object sender, AsyncCompletedEventArgs e)
 	{
-		unZipFolderLocation = Application.persistentDataPath + "/ " + Application.productName + "Model" + ListOfModelFolders.Count; // the extracted folder name
+		unZipFolderLocation = Application.persistentDataPath + "/" + Application.productName + "Model" + ListOfModelFolders.Count; // the extracted folder name
 
 		ZipFile.ExtractToDirectory(path, unZipFolderLocation);
 		ListModelFolders(); // upadtes the Model Folders List with new folder

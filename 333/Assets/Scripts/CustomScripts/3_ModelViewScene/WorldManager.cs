@@ -26,8 +26,10 @@ public class WorldManager : MonoBehaviour
 
         foreach(Transform child in parent.transform)
         {
+           
             Debug.Log(child.gameObject.name);
             ApplyCollidersToHouse(child.gameObject);
+            
         }
     }
 }
