@@ -10,6 +10,7 @@ using JetBrains.Annotations;
 using Unity.VisualScripting;
 using Newtonsoft.Json.Linq;
 using UnityEngine.InputSystem;
+using System.IO;
 
 public class PopulateScrollView : MonoBehaviour
 {
@@ -27,32 +28,35 @@ public class PopulateScrollView : MonoBehaviour
 
 
 		downloadHandler.ListModelFolders();
+
+
 		// use player pref each line contains Name/ClientName and array int
 		foreach (string key in downloadHandler.ListOfModelFolders)
 		{
 
-			if (PlayerPrefs.GetString("FN" + "Model" + PrefCount) != "" && PlayerPrefs.GetString("LN" + "Model" + PrefCount) != "")
-			{
-				AddModelButtonOnStart(PlayerPrefs.GetString("FN" + "Model" + PrefCount), PlayerPrefs.GetString("LN" + "Model" + PrefCount), Modelcount);
-				Modelcount++;
-			}
+			 
+			GetModelInfo.Instance.RunJsonDecodeForModelButton(File.ReadAllText(key + "/jsonEncode.txt"), Modelcount);
+
+			Modelcount++;
+
+			// if (PlayerPrefs.GetString("FN" + "Model" + PrefCount) != "" && PlayerPrefs.GetString("LN" + "Model" + PrefCount) != "")
+			// {
+			// 	AddModelButtonOnStart(PlayerPrefs.GetString("FN" + "Model" + PrefCount), PlayerPrefs.GetString("LN" + "Model" + PrefCount), Modelcount);
+			// 	
+			// }
 		}
 	}
 
-	public void SetModelPref(string Key,string FnValue, string LnValue)
-	{
-		PlayerPrefs.SetString("FN" + Key, FnValue);
-		PlayerPrefs.SetString("LN" + Key, LnValue);
-	}
+	
 
 	/// <summary>
 	/// Used to Add a new model button that has not been saved to player pref
 	/// </summary>
 	/// <param name="Key"></param>
 	/// <param name="Name"></param>
-	public void AddModelButton(string Key, string FirstName, string ClientName)
+	public void AddModelButton(string FirstName, string ClientName)
 	{
-			SetModelPref(Key, FirstName, ClientName);
+			
 
 			var buttonObject = Instantiate(buttonPrefab);
 			modelValueInButton modelValueInButton = buttonObject.GetComponent<modelValueInButton>();

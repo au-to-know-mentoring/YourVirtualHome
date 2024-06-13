@@ -47,8 +47,9 @@ public class DownloadHandler : MonoBehaviour
 	float time;
 	float delay = 1f;
 	void Start()
-	{
+	{	
 		
+		// DownloadFile("577485");
 		//get loading canvas object
 		loadingCanvas = GameObject.Find("LoadingCanvas");
 		// loadingCanvas.SetActive(false);
@@ -61,14 +62,14 @@ public class DownloadHandler : MonoBehaviour
 
 	}
 
-	private void Update() {
-		time += Time.deltaTime;
-		if  (time > delay){
-			time = 0f;
-			delay = 99999f;
-			DownloadFile("197061");
-		}
-	}
+	// private void Update() {
+	// 	time += Time.deltaTime;
+	// 	if  (time > delay){
+	// 		time = 0f;
+	// 		delay = 99999f;
+	// 		DownloadFile("197061");
+	// 	}
+	// }
 
 	public void DownloadFile(string Code)
 	{
@@ -99,6 +100,10 @@ public class DownloadHandler : MonoBehaviour
 			e.BytesReceived,
 			e.TotalBytesToReceive,
 			e.ProgressPercentage);// for DownloadBarProgress.cs to get percentage
+
+		if (e.ProgressPercentage == 0) {
+			StartCoroutine(FindObjectOfType<AddModelDownloadStarted>().DownloadSliderProgress());
+		}
 	}
 
 	public void ListModelFolders()
@@ -129,11 +134,18 @@ public class DownloadHandler : MonoBehaviour
 		unZipFolderLocation = Application.persistentDataPath + "/" + Application.productName + "Model" + ListOfModelFolders.Count; // the extracted folder name
 
 		ZipFile.ExtractToDirectory(path, unZipFolderLocation);
+
+		StartCoroutine(GetModelInfo.Instance.SaveJsonRequest(ICode, Application.persistentDataPath + "/" + Application.productName + "Model" + ListOfModelFolders.Count + "/" + "jsonEncode.txt"));
+
+
 		ListModelFolders(); // upadtes the Model Folders List with new folder
 
+		
+		// File.WriteAllText(unZipFolderLocation + "/" + "jsonEncode.txt", GetModelInfo.Instance.SaveJsonRequest(ICode));
+
 		// Gets model Name/ClientName then instantiates a new button inside of our Model ScrollView with PopulateScrollView.cs
-		GetModelInfo myGetModelInfo = FindObjectOfType<GetModelInfo>();
-		myGetModelInfo.getModelInfo(ICode, "Model" + ListOfModelFolders.Count);
+		// GetModelInfo myGetModelInfo = FindObjectOfType<GetModelInfo>();
+		// myGetModelInfo.getModelInfo(ICode, "Model" + ListOfModelFolders.Count);
 	}
 
 

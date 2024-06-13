@@ -57,7 +57,7 @@ public class AddModelDownloadStarted : MonoBehaviour
         yield return new WaitForSeconds(5f);
         StartCoroutine(MoveButtonUp());
     }
-	private IEnumerator DownloadSliderProgress()
+	public IEnumerator DownloadSliderProgress()
 	{
 		if (FindObjectOfType<DownloadHandler>().ProgressVar.ProgressPercentage <= 100)
 		{
