@@ -62,14 +62,7 @@ public class DownloadHandler : MonoBehaviour
 
 	}
 
-	// private void Update() {
-	// 	time += Time.deltaTime;
-	// 	if  (time > delay){
-	// 		time = 0f;
-	// 		delay = 99999f;
-	// 		DownloadFile("197061");
-	// 	}
-	// }
+
 
 	public void DownloadFile(string Code)
 	{
@@ -235,6 +228,11 @@ public class DownloadHandler : MonoBehaviour
 				player.transform.position = house.transform.position;
 			}
 		}
+	}
+
+	public void DeleteModel(string DeletionModelPath)
+	{
+		Directory.Delete(DeletionModelPath, true);
 	}
 
 

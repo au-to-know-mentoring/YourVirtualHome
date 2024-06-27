@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
+using OculusSampleFramework;
 using TMPro;
 using UnityEngine;
 
 public class modelValueInButton : MonoBehaviour
 {
+	public string modelPath;
 	public DownloadHandler  downloadHandler;
     public int modelVal;
 	private GameObject controlPanel;
@@ -21,6 +24,18 @@ public class modelValueInButton : MonoBehaviour
 	public void showModelPath()
 	{
 		//downloadHandler.modelSelectInt = modelVal;
+	}
+	public void ShowApprovementPanel()
+	{
+		ApprovementPanel.instance._modelValueInButton = this;
+
+		ApprovementPanel.instance.myPanel.SetActive(true);
+	}
+	public void DeleteModel()
+	{
+		downloadHandler.DeleteModel(modelPath);
+
+		Destroy(gameObject);
 	}
 	public void showControlPanel()
 	{

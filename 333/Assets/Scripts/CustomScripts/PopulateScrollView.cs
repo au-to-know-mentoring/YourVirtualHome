@@ -35,7 +35,7 @@ public class PopulateScrollView : MonoBehaviour
 		{
 
 			 
-			GetModelInfo.Instance.RunJsonDecodeForModelButton(File.ReadAllText(key + "/jsonEncode.txt"), Modelcount);
+			GetModelInfo.Instance.RunJsonDecodeForModelButton(File.ReadAllText(key + "/jsonEncode.txt"), Modelcount, key);
 
 			Modelcount++;
 
@@ -87,7 +87,7 @@ public class PopulateScrollView : MonoBehaviour
 	/// <param name="ClientName">Name/ClientName</param>
 	/// <param name="myModelVal" >DownloadHandler.LoadModelToScene(myModelVal)</param>
 
-	public void AddModelButtonOnStart(string FirstName, string ClientName, int myModelVal)
+	public void AddModelButtonOnStart(string FirstName, string ClientName, int myModelVal, string modelPath)
 	{
 
 		var buttonObject = Instantiate(buttonPrefab);
@@ -96,6 +96,7 @@ public class PopulateScrollView : MonoBehaviour
 		modelValueInButton modelValueInButton = buttonObject.GetComponent<modelValueInButton>();
 		modelValueInButton.FirstName.text = FirstName;
 		modelValueInButton.ClientName.text = ClientName;
+		modelValueInButton.modelPath = modelPath;
 	
 
 		buttonObject.transform.SetParent(parent.transform);

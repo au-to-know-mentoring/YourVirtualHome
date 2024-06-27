@@ -65,12 +65,12 @@ public class GetModelInfo : MonoBehaviour
 	/// </summary>
 	/// <param name="jsonEncoded">there should be a modelpath/JsonEncode.txt in the models unzip folder</param>
 	/// <param name="modelcount">modelcount is just an int value for the buttons modelval</param>
-	public void RunJsonDecodeForModelButton(string jsonEncoded, int modelcount){
+	public void RunJsonDecodeForModelButton(string jsonEncoded, int modelcount, string path){
 
 		RunJsonDecode(jsonEncoded);
 		PopulateScrollView myPopView = FindObjectOfType<PopulateScrollView>();
 
-		myPopView.AddModelButtonOnStart(myModelList.Modelinfo[0].Name, myModelList.Modelinfo[0].Client, modelcount);
+		myPopView.AddModelButtonOnStart(myModelList.Modelinfo[0].Name, myModelList.Modelinfo[0].Client, modelcount, path);
 	}
 
 	[System.Serializable]
