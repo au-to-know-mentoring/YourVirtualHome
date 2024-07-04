@@ -12,6 +12,7 @@ TagManager:
   - InputField
   - ChooseModelTest
   - DownloadButton
+  - Wanded
   layers:
   - Default
   - TransparentFX

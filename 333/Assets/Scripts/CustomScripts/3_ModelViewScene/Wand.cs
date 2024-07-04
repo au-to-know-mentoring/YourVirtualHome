@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -8,6 +9,9 @@ public class Wand : MonoBehaviour
 {
     //List<Vector3> Rotations;   // list of rotations for the house
     //int currentRotation = 0;   // current rotation index in list
+
+    public List<ObjectMaterials> objectMaterialsList = new List<ObjectMaterials>();
+
     GameObject house = null;   // reference to house game object
 
     [SerializeField] LineRenderer lr;   // reference to lineRenderer that projects line out of wand
@@ -50,22 +54,14 @@ public class Wand : MonoBehaviour
 
     void ActivateWand(InputAction.CallbackContext context) {
         wandActive = !wandActive;
-    }
+    }   
 
     void Undo(InputAction.CallbackContext context) 
     {
+      
+       EnableComponents(house);
 
-        foreach (GameObject g in objectList)
-        {
 
-            if (g.GetComponent<ObjectMaterials>() != null)
-            {
-                g.GetComponent<ObjectMaterials>().ResetMaterials();
-            }
-
-            g.GetComponent<MeshCollider>().enabled = true;
-
-        }
         // if (timer >= delay) 
         // {   
             
@@ -87,16 +83,39 @@ public class Wand : MonoBehaviour
         // }
     }
 
+     /// <summary>
+    /// re-enable mesh renderer and collider
+    /// </summary>
+    /// <param name="parent"></param>
+    public void EnableComponents(GameObject parent)
+    {
+
+        Debug.Log("ObjectName: " + parent.name);
+
+
+        if (parent.GetComponent<MeshCollider>() != null && parent.GetComponent<MeshRenderer>() != null){
+           parent.GetComponent<MeshCollider>().enabled = true;
+           
+           parent.GetComponent<MeshRenderer>().enabled = true;
+        }
+
+        Debug.Log(parent.transform.childCount);
+        
+        foreach(Transform child in parent.transform)
+        {
+            Debug.Log("Child ObjectName: " + child.gameObject.name);
+            EnableComponents(child.gameObject);
+            
+        }
+
+    }
+
     void addToList(GameObject objectHit)
     {
         
         Debug.Log("addToList");
         Debug.Log("object: " + objectHit.name);
         objectList.Add(objectHit);
-
-
-        Material material = objectHit.GetComponent<MeshRenderer>().material;
-        matList.Add(material);
     
     }
 
@@ -140,18 +159,12 @@ public class Wand : MonoBehaviour
 
             if (hit.transform.gameObject.GetComponent<MeshCollider>() != null)
             {
-                hit.collider.gameObject.AddComponent<ObjectMaterials>();
                 
-
-                hit.transform.gameObject.tag = "Wanded";
-                Debug.Log("Wanded");
-                Debug.Log(hit.transform.gameObject.name);
-                // MakeObjectTransparent(hit.transform.gameObject);
-                // SetFaded(hit.transform.gameObject);
-                // addToList(hit.collider.transform.gameObject);
-                
-                
-                hit.transform.gameObject.GetComponent<MeshRenderer>().material = transparentMat;
+              
+                // hit.transform.gameObject.tag = "Wanded";
+                Debug.Log(hit.transform.gameObject.name + ": Wanded");
+          
+                hit.transform.gameObject.GetComponent<MeshRenderer>().enabled = false;
                 hit.transform.gameObject.GetComponent<MeshCollider>().enabled = false;
                 Debug.Log("Collider Destroyed");
             }
@@ -216,11 +229,7 @@ public class Wand : MonoBehaviour
         }
 
         // set all materials to new transparent material
-        for (int i = 0; i < mr.materials.Length; i++)
-        {
-            newMaterials[i] = TransparentDefault;
-        }
-        mr.materials = newMaterials;
+       
     }
 
    

@@ -48,4 +48,7 @@ public class DataManager : MonoBehaviour
     public GameObject GetHouse() {
         return housePrefab;
     }
+
+
+   
 }

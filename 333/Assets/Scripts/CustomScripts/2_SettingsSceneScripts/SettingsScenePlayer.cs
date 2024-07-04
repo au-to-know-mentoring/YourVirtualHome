@@ -10,9 +10,11 @@ public class SettingsScenePlayer : MonoBehaviour
 {
 
     public int modelVal;
-
+    // spawn menu House Model, And UI
+    [SerializeField] private GameObject SpawnHouse;
     [SerializeField] private GameObject MainMenuCanvas;
     [SerializeField] private GameObject ControlPanelCanvas;
+    //
 
     private TMP_InputField CodeInputField;
 
@@ -131,7 +133,7 @@ public class SettingsScenePlayer : MonoBehaviour
     public void SwitchTeleportControllerOn()
     {
         
-
+        Destroy(SpawnHouse);
         MainMenuCanvas.active = false;
         ControlPanelCanvas.active = false;
 

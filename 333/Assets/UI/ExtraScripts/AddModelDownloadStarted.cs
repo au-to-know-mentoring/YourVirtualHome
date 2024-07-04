@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -17,12 +16,12 @@ public class AddModelDownloadStarted : MonoBehaviour
     [SerializeField] private TMP_Text downloadingText;
     [SerializeField] private TMP_Text downloadPercentage;
 
+    private bool isDownloading;
     private void Awake()
     {
         downloadBaseY = downloadButton.position.y;
         
     }
-
     private void OnGUI()
     {
         if (GUILayout.Button("Fake Download", GUILayout.MinWidth(60), GUILayout.MinHeight(30))) 
@@ -44,7 +43,8 @@ public class AddModelDownloadStarted : MonoBehaviour
         else
         {
 			
-			StartCoroutine(DownloadSliderProgress());
+			
+            // isDownloading = true;
 			StartCoroutine(FadeDownloadIn());
             yield return null;
         }
@@ -91,10 +91,18 @@ public class AddModelDownloadStarted : MonoBehaviour
     }
 	private void Update()
 	{
-		if (Input.GetKeyDown(KeyCode.H))
-        {
-           // FindObjectOfType<DownloadHandler>().DownloadFile("515337");
-			//(MoveButtonUp());
-		}
+
+        // if (FindObjectOfType<DownloadHandler>().ProgressVar.ProgressPercentage <= 100)
+		// {
+        //     if (isDownloading){
+        //         downloadProgressSlider.value = FindObjectOfType<DownloadHandler>().ProgressVar.ProgressPercentage;
+        //     downloadPercentage.text = downloadProgressSlider.value.ToString() + "%";
+        //     }
+            
+		// }else {
+        //     isDownloading = false;
+        // }
+
+
 	}
 }

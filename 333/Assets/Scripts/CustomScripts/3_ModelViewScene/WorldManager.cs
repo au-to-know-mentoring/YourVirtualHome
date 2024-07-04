@@ -23,7 +23,6 @@ public class WorldManager : MonoBehaviour
        
         parent.AddComponent<MeshCollider>();
         
-
         foreach(Transform child in parent.transform)
         {
            
