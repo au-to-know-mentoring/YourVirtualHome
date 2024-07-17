@@ -11,24 +11,19 @@ public class SettingsScenePlayer : MonoBehaviour
 
     public int modelVal;
     // spawn menu House Model, And UI
-    [SerializeField] private GameObject SpawnHouse;
-    [SerializeField] private GameObject MainMenuCanvas;
-    [SerializeField] private GameObject ControlPanelCanvas;
+    [SerializeField] private PlayerSetup playerSetup;
+    
     //
 
-    private TMP_InputField CodeInputField;
 
-    [SerializeField] GameObject TrackingAreaVr;
     [SerializeField] GameObject CameraRigVR;
 
     public TMP_Text myText;
 
-    private TMP_InputField myIField;
 
     [HideInInspector] public int ModelVal;
 
     //private TMP_InputField iField;
-    private TouchScreenKeyboard overlayKeyboard;
 
     public DownloadHandler myDownloadHandler;
 
@@ -42,14 +37,9 @@ public class SettingsScenePlayer : MonoBehaviour
     private Vector3 aimDirection;
     [SerializeField] LineRenderer lr;
 
-    [Header("Dollhouse")]
-    public GameObject dollhouse;
+    
 
-    [Header("Canvas Settings")]
-    public float activationDistance;
-    private bool sliderDragging = false;
-    [SerializeField] Transform Slider0Point;
-    [SerializeField] Scrollbar slider;
+   
     // spawner related variables
     private bool placingSpawner = false;
     [SerializeField] GameObject spawnerIndicatorPrefab;
@@ -57,11 +47,7 @@ public class SettingsScenePlayer : MonoBehaviour
     float maxNormalAngle = 45f;
     bool canPlaceSpawner = false;
 
-    [Header("MainMenuCanvas")]
-    [SerializeField] Transform VSlider0Point;
-    [SerializeField] Transform VSlider100point;
-    [SerializeField] Scrollbar VSlider;
-    private bool VSliderDragging = false;
+    
 
     private void Start()
     {
@@ -104,11 +90,7 @@ public class SettingsScenePlayer : MonoBehaviour
 
 
 
-    public void ShowKeyboard(TMP_InputField iField)
-    {
-        iField.text = overlayKeyboard.text;
-		overlayKeyboard = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.Default);
-    }
+    
     public void applyDownloadCode(InputField iField)
     {
         myDownloadHandler.DownloadFile(iField.text);
@@ -133,10 +115,8 @@ public class SettingsScenePlayer : MonoBehaviour
     public void SwitchTeleportControllerOn()
     {
         
-        Destroy(SpawnHouse);
-        MainMenuCanvas.active = false;
-        ControlPanelCanvas.active = false;
-
+        
+        
 		// saveModelRotation();
 
         
@@ -147,32 +127,11 @@ public class SettingsScenePlayer : MonoBehaviour
        
         House.transform.parent = null;
         House.transform.localScale /= 0.025f;
-        // House.transform.position += new Vector3(0, 0, 0);
-
-        //  PlayerPrefs.SetFloat( "ModelX" + modelVal, House.transform.rotation.x);
-		//  PlayerPrefs.SetFloat( "ModelZ" + modelVal, House.transform.rotation.y);
-		//  PlayerPrefs.SetFloat( "ModelZ" + modelVal, House.transform.rotation.z);
-
-   
-        
-        // CameraRigVR.transform.position = spawnerIndicator.transform.position;
-
-        // CameraRigVR.transform.position = TrackingAreaVr.transform.position;
-
-        // TrackingAreaVr.transform.SetParent(null);
+       
+        playerSetup.SettingUpPlayerForModelScene();
 
         StartCoroutine(TeleportToSpawn());
-
-        CustomTeleporter myTP = FindObjectOfType<CustomTeleporter>();
-        myTP.enabled = true;
-
-        Wand myWand = FindObjectOfType<Wand>();
-        myWand.enabled = true;
-        // TrackingAreaVr.transform.position = CameraRigVR.transform.position;
-        
         spawnerIndicator.gameObject.SetActive(false);
-
-
         
 	}
 

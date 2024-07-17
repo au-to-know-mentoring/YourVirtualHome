@@ -7,14 +7,11 @@ using TMPro;
 
 public class DownloadBarProgress : MonoBehaviour
 {
-    public GameObject downloadCanvas;
    [SerializeField] private DownloadHandler DownloadHandlerScript;
 
     public Slider ProgressSlider;
     public TMP_Text DownloadPercentText;
 
-    string PercentString;
-    string FilesDelete = "Deleted Files";
 
     int downloadBar;
     

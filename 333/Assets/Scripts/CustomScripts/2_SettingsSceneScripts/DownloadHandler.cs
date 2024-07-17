@@ -27,25 +27,12 @@ public class DownloadHandler : MonoBehaviour
 	string ICode; // saves 6-digit code to use when calling GetModelInfo in DownloadFileCallback();
 	
 	public List<string> ListOfModelFolders = new List<string>();
-	public List<string> dirs = new List<string>();
 	
 	
-	string[] OBJfiles;
-	string[] ArrayMTLfiles;
-	
-	
-	 public GameObject ModelHolderParent; // will be obsolete when settings scene has been introduced
-	public string unkownPathTwo;
-	
-
-	public GetModelInfo getModelInfoScript;
-	public Keyboard myKeyboardScript;
-
+	public GameObject ModelHolderParent; // will be obsolete when settings scene has been introduced
 	public GameObject loadingCanvas;
 	public Canvas canvas;
 	
-	float time;
-	float delay = 1f;
 	void Start()
 	{	
 		

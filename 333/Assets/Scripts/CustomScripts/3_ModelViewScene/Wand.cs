@@ -10,7 +10,6 @@ public class Wand : MonoBehaviour
     //List<Vector3> Rotations;   // list of rotations for the house
     //int currentRotation = 0;   // current rotation index in list
 
-    public List<ObjectMaterials> objectMaterialsList = new List<ObjectMaterials>();
 
     GameObject house = null;   // reference to house game object
 
@@ -27,8 +26,6 @@ public class Wand : MonoBehaviour
     private float maxWandDistance = 2.5f;   // Maximum interaction distance for wand
     private bool haveTarget = false; //boolean to confirm if wand should be useable and is on-target
     private RaycastHit target; // storing target for wand use
-    public Material transparentMat;
-    private List<Material> matList = new List<Material>();
     private List<GameObject> objectList = new List<GameObject>();
 
     private float timer = 0f;

@@ -13,10 +13,7 @@ public class CustomTeleporter : MonoBehaviour
     private bool leftSecondaryPressed = false;
     private bool rightSecondaryPressed = false;
 
-    [SerializeField] GameObject SceneResetCanvas;     // canvas reference for scene reset
-    private bool readyToReset = false; // bool to determine if the user is hovering the reset canvas
 
-    [SerializeField] DownloadHandler dh;
 
     [SerializeField] InputActionReference teleportButton; // 
     [SerializeField] GameObject rightController;    // reference to left controller gameObject

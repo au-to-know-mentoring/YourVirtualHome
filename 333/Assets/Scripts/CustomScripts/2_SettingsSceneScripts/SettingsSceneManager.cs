@@ -7,15 +7,10 @@ public class SettingsSceneManager : MonoBehaviour
 {
 
     [SerializeField] GameObject dollhouseParent;
-    [SerializeField] GameObject player;
     [SerializeField] SettingsScenePlayer playerScript;
     public float perspectiveCompensation = 0.95f;
     Vector3 dummyPosition = new Vector3(0,0,0);
 
-    DollhouseData dd;
-
-    // settings buttons
-    [SerializeField] Scrollbar scaleSlider;
 
     void Start()
     {
