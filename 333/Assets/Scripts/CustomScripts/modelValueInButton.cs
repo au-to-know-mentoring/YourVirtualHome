@@ -31,11 +31,16 @@ public class modelValueInButton : MonoBehaviour
 
 		ApprovementPanel.instance.myPanel.SetActive(true);
 	}
+
+	/// <summary>
+	/// Handles deltion of model button from the scroll view and file
+	/// </summary>
 	public void DeleteModel()
 	{
 		downloadHandler.DeleteModel(modelPath);
 
-		Destroy(gameObject);
+
+		Destroy(this.gameObject);
 	}
 	public void showControlPanel()
 	{
@@ -60,9 +65,10 @@ public class modelValueInButton : MonoBehaviour
 	}
 	public void importModel()
 	{
+		if(DataManager.Instance.GetHouse() != null){
+			Destroy(DataManager.Instance.GetHouse());
+		}
 
-		// dh = FindObjectOfType<DownloadHandler>();
-		
 		StartCoroutine(ShowLoadingPanel());
 		
 
@@ -70,19 +76,5 @@ public class modelValueInButton : MonoBehaviour
 
 		showControlPanel();
 		Debug.Log(modelVal);
-
-
-		//get download handler
-		
-		//enable loading screen
-		
-
-		//load model
-        // dh.LoadModelToScene(modelVal);
-        // FindObjectOfType<SettingsSceneManager>().SetupHouseDummy();
-        // FindObjectOfType<SettingsScenePlayer>().modelVal = modelVal;
-
-        //disable loading screen
-        // dh.loadingCanvas.SetActive(false);
 	}
 }

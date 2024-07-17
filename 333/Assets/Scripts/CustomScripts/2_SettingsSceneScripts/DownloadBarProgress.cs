@@ -19,16 +19,9 @@ public class DownloadBarProgress : MonoBehaviour
 
     void Start()
 	{
-        //DownloadHandlerScript = downloadCanvas.GetComponent<DownloadHandler>();
-       // DownloadHandlerScript = gameObject.GetComponent<DownloadHandler>();
-        
-        ProgressSlider.maxValue = 100; 
+       ProgressSlider.maxValue = 100; 
     }
-   // public void DeleteFilesWithButton()
- //   {
-   //     DownloadPercentText.text = FilesDelete;
-  //      DownloadHandlerScript.DeleteFilesWithButton(); 
-  //  }
+ 
     // Update is called once per frame
     void Update()
     {

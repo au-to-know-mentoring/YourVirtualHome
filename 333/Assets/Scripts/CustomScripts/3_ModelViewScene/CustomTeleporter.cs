@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
+
 public class CustomTeleporter : MonoBehaviour
 {
     // record input of secondary buttons for scene reset

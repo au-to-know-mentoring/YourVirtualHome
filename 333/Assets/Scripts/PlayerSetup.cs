@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Used for switching to the player controller/ Teleport controller
+/// </summary>
 public class PlayerSetup : MonoBehaviour
 {
 

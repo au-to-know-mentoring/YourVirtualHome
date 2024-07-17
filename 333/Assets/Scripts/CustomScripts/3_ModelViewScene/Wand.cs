@@ -55,29 +55,7 @@ public class Wand : MonoBehaviour
 
     void Undo(InputAction.CallbackContext context) 
     {
-      
        EnableComponents(house);
-
-
-        // if (timer >= delay) 
-        // {   
-            
-
-        //     for (var x = 0; x < objectList.Count;  x++) {
-        //         objectList[x].GetComponent<MeshRenderer>().material = matList[x];
-        //         objectList[x].GetComponent<MeshCollider>().enabled = true;
-        //     }
-        //     // objectList.Remove(objectList[objectList.Count - 1]);
-        //     // matList.Remove(matList[matList.Count - 1]);
-
-        //     Debug.Log("objList: " + objectList.Count);
-        //     Debug.Log("matList: " + matList.Count);
-
-        //     objectList.Clear();
-        //     matList.Clear();
-
-        //     timer = 0f;
-        // }
     }
 
      /// <summary>
@@ -166,31 +144,6 @@ public class Wand : MonoBehaviour
                 Debug.Log("Collider Destroyed");
             }
     }
-    // private void MakeObjectTransparent(GameObject houseObject)
-    // {
-    //     // get all materials applied to the mesh of a gameobject, and set them to transparency
-    //     MeshRenderer mr = houseObject.GetComponent<MeshRenderer>();
-    //     Material[] newMaterials = new Material[mr.materials.Length];
-    //     for (int i = 0; i < mr.materials.Length; i++)
-    //     {
-    //         Material m = houseObject.GetComponent<MeshRenderer>().materials[i];
-    //         Color c = m.color;
-    //         c.a = 125;
-    //         m.color = c;
-    //         m.SetOverrideTag("RenderType", "Transparent");
-    //         m.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
-    //         m.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-    //         m.SetInt("_ZWrite", 0);
-    //         m.DisableKeyword("_ALPHATEST_ON");
-    //         m.EnableKeyword("_ALPHABLEND_ON");
-    //         m.DisableKeyword("_ALPHAPREMULTIPLY_ON");
-    //         m.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
-    //         newMaterials[i] = m;
-
-    //     }
-    //     mr.materials = newMaterials;
-
-    // }
 
     private void ChangeLineRendererColor(Color color)
     {

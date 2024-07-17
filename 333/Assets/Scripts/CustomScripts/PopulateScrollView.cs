@@ -12,6 +12,10 @@ using Newtonsoft.Json.Linq;
 using UnityEngine.InputSystem;
 using System.IO;
 
+
+/// <summary>
+/// Handles the ScrollView population
+/// </summary>
 public class PopulateScrollView : MonoBehaviour
 {
     public DownloadHandler downloadHandler;
@@ -38,12 +42,6 @@ public class PopulateScrollView : MonoBehaviour
 			GetModelInfo.Instance.RunJsonDecodeForModelButton(File.ReadAllText(key + "/jsonEncode.txt"), Modelcount, key);
 
 			Modelcount++;
-
-			// if (PlayerPrefs.GetString("FN" + "Model" + PrefCount) != "" && PlayerPrefs.GetString("LN" + "Model" + PrefCount) != "")
-			// {
-			// 	AddModelButtonOnStart(PlayerPrefs.GetString("FN" + "Model" + PrefCount), PlayerPrefs.GetString("LN" + "Model" + PrefCount), Modelcount);
-			// 	
-			// }
 		}
 	}
 
@@ -62,10 +60,7 @@ public class PopulateScrollView : MonoBehaviour
 			modelValueInButton modelValueInButton = buttonObject.GetComponent<modelValueInButton>();
 			modelValueInButton.FirstName.text = FirstName;
 			modelValueInButton.ClientName.text = ClientName;
-			//var ModelVal = buttonObject.GetComponent<modelValueInButton>();
-
 			
-		
 			buttonObject.transform.SetParent(parent.transform);
 			buttonObject.transform.localScale = Vector3.one;
 			buttonObject.transform.position = new Vector3(buttonObject.transform.position.x, buttonObject.transform.position.y, 0f);
@@ -92,13 +87,13 @@ public class PopulateScrollView : MonoBehaviour
 
 		var buttonObject = Instantiate(buttonPrefab);
 
-
+		// Set variables 
 		modelValueInButton modelValueInButton = buttonObject.GetComponent<modelValueInButton>();
 		modelValueInButton.FirstName.text = FirstName;
 		modelValueInButton.ClientName.text = ClientName;
 		modelValueInButton.modelPath = modelPath;
-	
 
+		// Move button into scroll view
 		buttonObject.transform.SetParent(parent.transform);
 		buttonObject.transform.localScale = Vector3.one;
 		buttonObject.transform.position = new Vector3(buttonObject.transform.position.x, buttonObject.transform.position.y, 0f);

@@ -15,6 +15,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEditor;
+
+/// <summary>
+/// Handles downloading, Unzipping and deletion of the model
+/// </summary>
 public class DownloadHandler : MonoBehaviour
 {
 
@@ -50,7 +54,10 @@ public class DownloadHandler : MonoBehaviour
 	}
 
 
-
+	/// <summary>
+	/// Calls the virtualhome backend and download a model via the model code
+	/// </summary>
+	/// <param name="Code">Model Code</param>
 	public void DownloadFile(string Code)
 	{
 		ICode = Code;
@@ -82,10 +89,14 @@ public class DownloadHandler : MonoBehaviour
 			e.ProgressPercentage);// for DownloadBarProgress.cs to get percentage
 
 		if (e.ProgressPercentage == 0) {
+			// Animates download bar, and it's percentage text
 			StartCoroutine(FindObjectOfType<AddModelDownloadStarted>().DownloadSliderProgress());
 		}
 	}
 
+	/// <summary>
+	/// Makes a list of model folders, Used for listing models on the scroll view and importing models
+	/// </summary>
 	public void ListModelFolders()
 	{
 		unZipFolderLocation = Application.persistentDataPath + "/" + Application.productName + "Model";
@@ -109,84 +120,58 @@ public class DownloadHandler : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Unzips model to PersistentDataPath
+	/// </summary>
+	/// <param name="sender"></param>
+	/// <param name="e"></param>
 	public void DownloadFileCallback(object sender, AsyncCompletedEventArgs e)
 	{
 		unZipFolderLocation = Application.persistentDataPath + "/" + Application.productName + "Model" + ListOfModelFolders.Count; // the extracted folder name
 
 		ZipFile.ExtractToDirectory(path, unZipFolderLocation);
 
+		// Get model information, Create .txt file and write model info
 		StartCoroutine(GetModelInfo.Instance.SaveJsonRequest(ICode, Application.persistentDataPath + "/" + Application.productName + "Model" + ListOfModelFolders.Count + "/" + "jsonEncode.txt"));
 
 
 		ListModelFolders(); // upadtes the Model Folders List with new folder
-
-		
-		// File.WriteAllText(unZipFolderLocation + "/" + "jsonEncode.txt", GetModelInfo.Instance.SaveJsonRequest(ICode));
-
-		// Gets model Name/ClientName then instantiates a new button inside of our Model ScrollView with PopulateScrollView.cs
-		// GetModelInfo myGetModelInfo = FindObjectOfType<GetModelInfo>();
-		// myGetModelInfo.getModelInfo(ICode, "Model" + ListOfModelFolders.Count);
 	}
 
-
-	// May be removed, and instead turn ui controller off, and turn locomotion controller on
-
-	//public void SwitchToModelScene() 
-	//{
-	//	Scene scene = SceneManager.GetActiveScene();
-	//	StartCoroutine(LoadYourAsyncScene());
-	//}
-	//IEnumerator LoadYourAsyncScene() 
-	//{
-	//	UnityEngine.AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("ModelScene", LoadSceneMode.Single);
-
-		
-	//	while (!asyncLoad.isDone)
-	//	{
-	//		yield return null;
-	//	}
-	//}
-	//->
-	public void LoadModelToScene(int Choice) // used by ImportModelToModelViewScene.cs
+	/// <summary>
+	/// Loads model to the Dollhouse
+	/// </summary>
+	/// <param name="ModelId">Model Id</param>
+	public void LoadModelToScene(int ModelId) // used by ImportModelToModelViewScene.cs
 	{
 
-
-		string[] OBJfiles = Directory.GetFiles(ListOfModelFolders[Choice], "*.obj", SearchOption.AllDirectories);
+		// gets all .obj files in directory
+		string[] OBJfiles = Directory.GetFiles(ListOfModelFolders[ModelId], "*.obj", SearchOption.AllDirectories);
 
 
 		var objFilePath = OBJfiles[0];// get full path to the OBJ file
 
-
-		string[] ArrayMTLfiles = Directory.GetFiles(ListOfModelFolders[Choice], "*.mtl", SearchOption.AllDirectories);
+		// gets all .mtl files in directory
+		string[] ArrayMTLfiles = Directory.GetFiles(ListOfModelFolders[ModelId], "*.mtl", SearchOption.AllDirectories);
 
 		var mtlFilePath = ArrayMTLfiles[0]; // get full path to the MTL file
 
-		Debug.Log(mtlFilePath);
-		Debug.Log(objFilePath);
 
+
+	    #region Model Information
+		// Loads model to Scene
 		var loadedObject = new OBJLoader().Load(objFilePath, mtlFilePath); // imports the obj
 
 		Vector3 OriginalScale = loadedObject.gameObject.transform.localScale;
 
+		// nest model inside of dollhouse
 		loadedObject.gameObject.transform.SetParent(ModelHolderParent.transform); // putting our model in a cube allowing for rotation
 
-		//if (PlayerPrefs.GetFloat("ModelX" + Choice) != null && PlayerPrefs.GetFloat("ModelY" + Choice) != null && PlayerPrefs.GetFloat("ModelZ" + Choice) != null) {
-			// Vector3 RotationWithPlayerPrefs = new Vector3(PlayerPrefs.GetFloat("ModelX" + Choice), PlayerPrefs.GetFloat("ModelY" + Choice), PlayerPrefs.GetFloat("ModelZ" + Choice));
-			// Quaternion houseRotation = Quaternion.Euler(RotationWithPlayerPrefs);
-			// loadedObject.transform.rotation =  houseRotation;
-		//}
-
-
-
+		// Scales down so it can be configured with the control panel
 		loadedObject.gameObject.transform.localScale *= 0.025f;
 		loadedObject.gameObject.transform.localPosition = Vector3.zero;
-
-
-		// if (PlayerPrefs.GetString("modelsettings" + FindObjectOfType<SettingsScenePlayer>().ModelVal) != "")
-		// {
-		// 	loadedObject.gameObject.transform.localRotation = FindObjectOfType<SettingsScenePlayer>().LoadModelWithSettingsApplied();
-		// }
-
+		
+		// SetHouse Variable
 		DataManager.Instance.SetHouse(loadedObject);
 
 		Debug.Log("transform");
@@ -194,6 +179,8 @@ public class DownloadHandler : MonoBehaviour
 		WorldManager.Instance.ApplyCollidersToHouse(loadedObject);
 		
 		Debug.Log("collider");
+
+		#endregion
 		// code for modelview scene
 		// give reference of house to wand
 		FindObjectOfType<Wand>().setHouse(loadedObject);

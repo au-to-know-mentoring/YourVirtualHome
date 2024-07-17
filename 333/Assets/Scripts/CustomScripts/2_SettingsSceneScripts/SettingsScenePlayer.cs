@@ -12,18 +12,13 @@ public class SettingsScenePlayer : MonoBehaviour
     public int modelVal;
     // spawn menu House Model, And UI
     [SerializeField] private PlayerSetup playerSetup;
-    
-    //
-
 
     [SerializeField] GameObject CameraRigVR;
 
     public TMP_Text myText;
 
-
     [HideInInspector] public int ModelVal;
 
-    //private TMP_InputField iField;
 
     public DownloadHandler myDownloadHandler;
 
@@ -47,13 +42,8 @@ public class SettingsScenePlayer : MonoBehaviour
     float maxNormalAngle = 45f;
     bool canPlaceSpawner = false;
 
-    
-
     private void Start()
     {
-
-
-
         rightX.action.Enable();
         rightX.action.performed += GrabButton;
   

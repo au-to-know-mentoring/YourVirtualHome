@@ -23,10 +23,14 @@ public class ApprovementPanel : MonoBehaviour
     }
     public void Delete()
     {
+        
         _modelValueInButton.DeleteModel();
+        Hide();
+    
     }
     public void Select(){
         _modelValueInButton.importModel();
+        Hide();
         // _modelValueInButton.showControlPanel();
     }
 
