@@ -25,7 +25,7 @@ public class CustomTeleporter : MonoBehaviour
     List<GameObject> Previous;
 
 
-	Wand wand;	// reference to the wand
+    Wand wand;	// reference to the wand
 
     private float maxTeleportDistance = 20f;		// definition for the maximum distance that can be teleported
     private float maxNormalAngle = 45f;		// the maximum angle before a surface is considered a wall and not teleportable
@@ -46,11 +46,12 @@ public class CustomTeleporter : MonoBehaviour
 
     }
     bool AllowTeleport = false;
-    void EnableTeleport(InputAction.CallbackContext context) 
-    { 
-        AllowTeleport= true;
+    void EnableTeleport(InputAction.CallbackContext context)
+    {
+        AllowTeleport = true;
     }
-    void LeftSecondary(InputAction.CallbackContext context) {
+    void LeftSecondary(InputAction.CallbackContext context)
+    {
         leftSecondaryPressed = true;
     }
     void RightSecondary(InputAction.CallbackContext context)
@@ -78,7 +79,7 @@ public class CustomTeleporter : MonoBehaviour
     void Update()
     {
         HandleTeleporter();
-       // HandleSceneReset();
+        // HandleSceneReset();
     }
 
     private void HandleTeleporter()
@@ -110,30 +111,30 @@ public class CustomTeleporter : MonoBehaviour
 
         RaycastHit hits;
         // collect list of objects that the teleporter is pointing at as hits
-        if (Physics.Raycast(rightController.transform.position, rightController.transform.TransformDirection(aimDirection), out hits,maxTeleportDistance)) 
+        if (Physics.Raycast(rightController.transform.position, rightController.transform.TransformDirection(aimDirection), out hits, maxTeleportDistance))
         {
             if (Vector3.Angle(Vector3.up, hits.normal) < maxNormalAngle)
-                {
-                    // if it is a valid floor that hasnt been wanded, then put the teleport indicator there
-                    ChangeLineRendererColor(Color.green);
-                    ti.SetActive(true);
-                    ti.gameObject.transform.position = hits.point;
+            {
+                // if it is a valid floor that hasnt been wanded, then put the teleport indicator there
+                ChangeLineRendererColor(Color.green);
+                ti.SetActive(true);
+                ti.gameObject.transform.position = hits.point;
 
-                    ////////////
+                ////////////
 
-                    if (AllowTeleport)
-                    {
-                        gameObject.transform.position = hits.point;
-                    }
-                }
-                else
+                if (AllowTeleport)
                 {
-                    // cannot teleport there
-                    
-                    ChangeLineRendererColor(Color.red);
+                    gameObject.transform.position = hits.point;
                 }
+            }
+            else
+            {
+                // cannot teleport there
+
+                ChangeLineRendererColor(Color.red);
+            }
         }
-        AllowTeleport= false;
+        AllowTeleport = false;
     }
 
     private void ChangeLineRendererColor(Color color)
@@ -162,6 +163,3 @@ public class CustomTeleporter : MonoBehaviour
     //}
 
 }
-
-
-

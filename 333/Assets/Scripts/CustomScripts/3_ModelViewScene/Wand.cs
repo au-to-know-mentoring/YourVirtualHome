@@ -18,10 +18,10 @@ public class Wand : MonoBehaviour
     [SerializeField] GameObject leftController; // reference to right controller
     [SerializeField] InputActionReference wandButton;
     [SerializeField] InputActionReference wandActivateButton;
-	[SerializeField] InputActionReference wandUndo;
+    [SerializeField] InputActionReference wandUndo;
 
 
-	bool wandActive = false;
+    bool wandActive = false;
     Vector3 aimDirection = Vector3.forward;
     private float maxWandDistance = 2.5f;   // Maximum interaction distance for wand
     private bool haveTarget = false; //boolean to confirm if wand should be useable and is on-target
@@ -44,21 +44,22 @@ public class Wand : MonoBehaviour
 
     void UseWand(InputAction.CallbackContext context)
     {
-        if(haveTarget && wandActive)
+        if (haveTarget && wandActive)
             addToList(target.transform.gameObject);
-            DestroyCollider(target);   // remove collider on object hit by wand
+        DestroyCollider(target);   // remove collider on object hit by wand
     }
 
-    void ActivateWand(InputAction.CallbackContext context) {
-        wandActive = !wandActive;
-    }   
-
-    void Undo(InputAction.CallbackContext context) 
+    void ActivateWand(InputAction.CallbackContext context)
     {
-       EnableComponents(house);
+        wandActive = !wandActive;
     }
 
-     /// <summary>
+    void Undo(InputAction.CallbackContext context)
+    {
+        EnableComponents(house);
+    }
+
+    /// <summary>
     /// re-enable mesh renderer and collider
     /// </summary>
     /// <param name="parent"></param>
@@ -68,42 +69,44 @@ public class Wand : MonoBehaviour
         Debug.Log("ObjectName: " + parent.name);
 
 
-        if (parent.GetComponent<MeshCollider>() != null && parent.GetComponent<MeshRenderer>() != null){
-           parent.GetComponent<MeshCollider>().enabled = true;
-           
-           parent.GetComponent<MeshRenderer>().enabled = true;
+        if (parent.GetComponent<MeshCollider>() != null && parent.GetComponent<MeshRenderer>() != null)
+        {
+            parent.GetComponent<MeshCollider>().enabled = true;
+
+            parent.GetComponent<MeshRenderer>().enabled = true;
         }
 
         Debug.Log(parent.transform.childCount);
-        
-        foreach(Transform child in parent.transform)
+
+        foreach (Transform child in parent.transform)
         {
             Debug.Log("Child ObjectName: " + child.gameObject.name);
             EnableComponents(child.gameObject);
-            
+
         }
 
     }
 
     void addToList(GameObject objectHit)
     {
-        
+
         Debug.Log("addToList");
         Debug.Log("object: " + objectHit.name);
         objectList.Add(objectHit);
-    
+
     }
 
     void Update()
     {
         timer += Time.deltaTime;
         PointWand();
-        
+
     }
 
     private void PointWand()
     {
-        if (!wandActive) {
+        if (!wandActive)
+        {
             lr.enabled = false;
             return;
         }
@@ -117,7 +120,6 @@ public class Wand : MonoBehaviour
             ChangeLineRendererColor(Color.green);
             haveTarget = true;
             target = hit;
-            
 
         }
         else
@@ -129,20 +131,18 @@ public class Wand : MonoBehaviour
     }
 
     private void DestroyCollider(RaycastHit hit)
-    {   
+    {
 
+        if (hit.transform.gameObject.GetComponent<MeshCollider>() != null)
+        {
 
-            if (hit.transform.gameObject.GetComponent<MeshCollider>() != null)
-            {
-                
-              
-                // hit.transform.gameObject.tag = "Wanded";
-                Debug.Log(hit.transform.gameObject.name + ": Wanded");
-          
-                hit.transform.gameObject.GetComponent<MeshRenderer>().enabled = false;
-                hit.transform.gameObject.GetComponent<MeshCollider>().enabled = false;
-                Debug.Log("Collider Destroyed");
-            }
+            // hit.transform.gameObject.tag = "Wanded";
+            Debug.Log(hit.transform.gameObject.name + ": Wanded");
+
+            hit.transform.gameObject.GetComponent<MeshRenderer>().enabled = false;
+            hit.transform.gameObject.GetComponent<MeshCollider>().enabled = false;
+            Debug.Log("Collider Destroyed");
+        }
     }
 
     private void ChangeLineRendererColor(Color color)
@@ -165,7 +165,6 @@ public class Wand : MonoBehaviour
         MeshRenderer mr = houseObject.GetComponent<MeshRenderer>();
         Material[] newMaterials = new Material[mr.materials.Length];
 
-
         // add a houseObject script to record materials history
         if (houseObject.GetComponent<HouseObject>() == null)
         {
@@ -174,15 +173,12 @@ public class Wand : MonoBehaviour
             houseObject.AddComponent<HouseObject>();
             houseObject.GetComponent<HouseObject>().SetMyMaterials(oldMaterials);
 
-            
-
         }
-
         // set all materials to new transparent material
-       
+
     }
 
-   
+
     #endregion
 
     // define reference to house�s gameObject
@@ -190,40 +186,5 @@ public class Wand : MonoBehaviour
     {
         house = h;
     }
-    /*
-    // rotate the house gameObject through the list of rotations
-    private void rotateHouse()
-    {
-        if (house == null)
-            return;
-
-        if (Input.GetButtonDown("XRI_Right_SecondaryButton"))
-        {
-            house.transform.Rotate(Rotations[currentRotation]);
-            currentRotation++;
-            if (currentRotation >= Rotations.Count)
-            {
-                currentRotation = 0;
-            }
-        }
-    }
-    void createRotationList()
-    {
-        //  create and add each of 6 rotations to the list
-        Rotations = new List<Vector3>();
-        Rotations.Add(new Vector3(90, 0, 0));
-        Rotations.Add(new Vector3(180, 0, 0));
-        Rotations.Add(new Vector3(270, 0, 0));
-        Rotations.Add(new Vector3(0, 90, 0));
-        Rotations.Add(new Vector3(0, 180, 0));
-        Rotations.Add(new Vector3(0, 270, 0));
-        Rotations.Add(new Vector3(0, 0, 90));
-        Rotations.Add(new Vector3(0, 0, 180));
-        Rotations.Add(new Vector3(0, 0, 270));
-        Rotations.Add(new Vector3(0, 0, 0));
-    }
-    */
+   
 }
-
-
-

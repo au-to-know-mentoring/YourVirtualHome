@@ -24,22 +24,22 @@ public class DownloadHandler : MonoBehaviour
 
 	// event for completion of download
 	public event System.ComponentModel.AsyncCompletedEventHandler? DownloadFileCompleted;
-	
-	string path = ""; 
-	string zipFile = ""; 
-	string unZipFolderLocation; 
+
+	string path = "";
+	string zipFile = "";
+	string unZipFolderLocation;
 	string ICode; // saves 6-digit code to use when calling GetModelInfo in DownloadFileCallback();
-	
+
 	public List<string> ListOfModelFolders = new List<string>();
-	
-	
+
+
 	public GameObject ModelHolderParent; // will be obsolete when settings scene has been introduced
 	public GameObject loadingCanvas;
 	public Canvas canvas;
-	
+
 	void Start()
-	{	
-		
+	{
+
 		// DownloadFile("577485");
 		//get loading canvas object
 		loadingCanvas = GameObject.Find("LoadingCanvas");
@@ -47,9 +47,9 @@ public class DownloadHandler : MonoBehaviour
 		canvas = loadingCanvas.GetComponent<Canvas>();
 		canvas.enabled = false;
 
-		
+
 		ListModelFolders();
-		
+
 
 	}
 
@@ -88,7 +88,8 @@ public class DownloadHandler : MonoBehaviour
 			e.TotalBytesToReceive,
 			e.ProgressPercentage);// for DownloadBarProgress.cs to get percentage
 
-		if (e.ProgressPercentage == 0) {
+		if (e.ProgressPercentage == 0)
+		{
 			// Animates download bar, and it's percentage text
 			StartCoroutine(FindObjectOfType<AddModelDownloadStarted>().DownloadSliderProgress());
 		}
@@ -158,7 +159,7 @@ public class DownloadHandler : MonoBehaviour
 
 
 
-	    #region Model Information
+		#region Model Information
 		// Loads model to Scene
 		var loadedObject = new OBJLoader().Load(objFilePath, mtlFilePath); // imports the obj
 
@@ -170,14 +171,14 @@ public class DownloadHandler : MonoBehaviour
 		// Scales down so it can be configured with the control panel
 		loadedObject.gameObject.transform.localScale *= 0.025f;
 		loadedObject.gameObject.transform.localPosition = Vector3.zero;
-		
+
 		// SetHouse Variable
 		DataManager.Instance.SetHouse(loadedObject);
 
 		Debug.Log("transform");
 		// apply collision 
 		WorldManager.Instance.ApplyCollidersToHouse(loadedObject);
-		
+
 		Debug.Log("collider");
 
 		#endregion

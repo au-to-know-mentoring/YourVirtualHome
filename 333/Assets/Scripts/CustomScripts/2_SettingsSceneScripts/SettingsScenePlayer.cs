@@ -32,9 +32,9 @@ public class SettingsScenePlayer : MonoBehaviour
     private Vector3 aimDirection;
     [SerializeField] LineRenderer lr;
 
-    
 
-   
+
+
     // spawner related variables
     private bool placingSpawner = false;
     [SerializeField] GameObject spawnerIndicatorPrefab;
@@ -46,7 +46,7 @@ public class SettingsScenePlayer : MonoBehaviour
     {
         rightX.action.Enable();
         rightX.action.performed += GrabButton;
-  
+
         // rightTrigger.action.performed += ResetButton;
 
         lr.positionCount = 2;
@@ -57,15 +57,13 @@ public class SettingsScenePlayer : MonoBehaviour
         spawnerIndicator.SetActive(false);
     }
 
-    private void GrabButton(InputAction.CallbackContext context) {
+    private void GrabButton(InputAction.CallbackContext context)
+    {
         placeSpawner();
-     
-        
-
-    
     }
-  
-    private void ResetButton(InputAction.CallbackContext context) {
+
+    private void ResetButton(InputAction.CallbackContext context)
+    {
         //dollhouse.transform.eulerAngles = Vector3.zero;
         ResetSpawnIndicator();
     }
@@ -75,12 +73,6 @@ public class SettingsScenePlayer : MonoBehaviour
         PositionSpawner();
     }
 
-   
-    
-
-
-
-    
     public void applyDownloadCode(InputField iField)
     {
         myDownloadHandler.DownloadFile(iField.text);
@@ -96,7 +88,8 @@ public class SettingsScenePlayer : MonoBehaviour
     {
         ModelVal = myButton.GetComponent<modelValueInButton>().modelVal;
     }
-    IEnumerator TeleportToSpawn(){
+    IEnumerator TeleportToSpawn()
+    {
         yield return new WaitForSeconds(0.025f);
         CameraRigVR.transform.position = DataManager.Instance.GetSpawnPosition().transform.position;
 
@@ -104,86 +97,85 @@ public class SettingsScenePlayer : MonoBehaviour
 
     public void SwitchTeleportControllerOn()
     {
-        
-        
-        
-		// saveModelRotation();
 
-        
+        // saveModelRotation();
 
+        var House = FindObjectOfType<DataManager>().GetHouse();
 
-
-		var House = FindObjectOfType<DataManager>().GetHouse();
-       
         House.transform.parent = null;
         House.transform.localScale /= 0.025f;
-       
+
         playerSetup.SettingUpPlayerForModelScene();
 
         StartCoroutine(TeleportToSpawn());
         spawnerIndicator.gameObject.SetActive(false);
-        
-	}
 
-	#region Model rotation/ PlayerPref
-	public void saveModelRotation()
-    {
-		PlayerPrefs.SetString("modelSettings" + ModelVal, new Vector3(FindObjectOfType<DataManager>().GetHouse().transform.rotation.x, FindObjectOfType<DataManager>().GetHouse().transform.rotation.y, FindObjectOfType<DataManager>().GetHouse().transform.rotation.z).ToString());
-	}
+    }
 
-	public Quaternion LoadModelWithSettingsApplied()
+    #region Model rotation/ PlayerPref
+    public void saveModelRotation()
     {
-		Quaternion myQuat = new Quaternion();
-		
-		Vector3 myVector3 = StringToVector3("(" + PlayerPrefs.GetString("modelSettings" + ModelVal) + ")");
+        PlayerPrefs.SetString("modelSettings" + ModelVal, new Vector3(FindObjectOfType<DataManager>().GetHouse().transform.rotation.x, FindObjectOfType<DataManager>().GetHouse().transform.rotation.y, FindObjectOfType<DataManager>().GetHouse().transform.rotation.z).ToString());
+    }
+
+    public Quaternion LoadModelWithSettingsApplied()
+    {
+        Quaternion myQuat = new Quaternion();
+
+        Vector3 myVector3 = StringToVector3("(" + PlayerPrefs.GetString("modelSettings" + ModelVal) + ")");
         Debug.Log(myVector3.ToString());
-		myQuat.x = myVector3.x;
-		myQuat.y = myVector3.y;
-		myQuat.z = myVector3.z;
-		return myQuat;
-	}
+        myQuat.x = myVector3.x;
+        myQuat.y = myVector3.y;
+        myQuat.z = myVector3.z;
+        return myQuat;
+    }
 
-	public static Vector3 StringToVector3(string sVector)
-	{
-		// Remove the parentheses
-		if (sVector.StartsWith("(") && sVector.EndsWith(")"))
-		{
-			sVector = sVector.Substring(1, sVector.Length - 2);
-		}
+    public static Vector3 StringToVector3(string sVector)
+    {
+        // Remove the parentheses
+        if (sVector.StartsWith("(") && sVector.EndsWith(")"))
+        {
+            sVector = sVector.Substring(1, sVector.Length - 2);
+        }
 
-		// split the items
-		string[] sArray = sVector.Split(',');
+        // split the items
+        string[] sArray = sVector.Split(',');
 
-		// store as a Vector3
-		Vector3 result = new Vector3(
-			float.Parse(sArray[0]),
-			float.Parse(sArray[1]),
-			float.Parse(sArray[2]));
+        // store as a Vector3
+        Vector3 result = new Vector3(
+            float.Parse(sArray[0]),
+            float.Parse(sArray[1]),
+            float.Parse(sArray[2]));
 
-		return result;
-	}
-	#endregion
+        return result;
+    }
+    #endregion
 
-	public void EnableSpawnerPlacement() { 
+    public void EnableSpawnerPlacement()
+    {
         placingSpawner = true;
     }
 
-    private void PositionSpawner() {
+    private void PositionSpawner()
+    {
         if (!placingSpawner)
             return;
-		rightTrigger.action.Enable();
-		// use tags or layermask to check if house?
-		spawnerIndicator.SetActive(false);
+        rightTrigger.action.Enable();
+        // use tags or layermask to check if house?
+        spawnerIndicator.SetActive(false);
         ChangeLineRendererColor(Color.red);
         canPlaceSpawner = false;
 
         RaycastHit[] hits;
         hits = Physics.RaycastAll(controller.transform.position, controller.transform.TransformDirection(aimDirection), Mathf.Infinity);
-        if (hits.Length > 0) {
+        if (hits.Length > 0)
+        {
             // organise hits from closest to farthest
             System.Array.Sort(hits, (x, y) => x.distance.CompareTo(y.distance));
-            for (int i = 0; i < hits.Length; i++) {
-                if (hits[i].transform.gameObject.tag == "SettingsCanvas") {
+            for (int i = 0; i < hits.Length; i++)
+            {
+                if (hits[i].transform.gameObject.tag == "SettingsCanvas")
+                {
                     continue;
                 }
                 //Debug.Log(Vector3.Angle(Vector3.up, hits[i].normal));
@@ -198,17 +190,18 @@ public class SettingsScenePlayer : MonoBehaviour
             }
         }
     }
-    private void placeSpawner() {
+    private void placeSpawner()
+    {
         if (!canPlaceSpawner)
             return;
 
         placingSpawner = false;
         ChangeLineRendererColor(Color.red);
         DataManager.Instance.SetSpawnPosition(spawnerIndicator);
-		rightTrigger.action.Disable();
+        rightTrigger.action.Disable();
 
-		spawnerIndicator.transform.SetParent(DataManager.Instance.GetHouse().transform);
-       
+        spawnerIndicator.transform.SetParent(DataManager.Instance.GetHouse().transform);
+
     }
     public void ResetSpawnIndicator()
     {
