@@ -13,6 +13,8 @@ TagManager:
   - ChooseModelTest
   - DownloadButton
   - Wanded
+  - LHController
+  - RHController
   layers:
   - Default
   - TransparentFX
