@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEditor;
+using UnityEngine.Assertions.Must;
 
 /// <summary>
 /// Handles downloading, Unzipping and deletion of the model
@@ -69,11 +70,17 @@ public class DownloadHandler : MonoBehaviour
 		client.DownloadFileCompleted += new AsyncCompletedEventHandler(DownloadFileCallback);
 		// get ProgressPercent for DownloadBarProgress.cs
 		client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(DownloadProgressCallback4);
+		
+
+		
 
 		Uri uri = new Uri("https://aumentoring.com.au/virtualhome-remote/getModel/" + Code);
 
-		// call download function 
 		client.DownloadFileAsync(uri, path);
+		
+
+		// call download function 
+		
 	}
 
 
@@ -81,6 +88,7 @@ public class DownloadHandler : MonoBehaviour
 	public void DownloadProgressCallback4(object sender, DownloadProgressChangedEventArgs e)
 	{
 		ProgressVar = e;
+
 		// Displays the operation identifier, and the transfer progress.
 		Console.WriteLine("{0}    downloaded {1} of {2} bytes. {3} % complete...",
 			(string)e.UserState,
