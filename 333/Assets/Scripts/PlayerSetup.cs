@@ -8,6 +8,15 @@ using UnityEngine;
 public class PlayerSetup : MonoBehaviour
 {
 
+    public static PlayerSetup Instance;
+
+    private void Awake() {
+        if (Instance == null){
+            Instance = this;
+        }else {
+            Destroy(this);
+        }
+    }
    
     [SerializeField] private GameObject SpawnHouse;
     [SerializeField] private GameObject SpawnHouseCube;
