@@ -13,7 +13,7 @@ public class ControlsInfo : MonoBehaviour
         Ray ray = new Ray(headTransform.position, headTransform.forward);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit))
+        if (Physics.Raycast(headTransform.position, headTransform.forward, out hit, Mathf.Infinity, 10 ))
         {
             if (hit.collider.tag == "RHController")
             {

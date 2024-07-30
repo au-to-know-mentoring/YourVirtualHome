@@ -81,7 +81,9 @@ public class Wand : MonoBehaviour
         foreach (Transform child in parent.transform)
         {
             Debug.Log("Child ObjectName: " + child.gameObject.name);
-            EnableComponents(child.gameObject);
+            if (child.GetComponent<MeshCollider>().enabled == false){
+                EnableComponents(child.gameObject);
+            }
 
         }
 
