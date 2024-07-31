@@ -19,7 +19,7 @@ public class PlayerSetup : MonoBehaviour
     }
    
     [SerializeField] private GameObject SpawnHouse;
-    [SerializeField] private GameObject SpawnHouseCube;
+    [SerializeField] public GameObject SpawnHouseCube;
     [SerializeField] private GameObject MainMenuCanvas;
     [SerializeField] private GameObject ControlPanelCanvas;
 

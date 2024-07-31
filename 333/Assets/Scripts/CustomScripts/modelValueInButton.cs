@@ -54,7 +54,8 @@ public class modelValueInButton : MonoBehaviour
 	}
 	IEnumerator ShowLoadingPanel(){
 		if (downloadHandler.canvas.enabled != true){
-			PlayerSetup.Instance.SettingUpPlayerForModelScene();
+			
+			PlayerSetup.Instance.SpawnHouseCube.SetActive(false);
 			downloadHandler.canvas.enabled = true;
 			// importModel();
 		}

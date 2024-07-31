@@ -75,7 +75,7 @@ public class DownloadHandler : MonoBehaviour
 		
 
 		Uri uri = new Uri("https://aumentoring.com.au/virtualhome-remote/getModel/" + Code);
-
+		
 		client.DownloadFileAsync(uri, path);
 		
 
@@ -197,6 +197,8 @@ public class DownloadHandler : MonoBehaviour
 		// spawns player near house
 		// positionPlayer(loadedObject);
 		canvas.enabled = false;
+		PlayerSetup.Instance.SpawnHouseCube.active = true;
+
 	}
 
 
