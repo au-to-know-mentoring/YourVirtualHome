@@ -38,11 +38,9 @@ public class ControlsInfo : MonoBehaviour
         if (other.tag == "RHController")
         {
             rhAnimator.SetBool("LookingAtController", true);
-            lhAnimator.SetBool("LookingAtController", false);
         }
         else if (other.tag == "LHController")
         {
-            rhAnimator.SetBool("LookingAtController", false);
             lhAnimator.SetBool("LookingAtController", true);
         }
 
@@ -53,11 +51,9 @@ public class ControlsInfo : MonoBehaviour
         if (other.tag == "RHController")
         {
             rhAnimator.SetBool("LookingAtController", false);
-            lhAnimator.SetBool("LookingAtController", true);
         }
         else if (other.tag == "LHController")
         {
-            rhAnimator.SetBool("LookingAtController", true);
             lhAnimator.SetBool("LookingAtController", false);
         }
     }
