@@ -8,6 +8,8 @@ using UnityEngine.SceneManagement;
 public class CustomTeleporter : MonoBehaviour
 {
     // record input of secondary buttons for scene reset
+    public LayerMask layerMask;
+
     [SerializeField] GameObject TrackingSpace;
     [SerializeField] InputActionReference leftSecondary;
     [SerializeField] InputActionReference rightSecondary;
@@ -110,8 +112,11 @@ public class CustomTeleporter : MonoBehaviour
         ti.SetActive(false);
 
         RaycastHit hits;
+
+        
+
         // collect list of objects that the teleporter is pointing at as hits
-        if (Physics.Raycast(rightController.transform.position, rightController.transform.TransformDirection(aimDirection), out hits, maxTeleportDistance))
+        if (Physics.Raycast(rightController.transform.position, rightController.transform.TransformDirection(aimDirection), out hits, maxTeleportDistance, layerMask))
         {
             if (Vector3.Angle(Vector3.up, hits.normal) < maxNormalAngle)
             {

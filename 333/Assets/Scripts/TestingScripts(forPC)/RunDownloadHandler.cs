@@ -9,7 +9,7 @@ public class RunDownloadHandler : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.S))
         {
-            FindObjectOfType<DownloadHandler>().DownloadFile("564052");
+            // FindObjectOfType<DownloadHandler>().DownloadFile("564052");
         }
     }
 }

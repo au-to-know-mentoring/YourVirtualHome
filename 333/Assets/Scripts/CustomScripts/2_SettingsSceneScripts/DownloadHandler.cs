@@ -15,7 +15,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEditor;
-using UnityEngine.Assertions.Must;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Net.Sockets;
 
 /// <summary>
 /// Handles downloading, Unzipping and deletion of the model
@@ -29,19 +31,22 @@ public class DownloadHandler : MonoBehaviour
 	string path = "";
 	string zipFile = "";
 	string unZipFolderLocation;
-	string ICode; // saves 6-digit code to use when calling GetModelInfo in DownloadFileCallback();
+	public string ICode; // saves 6-digit code to use when calling GetModelInfo in DownloadFileCallback();
 
 	public List<string> ListOfModelFolders = new List<string>();
 
 
 	public GameObject ModelHolderParent; // will be obsolete when settings scene has been introduced
+
 	public GameObject loadingCanvas;
 	public Canvas canvas;
 
-	void Start()
-	{
+	public GameObject ErrorPanel;
+	public GameObject ConnectingPanel;
+	public GameObject DownloadButton;
 
-		// DownloadFile("577485");
+	private void Start()
+	{
 		//get loading canvas object
 		loadingCanvas = GameObject.Find("LoadingCanvas");
 		// loadingCanvas.SetActive(false);
@@ -51,36 +56,106 @@ public class DownloadHandler : MonoBehaviour
 
 		ListModelFolders();
 
-
 	}
 
 
 	/// <summary>
 	/// Calls the virtualhome backend and download a model via the model code
 	/// </summary>
-	/// <param name="Code">Model Code</param>
-	public void DownloadFile(string Code)
+	/// <param name="uri">Model Link</param>
+	public void DownloadFile(Uri uri)
 	{
-		ICode = Code;
+		// ICode = Code;
 		WebClient client = new WebClient();
 
 		zipFile = Application.productName + ".zip";
 		path = Application.persistentDataPath + "/" + Application.productName + ".zip";
-		// links function  to event
+		
+		
+		
+			// links function  to event
 		client.DownloadFileCompleted += new AsyncCompletedEventHandler(DownloadFileCallback);
 		// get ProgressPercent for DownloadBarProgress.cs
 		client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(DownloadProgressCallback4);
-		
 
+	
+
+		FindObjectOfType<AddModelDownloadStarted>().DownloadStarted();
+
+
+		client.DownloadFileAsync(uri, path);
 		
+		// call download function 
+		
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="Code">Download Code</param>
+	public async void CallCheckCodeStatus(string Code){
 
 		Uri uri = new Uri("https://aumentoring.com.au/virtualhome-remote/getModel/" + Code);
 		
-		client.DownloadFileAsync(uri, path);
-		
+		await CheckCodeStatus(uri);
+	}
 
-		// call download function 
+
+	/// <summary>
+	/// Async call to check the get status (302 = redirect, 200 = OK)
+	/// </summary>
+	/// <param name="uri"> Model Link </param>
+	/// <returns></returns>
+	public async Task<IEnumerator> CheckCodeStatus(Uri uri){
+
+			// turn button interaction off
+			ErrorPanel.SetActive(false);
+			DownloadButton.GetComponent<Button>().interactable = false;
+			// connecting panel
+			ConnectingPanel.SetActive(true);
+
+		    // Call asynchronous network methods in a try/catch block to handle exceptions.
+			HttpClientHandler handler = new HttpClientHandler();
+			handler.AllowAutoRedirect = false;
+
+			HttpClient client = new HttpClient(handler);
+			
 		
+		try
+		{	
+
+			using HttpResponseMessage response = await client.GetAsync(uri);
+			
+			string responseBody = await response.Content.ReadAsStringAsync();
+			
+				if (response.StatusCode == HttpStatusCode.OK)
+				{
+					// hide connect panel
+					ConnectingPanel.SetActive(false);
+					
+					DownloadFile(uri);
+				}
+				else if(response.StatusCode == HttpStatusCode.Redirect)
+				{
+					// hide connect panel
+					ConnectingPanel.SetActive(false);
+					ErrorPanel.SetActive(true);
+				}
+
+			Debug.Log("Status Code" + response.StatusCode);
+		}
+		catch (HttpRequestException e)
+		{
+			Debug.Log("\nException Caught!");
+			Debug.Log("Message :{0} " + e.Message);
+		}
+
+		// re-enable button interaction
+		DownloadButton.GetComponent<Button>().interactable = true;
+			
+			
+
+		return null;
 	}
 
 
@@ -96,10 +171,12 @@ public class DownloadHandler : MonoBehaviour
 			e.TotalBytesToReceive,
 			e.ProgressPercentage);// for DownloadBarProgress.cs to get percentage
 
+
 		if (e.ProgressPercentage == 0)
 		{
 			// Animates download bar, and it's percentage text
-			StartCoroutine(FindObjectOfType<AddModelDownloadStarted>().DownloadSliderProgress());
+			AddModelDownloadStarted downloadStarted = FindObjectOfType<AddModelDownloadStarted>();
+			StartCoroutine(downloadStarted.DownloadSliderProgress());
 		}
 	}
 
@@ -136,6 +213,9 @@ public class DownloadHandler : MonoBehaviour
 	/// <param name="e"></param>
 	public void DownloadFileCallback(object sender, AsyncCompletedEventArgs e)
 	{
+
+		
+
 		unZipFolderLocation = Application.persistentDataPath + "/" + Application.productName + "Model" + ListOfModelFolders.Count; // the extracted folder name
 
 		ZipFile.ExtractToDirectory(path, unZipFolderLocation);
@@ -145,6 +225,8 @@ public class DownloadHandler : MonoBehaviour
 
 
 		ListModelFolders(); // upadtes the Model Folders List with new folder
+		File.Delete(path);
+		
 	}
 
 	/// <summary>
@@ -178,7 +260,8 @@ public class DownloadHandler : MonoBehaviour
 
 		// Scales down so it can be configured with the control panel
 		loadedObject.gameObject.transform.localScale *= 0.025f;
-		loadedObject.gameObject.transform.localPosition = Vector3.zero;
+		// loadedObject.gameObject.transform.localPosition = Vector3.zero;
+		loadedObject.AddComponent<GetPivot>();
 
 		// SetHouse Variable
 		DataManager.Instance.SetHouse(loadedObject);

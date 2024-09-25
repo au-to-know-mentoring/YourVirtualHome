@@ -75,7 +75,8 @@ public class SettingsScenePlayer : MonoBehaviour
 
     public void applyDownloadCode(InputField iField)
     {
-        myDownloadHandler.DownloadFile(iField.text);
+        myDownloadHandler.ICode = iField.text;
+        myDownloadHandler.CallCheckCodeStatus(iField.text);
         //printText(iField.text);
     }
 

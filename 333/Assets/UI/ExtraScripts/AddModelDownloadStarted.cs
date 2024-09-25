@@ -31,10 +31,13 @@ public class AddModelDownloadStarted : MonoBehaviour
     }
     public void DownloadStarted()
     {
+        
+        
         StartCoroutine(MoveButtonUp());
+        
     }
 
-    private IEnumerator MoveButtonUp()
+    public IEnumerator MoveButtonUp()
     {
         if (downloadButton.localPosition.y < downloadTopY)
         {
