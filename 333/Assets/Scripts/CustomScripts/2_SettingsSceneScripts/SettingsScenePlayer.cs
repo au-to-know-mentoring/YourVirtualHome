@@ -46,6 +46,11 @@ public class SettingsScenePlayer : MonoBehaviour
     {
         rightX.action.Enable();
         rightX.action.performed += GrabButton;
+        
+        rightTrigger.action.Enable();
+        rightTrigger.action.performed += GrabButton;
+
+
 
         // rightTrigger.action.performed += ResetButton;
 

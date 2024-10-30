@@ -214,7 +214,7 @@ public class DownloadHandler : MonoBehaviour
 	public void DownloadFileCallback(object sender, AsyncCompletedEventArgs e)
 	{
 
-		
+		ListModelFolders();
 
 		unZipFolderLocation = Application.persistentDataPath + "/" + Application.productName + "Model" + ListOfModelFolders.Count; // the extracted folder name
 
@@ -300,6 +300,7 @@ public class DownloadHandler : MonoBehaviour
 
 	public void DeleteModel(string DeletionModelPath)
 	{
+		Debug.Log(DeletionModelPath);
 		Directory.Delete(DeletionModelPath, true);
 	}
 

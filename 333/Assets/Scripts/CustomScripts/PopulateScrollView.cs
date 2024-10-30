@@ -52,7 +52,7 @@ public class PopulateScrollView : MonoBehaviour
 	/// </summary>
 	/// <param name="Key"></param>
 	/// <param name="Name"></param>
-	public void AddModelButton(string FirstName, string ClientName)
+	public void AddModelButton(string FirstName, string ClientName, string modelpath)
 	{
 			
 
@@ -60,6 +60,8 @@ public class PopulateScrollView : MonoBehaviour
 			modelValueInButton modelValueInButton = buttonObject.GetComponent<modelValueInButton>();
 			modelValueInButton.FirstName.text = FirstName;
 			modelValueInButton.ClientName.text = ClientName;
+			modelValueInButton.modelPath = Path.GetDirectoryName(modelpath);
+			
 			
 			buttonObject.transform.SetParent(parent.transform);
 			buttonObject.transform.localScale = Vector3.one;
@@ -92,6 +94,7 @@ public class PopulateScrollView : MonoBehaviour
 		modelValueInButton.FirstName.text = FirstName;
 		modelValueInButton.ClientName.text = ClientName;
 		modelValueInButton.modelPath = modelPath;
+		Debug.Log("ModelPath: " + modelPath);
 
 		// Move button into scroll view
 		buttonObject.transform.SetParent(parent.transform);

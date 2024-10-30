@@ -56,7 +56,7 @@ public class GetModelInfo : MonoBehaviour
 	
 		PopulateScrollView myPopView = FindObjectOfType<PopulateScrollView>();
 
-		myPopView.AddModelButton(myModelList.Modelinfo[0].Name, myModelList.Modelinfo[0].Client);
+		myPopView.AddModelButton(myModelList.Modelinfo[0].Name, myModelList.Modelinfo[0].Client, path);
 		
 	}
 
