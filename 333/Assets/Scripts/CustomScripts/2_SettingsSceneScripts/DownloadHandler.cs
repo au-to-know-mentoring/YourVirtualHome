@@ -18,6 +18,7 @@ using UnityEditor;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Net.Sockets;
+// using UnityEngine.UIElements;
 
 /// <summary>
 /// Handles downloading, Unzipping and deletion of the model
@@ -247,7 +248,7 @@ public class DownloadHandler : MonoBehaviour
 
 		var mtlFilePath = ArrayMTLfiles[0]; // get full path to the MTL file
 
-
+		// FindObjectOfType<SettingsScenePlayer>().CurrentModelPath = ListOfModelFolders[ModelId];
 
 		#region Model Information
 		// Loads model to Scene
@@ -262,6 +263,8 @@ public class DownloadHandler : MonoBehaviour
 		loadedObject.gameObject.transform.localScale *= 0.025f;
 		// loadedObject.gameObject.transform.localPosition = Vector3.zero;
 		loadedObject.AddComponent<GetPivot>();
+
+		
 
 		// SetHouse Variable
 		DataManager.Instance.SetHouse(loadedObject);
@@ -282,8 +285,42 @@ public class DownloadHandler : MonoBehaviour
 		canvas.enabled = false;
 		PlayerSetup.Instance.SpawnHouseCube.active = true;
 
+		// WaitThenApplySettings(canvas, ListOfModelFolders[ModelId], loadedObject);
+		
+		
+
 	}
 
+	 IEnumerator WaitThenApplySettings(Canvas myCanvas, string myPath, GameObject myLoadedObject){
+		yield return new WaitForSeconds(0.025f);
+		if (myCanvas.enabled == false){
+			if (File.Exists(myPath + "/modelsettings.txt") == true){
+						
+				StreamReader sr = new StreamReader(myPath + "/modelsettings.txt");
+
+				string x = sr.ReadLine();
+				string y = sr.ReadLine();
+				string z = sr.ReadLine();
+				string Originx = sr.ReadLine();
+				string Originy = sr.ReadLine();
+				string Originz = sr.ReadLine();
+				
+
+				myLoadedObject.transform.rotation = new Quaternion(float.Parse(x), float.Parse(y), float.Parse(z), 0f);
+				DataManager.Instance.spawnPosition.transform.position = new Vector3(float.Parse(Originx),float.Parse(Originy),float.Parse(Originz));
+
+				Debug.Log(x);
+				Debug.Log(y);
+				Debug.Log(z);
+				Debug.Log(Originx);
+				Debug.Log(Originy);
+				Debug.Log(Originz);
+
+				sr.Close();
+				
+			}
+		}
+	 }
 
 	void positionPlayer(GameObject house)
 	{

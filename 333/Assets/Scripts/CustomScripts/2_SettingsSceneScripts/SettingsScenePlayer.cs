@@ -25,6 +25,7 @@ public class SettingsScenePlayer : MonoBehaviour
     [Header("Controller")]
     [SerializeField] InputActionReference rightX;
     [SerializeField] InputActionReference rightTrigger;
+    [SerializeField] InputActionReference aButton;
     [SerializeField] GameObject controller;
 
     //public OVRInput.Button grabButton;
@@ -32,6 +33,9 @@ public class SettingsScenePlayer : MonoBehaviour
     private Vector3 aimDirection;
     [SerializeField] LineRenderer lr;
 
+    public GameObject customTpObj;
+
+    public bool inModelScene;
 
 
 
@@ -42,13 +46,35 @@ public class SettingsScenePlayer : MonoBehaviour
     float maxNormalAngle = 45f;
     bool canPlaceSpawner = false;
 
+
+    private CustomTeleporter customTeleporter;
+
+   
+    [Header("Controls Info Panel")]
+
+
+    public ControlsInfo controlsInfo;
+    public InputField codeFieldForControlsInfo;
+
     private void Start()
     {
+        inModelScene = false;
+        customTeleporter = FindObjectOfType<CustomTeleporter>();
+
+        if (placingSpawner == true){
+            customTpObj.SetActive(false);
+            var myTP = FindObjectOfType<CustomTeleporter>();
+            myTP.enabled = false;
+        }
+
         rightX.action.Enable();
         rightX.action.performed += GrabButton;
         
         rightTrigger.action.Enable();
         rightTrigger.action.performed += GrabButton;
+
+        aButton.action.Enable();
+        aButton.action.performed += TurnOffTeleporter;
 
 
 
@@ -66,6 +92,11 @@ public class SettingsScenePlayer : MonoBehaviour
     {
         placeSpawner();
     }
+    private void TurnOffTeleporter(InputAction.CallbackContext context)
+    {
+        var myTP = FindObjectOfType<CustomTeleporter>();
+        myTP.enabled = false;
+    }
 
     private void ResetButton(InputAction.CallbackContext context)
     {
@@ -76,12 +107,26 @@ public class SettingsScenePlayer : MonoBehaviour
     void Update()
     {
         PositionSpawner();
+        codeFieldForControlsInfo.onValueChanged.AddListener(delegate {TurnOnControlsInfo(); });
+    }
+
+    public void TurnOnControlsInfo()
+    {
+        controlsInfo.enabled = false;
+        
     }
 
     public void applyDownloadCode(InputField iField)
     {
-        myDownloadHandler.ICode = iField.text;
-        myDownloadHandler.CallCheckCodeStatus(iField.text);
+
+        if (iField.text == ""){
+            iField.Select();
+        }else {
+            myDownloadHandler.ICode = iField.text;
+            myDownloadHandler.CallCheckCodeStatus(iField.text);
+        }
+        controlsInfo.enabled = true;
+        
         //printText(iField.text);
     }
 
@@ -103,8 +148,9 @@ public class SettingsScenePlayer : MonoBehaviour
 
     public void SwitchTeleportControllerOn()
     {
-
+        FindObjectOfType<SettingsScenePlayer>().inModelScene = true;
         // saveModelRotation();
+        aButton.action.Disable();
 
         var House = FindObjectOfType<DataManager>().GetHouse();
 

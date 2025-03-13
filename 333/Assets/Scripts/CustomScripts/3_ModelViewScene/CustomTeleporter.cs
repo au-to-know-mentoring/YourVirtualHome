@@ -8,6 +8,8 @@ using UnityEngine.SceneManagement;
 public class CustomTeleporter : MonoBehaviour
 {
     // record input of secondary buttons for scene reset
+    public static CustomTeleporter instance;
+
     public LayerMask layerMask;
 
     [SerializeField] GameObject TrackingSpace;
@@ -32,10 +34,16 @@ public class CustomTeleporter : MonoBehaviour
     private float maxTeleportDistance = 20f;		// definition for the maximum distance that can be teleported
     private float maxNormalAngle = 45f;		// the maximum angle before a surface is considered a wall and not teleportable
     Vector3 aimDirection = Vector3.forward;
+    private void Awake() {
 
-    private void Awake()
-    {
-        // enable controls
+        if (instance == null){
+            instance = this;
+        }else if(instance != null && instance != this){
+            Destroy(this);
+        }
+
+        Debug.Log("TELEPORTER ACTIVATED");
+
         teleportButton.action.Enable();
         teleportButton.action.performed += EnableTeleport;
 
@@ -45,9 +53,10 @@ public class CustomTeleporter : MonoBehaviour
         leftSecondary.action.canceled += LeftSecondaryOff;
         rightSecondary.action.performed += RightSecondary;
         rightSecondary.action.canceled += RightSecondaryOff;
-
     }
+   
     bool AllowTeleport = false;
+    
     void EnableTeleport(InputAction.CallbackContext context)
     {
         AllowTeleport = true;
@@ -68,14 +77,19 @@ public class CustomTeleporter : MonoBehaviour
     {
         rightSecondaryPressed = false;
     }
+   
 
     void Start()
     {
+        
+        // this.enabled = false;
         ti = Instantiate(tiPrefab, Vector3.zero, Quaternion.identity);
         wand = FindObjectOfType<Wand>();
         FadedObjects = new List<GameObject>();
         Previous = new List<GameObject>();
         ChangeLineRendererColor(Color.red);
+
+      
     }
 
     void Update()
