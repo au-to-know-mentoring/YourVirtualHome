@@ -5,8 +5,9 @@ using UnityEngine.UI;
 
 public class SettingsSceneManager : MonoBehaviour
 {
+	[SerializeField] GameObject originPrefab;
 
-    [SerializeField] GameObject dollhouseParent;
+	[SerializeField] GameObject dollhouseParent;
     [SerializeField] SettingsScenePlayer playerScript;
     public float perspectiveCompensation = 0.95f;
     Vector3 dummyPosition = new Vector3(0, 0, 0);
@@ -50,6 +51,51 @@ public class SettingsSceneManager : MonoBehaviour
         }
         // record new rotation
         //dd.houseRotation = dollhouseParent.transform.rotation;
+    }
+
+    public void moveDollhouse(int xyz)
+    {
+        if (Mathf.Abs(xyz) == 1)
+        {
+            dollhouseParent.transform.position += new Vector3(0.25f * Mathf.Sign(xyz), 0, 0);
+        }
+        else if (Mathf.Abs(xyz) == 2)
+        {
+            dollhouseParent.transform.position -= new Vector3(0.25f * Mathf.Sign(xyz), 0, 0);
+        }
+        else if (Mathf.Abs(xyz) == 3)
+        {
+            dollhouseParent.transform.position += new Vector3(0, 0.25f * Mathf.Sign(xyz), 0);
+        }else if (Mathf.Abs(xyz) == 4)
+        {
+            dollhouseParent.transform.position -= new Vector3(0, 0.25f * Mathf.Sign(xyz), 0);
+        }
+        else if (Mathf.Abs(xyz) == 5)
+        {
+            dollhouseParent.transform.position += new Vector3(0, 0, 0.25f * Mathf.Sign(xyz));
+        }else if (Mathf.Abs(xyz) == 6)
+        {
+            dollhouseParent.transform.position -= new Vector3(0, 0, 0.25f * Mathf.Sign(xyz));
+        }
+        //  if (Mathf.Abs(xyz) == 1)
+        // {
+        //     dollhouseParent.transform.position *= Quaternion.Euler(90 * Mathf.Sign(xyz), 0, 0);
+        // }
+        // else if (Mathf.Abs(xyz) == 2)
+        // {
+        //     dollhouseParent.transform.position *= Quaternion.Euler(0, 90 * Mathf.Sign(xyz), 0);
+        // }
+        // else if (Mathf.Abs(xyz) == 3)
+        // {
+        //     dollhouseParent.transform.position *= Quaternion.Euler(0, 0, 90 * Mathf.Sign(xyz));
+        // }
+        // record new rotation
+        //dd.houseRotation = dollhouseParent.transform.rotation;
+    }
+
+    public void setNewOrigin()
+    {
+        Instantiate(originPrefab, dollhouseParent.transform);
     }
 
     public void EnablePlaceSpawnerButton()
