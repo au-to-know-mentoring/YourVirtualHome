@@ -256,6 +256,8 @@ public class DownloadHandler : MonoBehaviour
 
 		Vector3 OriginalScale = loadedObject.gameObject.transform.localScale;
 
+		loadedObject.transform.rotation = ModelSettings.Instance.FetchSettingsRotation();
+
 		// nest model inside of dollhouse
 		loadedObject.gameObject.transform.SetParent(ModelHolderParent.transform); // putting our model in a cube allowing for rotation
 

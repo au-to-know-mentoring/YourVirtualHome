@@ -148,11 +148,16 @@ public class SettingsScenePlayer : MonoBehaviour
 
     public void SwitchTeleportControllerOn()
     {
+
+
+
         FindObjectOfType<SettingsScenePlayer>().inModelScene = true;
         // saveModelRotation();
         aButton.action.Disable();
 
         var House = FindObjectOfType<DataManager>().GetHouse();
+
+        ModelSettings.Instance.SaveSettings(modelVal.ToString(), House.transform.position.ToString(), House.transform.rotation.ToString());
 
         House.transform.parent = null;
         House.transform.localScale /= 0.025f;
