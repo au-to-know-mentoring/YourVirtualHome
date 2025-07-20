@@ -9,8 +9,7 @@ using TMPro;
 public class SettingsScenePlayer : MonoBehaviour
 {
 
-    public int modelVal;
-    // spawn menu House Model, And UI
+    
     [SerializeField] private PlayerSetup playerSetup;
 
     [SerializeField] GameObject CameraRigVR;
@@ -135,9 +134,9 @@ public class SettingsScenePlayer : MonoBehaviour
         myText.text = inputText;
     }
 
-    public void getModelIntFromUIButton(GameObject myButton)
+    public void getModelIntFromUIButton(int modelValue)
     {
-        ModelVal = myButton.GetComponent<modelValueInButton>().modelVal;
+        ModelVal = modelValue;
     }
     IEnumerator TeleportToSpawn()
     {
@@ -157,7 +156,7 @@ public class SettingsScenePlayer : MonoBehaviour
 
         var House = FindObjectOfType<DataManager>().GetHouse();
 
-        ModelSettings.Instance.SaveSettings(modelVal.ToString(), House.transform.position.ToString(), House.transform.rotation.ToString());
+        ModelSettings.Instance.SaveSettings(ModelVal.ToString(), FindObjectOfType<SettingsSceneManager>().dollhouseParent.transform.position.ToString(), FindObjectOfType<SettingsSceneManager>().dollhouseParent.transform.rotation.ToString());
 
         House.transform.parent = null;
         House.transform.localScale /= 0.025f;

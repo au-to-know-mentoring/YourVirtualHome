@@ -7,7 +7,7 @@ public class SettingsSceneManager : MonoBehaviour
 {
 	[SerializeField] GameObject originPrefab;
 
-	[SerializeField] GameObject dollhouseParent;
+	public GameObject dollhouseParent;
     [SerializeField] SettingsScenePlayer playerScript;
     public float perspectiveCompensation = 0.95f;
     Vector3 dummyPosition = new Vector3(0, 0, 0);

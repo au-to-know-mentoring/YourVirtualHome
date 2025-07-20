@@ -256,7 +256,7 @@ public class DownloadHandler : MonoBehaviour
 
 		Vector3 OriginalScale = loadedObject.gameObject.transform.localScale;
 
-		loadedObject.transform.rotation = ModelSettings.Instance.FetchSettingsRotation();
+
 
 		// nest model inside of dollhouse
 		loadedObject.gameObject.transform.SetParent(ModelHolderParent.transform); // putting our model in a cube allowing for rotation
@@ -266,7 +266,7 @@ public class DownloadHandler : MonoBehaviour
 		// loadedObject.gameObject.transform.localPosition = Vector3.zero;
 		loadedObject.AddComponent<GetPivot>();
 
-		
+
 
 		// SetHouse Variable
 		DataManager.Instance.SetHouse(loadedObject);
@@ -286,10 +286,16 @@ public class DownloadHandler : MonoBehaviour
 		// positionPlayer(loadedObject);
 		canvas.enabled = false;
 		PlayerSetup.Instance.SpawnHouseCube.active = true;
+		
+		if (ModelSettings.Instance.CheckIfSaved() == true)
+		{
+			FindObjectOfType<SettingsSceneManager>().dollhouseParent.transform.rotation = ModelSettings.Instance.FetchSettingsRotation();
+			FindObjectOfType<SettingsSceneManager>().dollhouseParent.transform.position = ModelSettings.Instance.FetchSettingsPosition();
+		}
 
 		// WaitThenApplySettings(canvas, ListOfModelFolders[ModelId], loadedObject);
-		
-		
+
+
 
 	}
 

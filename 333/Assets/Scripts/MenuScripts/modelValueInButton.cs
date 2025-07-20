@@ -50,20 +50,23 @@ public class modelValueInButton : MonoBehaviour
 
 	public void setSettingsScenePlayerModelVal()
 	{
-		FindObjectOfType<SettingsScenePlayer>().getModelIntFromUIButton(gameObject);
+		FindObjectOfType<SettingsScenePlayer>().getModelIntFromUIButton(modelVal);
 	}
-	IEnumerator ShowLoadingPanel(){
-		if (downloadHandler.canvas.enabled != true){
-			
+	IEnumerator ShowLoadingPanel()
+	{
+		if (downloadHandler.canvas.enabled != true)
+		{
+
 			PlayerSetup.Instance.SpawnHouseCube.SetActive(false);
 			downloadHandler.canvas.enabled = true;
 			// importModel();
 		}
 		yield return new WaitForSeconds(0.1f);
-		
+
+		setSettingsScenePlayerModelVal();
 		downloadHandler.LoadModelToScene(modelVal);
-        FindObjectOfType<SettingsSceneManager>().SetupHouseDummy();
-        FindObjectOfType<SettingsScenePlayer>().modelVal = modelVal;
+		FindObjectOfType<SettingsSceneManager>().SetupHouseDummy();
+		
 	}
 	public void importModel()
 	{
